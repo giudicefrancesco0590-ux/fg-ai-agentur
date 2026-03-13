@@ -218,47 +218,42 @@
     }
 
     .logo-icon {
-      width: 46px;
-      height: 46px;
-      position: relative;
+      width: 48px;
+      height: 48px;
       flex-shrink: 0;
     }
 
     .logo-icon svg {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       display: block;
       transition: filter var(--transition-slow);
     }
 
     .logo:hover .logo-icon svg {
-      filter: drop-shadow(0 0 10px rgba(96,165,250,0.7)) drop-shadow(0 0 20px rgba(167,139,250,0.4));
-    }
-
-    @keyframes infinityPulse {
-      0%, 100% { stroke-dashoffset: 0; opacity: 1; }
-      50%       { stroke-dashoffset: -40; opacity: 0.65; }
-    }
-
-    .logo-infinity-path {
-      stroke-dasharray: 120;
-      animation: infinityPulse 3s ease-in-out infinite;
-    }
-
-    /* Cyan glow on hover matching lamaratcha style */
-    .logo:hover .logo-icon svg {
-      filter: drop-shadow(0 0 8px rgba(0,153,255,0.8)) drop-shadow(0 0 16px rgba(0,204,255,0.4));
+      filter: drop-shadow(0 0 12px rgba(0,200,255,0.55));
     }
 
     .logo-text {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
       line-height: 1;
     }
 
-    .logo-text span {
-      color: var(--color-primary-light);
+    .logo-name {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    .logo-sub {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #09f;
     }
 
     .nav-links {
@@ -1639,77 +1634,37 @@
       <div class="navbar-inner">
         <a href="#" class="logo" aria-label="FG AI Agentur – Startseite">
           <div class="logo-icon" aria-hidden="true">
-            <svg viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="lgN1" x1="0" y1="0" x2="46" y2="46" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%"   stop-color="#ffffff"/>
-                  <stop offset="55%"  stop-color="#09f"/>
-                  <stop offset="100%" stop-color="#00ffcc"/>
+                <radialGradient id="iconBgN" cx="25%" cy="78%" r="110%">
+                  <stop offset="0%"   stop-color="#e8f8ff"/>
+                  <stop offset="45%"  stop-color="#a8e6f8"/>
+                  <stop offset="100%" stop-color="#5cc8e8"/>
+                </radialGradient>
+                <linearGradient id="letterN" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"   stop-color="rgba(220,240,250,0.95)"/>
+                  <stop offset="45%"  stop-color="rgba(140,185,210,0.9)"/>
+                  <stop offset="100%" stop-color="rgba(60,100,130,0.95)"/>
                 </linearGradient>
-                <linearGradient id="lgN2" x1="0" y1="0" x2="46" y2="46" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%"   stop-color="#0a0a0a"/>
-                  <stop offset="100%" stop-color="#000000"/>
-                </linearGradient>
-                <filter id="glowN" x="-40%" y="-40%" width="180%" height="180%">
-                  <feGaussianBlur stdDeviation="1.8" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-                <filter id="glowNsm" x="-60%" y="-60%" width="220%" height="220%">
-                  <feGaussianBlur stdDeviation="1" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
               </defs>
-
-              <!-- Background rounded square -->
-              <rect x="1" y="1" width="44" height="44" rx="11" fill="url(#lgN2)"/>
-              <!-- Gradient border -->
-              <rect x="1" y="1" width="44" height="44" rx="11" fill="none" stroke="url(#lgN1)" stroke-width="1.2" opacity="0.9"/>
-              <!-- Inner subtle border -->
-              <rect x="3.5" y="3.5" width="39" height="39" rx="9" fill="none" stroke="url(#lgN1)" stroke-width="0.4" opacity="0.25"/>
-
-              <!-- Corner tech marks -->
-              <line x1="1"  y1="10" x2="1"  y2="4"  stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="1"  y1="4"  x2="8"  y2="4"  stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="45" y1="10" x2="45" y2="4"  stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="45" y1="4"  x2="38" y2="4"  stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="1"  y1="36" x2="1"  y2="42" stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="1"  y1="42" x2="8"  y2="42" stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="45" y1="36" x2="45" y2="42" stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="45" y1="42" x2="38" y2="42" stroke="#09f" stroke-width="1.8" stroke-linecap="round"/>
-
-              <!-- ∞ Infinity symbol centered at (23, 21) -->
-              <path class="logo-infinity-path"
-                d="M 23,21
-                   C 23,17.5 26,14.5 30,14.5
-                   C 34,14.5 37,17.5 37,21
-                   C 37,24.5 34,27.5 30,27.5
-                   C 26,27.5 20,14.5 16,14.5
-                   C 12,14.5 9,17.5 9,21
-                   C 9,24.5 12,27.5 16,27.5
-                   C 20,27.5 23,24.5 23,21 Z"
-                fill="none"
-                stroke="url(#lgN1)"
-                stroke-width="2.4"
-                stroke-linecap="round"
-                filter="url(#glowN)"
-              />
-
-              <!-- FG label -->
-              <text x="23" y="38.5"
-                font-family="Inter,system-ui,sans-serif"
-                font-size="7.5"
-                font-weight="900"
-                fill="url(#lgN1)"
-                text-anchor="middle"
-                letter-spacing="3"
-                filter="url(#glowNsm)"
-              >FG</text>
-
-              <!-- Center cross dot at crossing of ∞ -->
-              <circle cx="23" cy="21" r="1.8" fill="url(#lgN1)" filter="url(#glowN)"/>
+              <!-- Glassmorphism rounded square -->
+              <rect x="1" y="1" width="46" height="46" rx="11" fill="url(#iconBgN)"/>
+              <!-- White top-edge highlight (glass effect) -->
+              <rect x="1" y="1" width="46" height="46" rx="11" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1"/>
+              <!-- FG in large italic serif -->
+              <text x="24" y="36"
+                font-family="Georgia,'Times New Roman',serif"
+                font-size="27"
+                font-style="italic"
+                font-weight="normal"
+                fill="url(#letterN)"
+                text-anchor="middle">FG</text>
             </svg>
           </div>
-          <span class="logo-text">FG <span>AI</span> Agentur</span>
+          <div class="logo-text">
+            <span class="logo-name">FG AI</span>
+            <span class="logo-sub">Agentur</span>
+          </div>
         </a>
 
         <ul class="nav-links" role="list">
