@@ -453,7 +453,7 @@
       background: var(--border);
     }
 
-    /* Hero image */
+    /* ─── Hero Visual ─── */
     .hero-visual {
       position: relative;
       z-index: 1;
@@ -461,93 +461,118 @@
       animation: fadeInUp 0.8s ease 0.5s both;
     }
 
-    /* ── Hero Mockup ── */
-    .hero-mockup {
+    .hero-scene {
       position: relative;
-      max-width: 900px;
+      max-width: 860px;
       margin: 0 auto;
     }
 
-    /* Glow rings behind the card */
-    .hero-mockup::before {
+    /* Ambient glow backdrop */
+    .hero-scene::before {
       content: '';
       position: absolute;
-      inset: -40px;
-      border-radius: 40px;
-      background: radial-gradient(ellipse at 50% 60%, rgba(99,102,241,0.18) 0%, rgba(59,130,246,0.1) 40%, transparent 70%);
-      filter: blur(20px);
+      inset: -60px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 50% 55%,
+        rgba(0,153,255,0.18) 0%,
+        rgba(0,200,255,0.08) 40%,
+        transparent 70%);
+      filter: blur(32px);
       z-index: 0;
+      pointer-events: none;
     }
 
-    .mockup-window {
+    /* ── Browser Chrome ── */
+    .browser-chrome {
       position: relative;
       z-index: 1;
-      background: rgba(13, 20, 40, 0.92);
-      border: 1px solid rgba(99,149,255,0.2);
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
+      background: rgba(8,12,24,0.94);
+      border: 1px solid rgba(0,153,255,0.22);
       box-shadow:
-        0 0 0 1px rgba(99,149,255,0.08),
-        0 40px 80px rgba(0,0,0,0.6),
-        0 0 60px rgba(59,130,246,0.08);
-      backdrop-filter: blur(12px);
+        0 0 0 1px rgba(0,153,255,0.06),
+        0 48px 96px rgba(0,0,0,0.7),
+        0 0 80px rgba(0,153,255,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
-    /* Title bar */
-    .mockup-titlebar {
+    .browser-bar {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 14px 18px;
-      background: rgba(255,255,255,0.03);
-      border-bottom: 1px solid rgba(99,149,255,0.1);
+      padding: 13px 18px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(0,153,255,0.1);
     }
 
-    .mockup-dot {
-      width: 11px; height: 11px;
-      border-radius: 50%;
-    }
-    .mockup-dot.red   { background: #ff5f57; }
-    .mockup-dot.yellow{ background: #febc2e; }
-    .mockup-dot.green { background: #28c840; }
+    .b-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .b-dot.r { background: #ff5f57; }
+    .b-dot.y { background: #febc2e; }
+    .b-dot.g { background: #28c840; }
 
-    .mockup-titlebar-label {
-      margin-left: 10px;
-      font-size: 12px;
-      font-weight: 600;
+    .b-url {
+      margin-left: 12px;
+      flex: 1;
+      max-width: 280px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11px;
       color: var(--text-muted);
+      letter-spacing: 0.01em;
+    }
+
+    .b-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(0,255,150,0.1);
+      border: 1px solid rgba(0,255,150,0.2);
+      color: #00e676;
+      display: flex; align-items: center; gap: 5px;
       letter-spacing: 0.04em;
     }
+    .b-badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #00e676;
+      animation: pulse 2s ease infinite;
+    }
 
-    /* Dashboard body */
-    .mockup-body {
+    /* ── App Layout ── */
+    .app-layout {
       display: grid;
-      grid-template-columns: 200px 1fr;
-      min-height: 400px;
+      grid-template-columns: 220px 1fr;
+      min-height: 420px;
     }
 
     /* Sidebar */
-    .mockup-sidebar {
-      background: rgba(9,14,28,0.8);
-      border-right: 1px solid rgba(99,149,255,0.08);
-      padding: 20px 14px;
+    .app-sidebar {
+      background: rgba(5,8,18,0.9);
+      border-right: 1px solid rgba(0,153,255,0.08);
+      padding: 22px 14px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
-    .sidebar-logo {
-      font-size: 13px;
+    .app-brand {
+      font-size: 14px;
       font-weight: 800;
       letter-spacing: -0.02em;
-      color: var(--text-primary);
-      padding: 4px 8px 16px;
-      border-bottom: 1px solid rgba(99,149,255,0.08);
-      margin-bottom: 8px;
+      color: #fff;
+      padding: 4px 10px 18px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(0,153,255,0.08);
     }
-    .sidebar-logo span { color: var(--color-primary-light); }
+    .app-brand span { color: #09f; }
 
-    .sidebar-item {
+    .app-nav-item {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -555,199 +580,252 @@
       border-radius: 8px;
       font-size: 12px;
       font-weight: 500;
-      color: var(--text-muted);
+      color: rgba(255,255,255,0.35);
       cursor: default;
-      transition: all 0.15s;
     }
-    .sidebar-item.active {
-      background: rgba(59,130,246,0.12);
-      color: var(--color-primary-light);
+    .app-nav-item.active {
+      background: rgba(0,153,255,0.1);
+      color: #09f;
     }
-    .sidebar-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .app-nav-item svg { width: 14px; height: 14px; flex-shrink: 0; opacity: 0.7; }
+    .app-nav-item.active svg { opacity: 1; }
 
-    /* Main content */
-    .mockup-main {
-      padding: 20px 22px;
+    /* Chat section */
+    .app-chat {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      padding: 0;
+      background: rgba(10,15,30,0.7);
     }
 
-    .mockup-header {
+    .chat-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(0,153,255,0.08);
+      background: rgba(255,255,255,0.015);
     }
-    .mockup-title { font-size: 14px; font-weight: 700; }
-    .mockup-badge {
-      font-size: 10px;
-      font-weight: 600;
-      background: rgba(34,197,94,0.12);
-      color: #4ade80;
-      border: 1px solid rgba(34,197,94,0.2);
-      padding: 3px 10px;
-      border-radius: 999px;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .mockup-badge::before {
-      content: '';
-      width: 5px; height: 5px;
+    .chat-avatar {
+      width: 32px; height: 32px;
       border-radius: 50%;
-      background: #4ade80;
-      animation: pulse 2s ease infinite;
+      background: linear-gradient(135deg, #09f, #00e5ff);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: #000;
+      flex-shrink: 0;
     }
+    .chat-header-info { flex: 1; }
+    .chat-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .chat-status { font-size: 10px; color: #00e676; display: flex; align-items: center; gap: 4px; }
+    .chat-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #00e676; flex-shrink: 0; }
 
-    /* KPI cards row */
-    .mockup-kpis {
+    .chat-stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 10px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(0,153,255,0.06);
     }
 
-    .mockup-kpi {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(99,149,255,0.1);
+    .chat-stat {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(0,153,255,0.1);
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 11px 13px;
     }
-    .mockup-kpi-label {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 500;
-      margin-bottom: 6px;
+    .chat-stat-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.32);
+      margin-bottom: 5px;
     }
-    .mockup-kpi-value {
-      font-size: 18px;
+    .chat-stat-val {
+      font-size: 17px;
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1;
     }
-    .mockup-kpi-change {
-      font-size: 10px;
-      margin-top: 4px;
+    .chat-stat-change {
+      font-size: 9.5px;
       font-weight: 600;
+      margin-top: 3px;
     }
-    .up { color: #4ade80; }
-    .down { color: #f87171; }
+    .stat-up { color: #00e676; }
+    .stat-dn { color: #ff5252; }
+    .v-blue  { background: linear-gradient(135deg,#09f,#60cfff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .v-green { background: linear-gradient(135deg,#00e676,#00bcd4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .v-purple{ background: linear-gradient(135deg,#c084fc,#818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
-    /* Chart area */
-    .mockup-chart-area {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(99,149,255,0.08);
-      border-radius: 10px;
-      padding: 14px 16px;
+    /* Chat messages */
+    .chat-messages {
       flex: 1;
-    }
-    .mockup-chart-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-
-    /* Animated bar chart */
-    .chart-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      height: 80px;
-    }
-
-    .chart-bar {
-      flex: 1;
-      border-radius: 4px 4px 0 0;
-      background: linear-gradient(to top, var(--color-primary), #a78bfa);
-      opacity: 0.7;
-      animation: barRise 1s ease both;
-    }
-    .chart-bar:nth-child(odd) { opacity: 0.45; }
-
-    @keyframes barRise {
-      from { transform: scaleY(0); transform-origin: bottom; }
-      to   { transform: scaleY(1); transform-origin: bottom; }
-    }
-
-    /* AI activity feed */
-    .mockup-feed {
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 12px;
     }
 
-    .feed-item {
+    .msg {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .msg-avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .msg-avatar.ai  { background: linear-gradient(135deg,#09f,#00e5ff); color: #000; }
+    .msg-avatar.usr { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.12); }
+
+    .msg-bubble {
+      max-width: 68%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 11.5px;
+      line-height: 1.55;
+    }
+    .msg.ai  .msg-bubble {
+      background: rgba(0,153,255,0.1);
+      border: 1px solid rgba(0,153,255,0.18);
+      color: rgba(255,255,255,0.85);
+      border-top-left-radius: 4px;
+    }
+    .msg.usr .msg-bubble {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.75);
+      margin-left: auto;
+      border-top-right-radius: 4px;
+    }
+    .msg.usr { flex-direction: row-reverse; }
+
+    /* typing indicator */
+    .msg-typing {
+      display: flex; gap: 4px; align-items: center; padding: 4px 2px;
+    }
+    .typing-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #09f;
+      opacity: 0.6;
+      animation: typingBounce 1.3s ease infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: .2s; }
+    .typing-dot:nth-child(3) { animation-delay: .4s; }
+
+    @keyframes typingBounce {
+      0%,60%,100% { transform: translateY(0); opacity: 0.6; }
+      30% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* Chat input bar */
+    .chat-input-bar {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 11px;
-      color: var(--text-secondary);
+      padding: 12px 18px;
+      border-top: 1px solid rgba(0,153,255,0.08);
+      background: rgba(255,255,255,0.015);
     }
-    .feed-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
+    .chat-input-field {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.4);
+    }
+    .chat-send-btn {
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #09f, #006fb5);
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .feed-time { color: var(--text-muted); font-size: 10px; margin-left: auto; }
+    .chat-send-btn svg { width: 14px; height: 14px; color: #fff; }
 
-    /* Floating accent cards */
-    .float-card {
+    /* ── Floating notification cards ── */
+    .f-card {
       position: absolute;
-      z-index: 2;
-      background: rgba(13,20,40,0.95);
-      border: 1px solid rgba(99,149,255,0.25);
-      border-radius: 14px;
+      z-index: 3;
+      background: rgba(8,12,24,0.96);
+      border-radius: 16px;
       padding: 14px 18px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59,130,246,0.1);
-      backdrop-filter: blur(16px);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(0,153,255,0.18),
+        0 0 30px rgba(0,153,255,0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,153,255,0.15);
+      min-width: 180px;
     }
 
-    .float-card-left {
-      left: -64px;
-      top: 28%;
-      animation: floatY 4s ease-in-out infinite;
+    .f-card-left {
+      left: -72px;
+      top: 22%;
+      animation: floatY 4.5s ease-in-out infinite;
     }
 
-    .float-card-right {
-      right: -64px;
-      top: 52%;
-      animation: floatY 4s ease-in-out infinite 1.5s;
+    .f-card-right {
+      right: -72px;
+      top: 55%;
+      animation: floatY 4.5s ease-in-out infinite 2s;
     }
 
     @keyframes floatY {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-10px); }
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-12px); }
     }
 
-    .float-card-label {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
+    .f-card-icon {
+      font-size: 20px;
+      margin-bottom: 7px;
+      line-height: 1;
     }
-    .float-card-value {
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #60a5fa, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .f-card-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 3px;
     }
-    .float-card-sub {
+    .f-card-sub {
       font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 3px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.4;
+    }
+    .f-card-highlight {
+      margin-top: 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #09f;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .f-card-highlight::before {
+      content: '';
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #09f;
+      animation: pulse 2s ease infinite;
     }
 
-    /* hide float cards on small screens */
     @media (max-width: 900px) {
-      .float-card { display: none; }
-      .mockup-body { grid-template-columns: 1fr; }
-      .mockup-sidebar { display: none; }
+      .f-card { display: none; }
+      .app-layout { grid-template-columns: 1fr; }
+      .app-sidebar { display: none; }
     }
     @media (max-width: 600px) {
-      .mockup-kpis { grid-template-columns: 1fr 1fr; }
+      .chat-stats { grid-template-columns: 1fr 1fr; }
     }
 
     /* ===========================
@@ -1759,127 +1837,127 @@
           </div>
         </div>
 
-        <!-- Hero Visual: Premium UI Mockup -->
+        <!-- Hero Visual: Premium AI Chat UI -->
         <div class="hero-visual animate-on-scroll" aria-hidden="true">
-          <div class="hero-mockup">
+          <div class="hero-scene">
 
-            <!-- Floating left card -->
-            <div class="float-card float-card-left">
-              <div class="float-card-label">Automatisierungen</div>
-              <div class="float-card-value">3.4k</div>
-              <div class="float-card-sub">↑ 24% diese Woche</div>
+            <!-- Floating card LEFT: Lead erkannt -->
+            <div class="f-card f-card-left">
+              <div class="f-card-icon">🎯</div>
+              <div class="f-card-title">Neuer Lead erkannt</div>
+              <div class="f-card-sub">Max Müller · Anfrage via Chatbot</div>
+              <div class="f-card-highlight">Jetzt qualifiziert</div>
             </div>
 
-            <!-- Floating right card -->
-            <div class="float-card float-card-right">
-              <div class="float-card-label">KI-Genauigkeit</div>
-              <div class="float-card-value">98.7%</div>
-              <div class="float-card-sub">Modell v4.1 aktiv</div>
+            <!-- Floating card RIGHT: Termin gebucht -->
+            <div class="f-card f-card-right">
+              <div class="f-card-icon">📅</div>
+              <div class="f-card-title">Termin gebucht</div>
+              <div class="f-card-sub">Mo 17. März · 10:00 Uhr<br>Google Calendar ✓</div>
+              <div class="f-card-highlight">Automatisch bestätigt</div>
             </div>
 
-            <!-- Main dashboard window -->
-            <div class="mockup-window">
-              <!-- Title bar -->
-              <div class="mockup-titlebar">
-                <span class="mockup-dot red"></span>
-                <span class="mockup-dot yellow"></span>
-                <span class="mockup-dot green"></span>
-                <span class="mockup-titlebar-label">FG AI · Intelligence Dashboard</span>
+            <!-- Browser Chrome -->
+            <div class="browser-chrome">
+              <!-- Browser bar -->
+              <div class="browser-bar">
+                <span class="b-dot r"></span>
+                <span class="b-dot y"></span>
+                <span class="b-dot g"></span>
+                <span class="b-url">app.fg-ai.de/chatbot</span>
+                <span class="b-badge">KI Aktiv</span>
               </div>
 
-              <!-- Dashboard body -->
-              <div class="mockup-body">
+              <!-- App Layout -->
+              <div class="app-layout">
                 <!-- Sidebar -->
-                <nav class="mockup-sidebar">
-                  <div class="sidebar-logo">FG <span>AI</span></div>
-                  <div class="sidebar-item active">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                    Übersicht
+                <nav class="app-sidebar">
+                  <div class="app-brand">FG <span>AI</span></div>
+                  <div class="app-nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    KI-Chatbot
                   </div>
-                  <div class="sidebar-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    Analytik
+                  <div class="app-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Voice Agent
                   </div>
-                  <div class="sidebar-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-                    Automatisierung
+                  <div class="app-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Lead-Analytik
                   </div>
-                  <div class="sidebar-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    KI-Chat
+                  <div class="app-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Kalender
                   </div>
-                  <div class="sidebar-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    Sicherheit
+                  <div class="app-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+                    Einstellungen
                   </div>
                 </nav>
 
-                <!-- Main content -->
-                <div class="mockup-main">
-                  <div class="mockup-header">
-                    <span class="mockup-title">KI-Übersicht · März 2025</span>
-                    <span class="mockup-badge">Live</span>
-                  </div>
-
-                  <!-- KPI Cards -->
-                  <div class="mockup-kpis">
-                    <div class="mockup-kpi">
-                      <div class="mockup-kpi-label">Prozesse automatisiert</div>
-                      <div class="mockup-kpi-value" style="background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">12.4k</div>
-                      <div class="mockup-kpi-change up">↑ 18.3%</div>
-                    </div>
-                    <div class="mockup-kpi">
-                      <div class="mockup-kpi-label">Kostenersparnis</div>
-                      <div class="mockup-kpi-value" style="background:linear-gradient(135deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">€84k</div>
-                      <div class="mockup-kpi-change up">↑ 41.2%</div>
-                    </div>
-                    <div class="mockup-kpi">
-                      <div class="mockup-kpi-label">Fehlerquote</div>
-                      <div class="mockup-kpi-value" style="background:linear-gradient(135deg,#fb923c,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">0.3%</div>
-                      <div class="mockup-kpi-change down">↓ 76%</div>
+                <!-- Chat Column -->
+                <div class="app-chat">
+                  <!-- Chat header -->
+                  <div class="chat-header">
+                    <div class="chat-avatar">AI</div>
+                    <div class="chat-header-info">
+                      <div class="chat-name">FG AI Assistent</div>
+                      <div class="chat-status">Online · reagiert sofort</div>
                     </div>
                   </div>
 
-                  <!-- Chart -->
-                  <div class="mockup-chart-area">
-                    <div class="mockup-chart-title">KI-Leistung – letzte 12 Wochen</div>
-                    <div class="chart-bars">
-                      <div class="chart-bar" style="height:45%;animation-delay:.05s"></div>
-                      <div class="chart-bar" style="height:62%;animation-delay:.1s"></div>
-                      <div class="chart-bar" style="height:50%;animation-delay:.15s"></div>
-                      <div class="chart-bar" style="height:71%;animation-delay:.2s"></div>
-                      <div class="chart-bar" style="height:55%;animation-delay:.25s"></div>
-                      <div class="chart-bar" style="height:80%;animation-delay:.3s"></div>
-                      <div class="chart-bar" style="height:68%;animation-delay:.35s"></div>
-                      <div class="chart-bar" style="height:88%;animation-delay:.4s"></div>
-                      <div class="chart-bar" style="height:74%;animation-delay:.45s"></div>
-                      <div class="chart-bar" style="height:92%;animation-delay:.5s"></div>
-                      <div class="chart-bar" style="height:85%;animation-delay:.55s"></div>
-                      <div class="chart-bar" style="height:100%;animation-delay:.6s"></div>
+                  <!-- KPI Stats -->
+                  <div class="chat-stats">
+                    <div class="chat-stat">
+                      <div class="chat-stat-label">Leads heute</div>
+                      <div class="chat-stat-val v-blue">47</div>
+                      <div class="chat-stat-change stat-up">↑ 32%</div>
+                    </div>
+                    <div class="chat-stat">
+                      <div class="chat-stat-label">Termine gebucht</div>
+                      <div class="chat-stat-val v-green">12</div>
+                      <div class="chat-stat-change stat-up">↑ 18%</div>
+                    </div>
+                    <div class="chat-stat">
+                      <div class="chat-stat-label">Ø Antwortzeit</div>
+                      <div class="chat-stat-val v-purple">1.2s</div>
+                      <div class="chat-stat-change stat-up">↓ 0.4s</div>
                     </div>
                   </div>
 
-                  <!-- Activity feed -->
-                  <div class="mockup-feed">
-                    <div class="feed-item">
-                      <span class="feed-dot" style="background:#4ade80"></span>
-                      Rechnungsverarbeitung abgeschlossen · 342 Dokumente
-                      <span class="feed-time">vor 2 Min</span>
+                  <!-- Messages -->
+                  <div class="chat-messages">
+                    <div class="msg usr">
+                      <div class="msg-avatar usr">K</div>
+                      <div class="msg-bubble">Hallo, ich interessiere mich für eine neue Website mit KI-Chatbot. Wann wäre ein Termin möglich?</div>
                     </div>
-                    <div class="feed-item">
-                      <span class="feed-dot" style="background:#60a5fa"></span>
-                      Chatbot: 94 Kundenanfragen gelöst
-                      <span class="feed-time">vor 8 Min</span>
+                    <div class="msg ai">
+                      <div class="msg-avatar ai">AI</div>
+                      <div class="msg-bubble">Hallo! Sehr gerne 😊 Ich bin der KI-Assistent von FG AI Agentur. Ich kann direkt einen Termin für Sie buchen – welcher Tag passt Ihnen diese Woche am besten?</div>
                     </div>
-                    <div class="feed-item">
-                      <span class="feed-dot" style="background:#a78bfa"></span>
-                      Anomalie erkannt – Risikostufe niedrig
-                      <span class="feed-time">vor 15 Min</span>
+                    <div class="msg usr">
+                      <div class="msg-avatar usr">K</div>
+                      <div class="msg-bubble">Montag oder Dienstag wäre ideal.</div>
+                    </div>
+                    <div class="msg ai">
+                      <div class="msg-avatar ai">AI</div>
+                      <div class="msg-bubble">
+                        <div class="msg-typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Input bar -->
+                  <div class="chat-input-bar">
+                    <div class="chat-input-field">Nachricht eingeben …</div>
+                    <div class="chat-send-btn">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
