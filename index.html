@@ -1,0 +1,2907 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FG AI Agentur – Websites, KI-Chatbots & Voice Agents</title>
+  <meta name="description" content="FG AI Agentur – Wir bauen professionelle Websites, KI-Chatbots, Voice Agents und automatisieren Ihre Lead-Generierung mit direkter Kalender-Buchung." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* ===========================
+       DESIGN TOKENS
+    =========================== */
+    :root {
+      --bg-primary: #020817;
+      --bg-secondary: #0f172a;
+      --bg-card: #0f1a2e;
+      --bg-card-hover: #162035;
+      --border: rgba(99, 149, 255, 0.15);
+      --border-hover: rgba(99, 149, 255, 0.35);
+
+      --color-primary: #3b82f6;
+      --color-primary-light: #60a5fa;
+      --color-primary-dark: #1d4ed8;
+      --color-accent: #f97316;
+      --color-accent-light: #fb923c;
+
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #475569;
+
+      --glow-blue: rgba(59, 130, 246, 0.15);
+      --glow-blue-strong: rgba(59, 130, 246, 0.3);
+      --glow-accent: rgba(249, 115, 22, 0.15);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+
+      --shadow-card: 0 0 0 1px rgba(99, 149, 255, 0.1), 0 4px 24px rgba(0,0,0,0.4);
+      --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.2);
+
+      --transition: 200ms cubic-bezier(0.4,0,0.2,1);
+      --transition-slow: 350ms cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ===========================
+       RESET & BASE
+    =========================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* ===========================
+       LAYOUT
+    =========================== */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 96px 0;
+    }
+
+    /* ===========================
+       TYPOGRAPHY
+    =========================== */
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-primary-light);
+      padding: 6px 14px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.25);
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ===========================
+       BUTTONS
+    =========================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      transition: all var(--transition);
+      cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+      box-shadow: 0 0 0 0 rgba(59,130,246,0);
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-light);
+      box-shadow: 0 0 24px rgba(59,130,246,0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-hover);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(99,149,255,0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-accent {
+      background: var(--color-accent);
+      color: #fff;
+    }
+    .btn-accent:hover {
+      background: var(--color-accent-light);
+      box-shadow: 0 0 24px rgba(249,115,22,0.4);
+      transform: translateY(-1px);
+    }
+
+    /* ===========================
+       NAVIGATION
+    =========================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0;
+      transition: all var(--transition-slow);
+    }
+
+    .navbar.scrolled {
+      background: rgba(2, 8, 23, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* futuristic FG mark */
+    .logo-icon svg {
+      width: 44px;
+      height: 44px;
+      display: block;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .logo-text span {
+      color: var(--color-primary-light);
+    }
+
+    .logo:hover .logo-icon svg {
+      filter: drop-shadow(0 0 8px rgba(96,165,250,0.6));
+      transition: filter var(--transition);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: all var(--transition);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 72px 0 0 0;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ===========================
+       HERO
+    =========================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* Shader canvas: fixed, starts at very top behind navbar */
+    #shader-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      display: block;
+      z-index: 0;
+    }
+
+    /* Bottom fade: blends shader into the page below */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent, var(--bg-primary));
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Subtle dark overlay so text stays readable */
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 8, 23, 0.45);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 0 60px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-primary-light);
+      padding: 8px 16px;
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      animation: fadeInDown 0.6s ease both;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      background: #22d3ee;
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+
+    .hero-title {
+      font-size: clamp(2.75rem, 7vw, 5rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.1s both;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      animation: fadeInUp 0.7s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+      animation: fadeInUp 0.7s ease 0.3s both;
+    }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.4s both;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .hero-stat-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+    }
+
+    /* Hero image */
+    .hero-visual {
+      position: relative;
+      z-index: 1;
+      margin-top: 60px;
+      animation: fadeInUp 0.8s ease 0.5s both;
+    }
+
+    /* ── Hero Mockup ── */
+    .hero-mockup {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Glow rings behind the card */
+    .hero-mockup::before {
+      content: '';
+      position: absolute;
+      inset: -40px;
+      border-radius: 40px;
+      background: radial-gradient(ellipse at 50% 60%, rgba(99,102,241,0.18) 0%, rgba(59,130,246,0.1) 40%, transparent 70%);
+      filter: blur(20px);
+      z-index: 0;
+    }
+
+    .mockup-window {
+      position: relative;
+      z-index: 1;
+      background: rgba(13, 20, 40, 0.92);
+      border: 1px solid rgba(99,149,255,0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(99,149,255,0.08),
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 60px rgba(59,130,246,0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Title bar */
+    .mockup-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(99,149,255,0.1);
+    }
+
+    .mockup-dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+    }
+    .mockup-dot.red   { background: #ff5f57; }
+    .mockup-dot.yellow{ background: #febc2e; }
+    .mockup-dot.green { background: #28c840; }
+
+    .mockup-titlebar-label {
+      margin-left: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* Dashboard body */
+    .mockup-body {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 400px;
+    }
+
+    /* Sidebar */
+    .mockup-sidebar {
+      background: rgba(9,14,28,0.8);
+      border-right: 1px solid rgba(99,149,255,0.08);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-logo {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      padding: 4px 8px 16px;
+      border-bottom: 1px solid rgba(99,149,255,0.08);
+      margin-bottom: 8px;
+    }
+    .sidebar-logo span { color: var(--color-primary-light); }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: default;
+      transition: all 0.15s;
+    }
+    .sidebar-item.active {
+      background: rgba(59,130,246,0.12);
+      color: var(--color-primary-light);
+    }
+    .sidebar-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* Main content */
+    .mockup-main {
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mockup-title { font-size: 14px; font-weight: 700; }
+    .mockup-badge {
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(34,197,94,0.12);
+      color: #4ade80;
+      border: 1px solid rgba(34,197,94,0.2);
+      padding: 3px 10px;
+      border-radius: 999px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .mockup-badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s ease infinite;
+    }
+
+    /* KPI cards row */
+    .mockup-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .mockup-kpi {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(99,149,255,0.1);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .mockup-kpi-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .mockup-kpi-value {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .mockup-kpi-change {
+      font-size: 10px;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .up { color: #4ade80; }
+    .down { color: #f87171; }
+
+    /* Chart area */
+    .mockup-chart-area {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(99,149,255,0.08);
+      border-radius: 10px;
+      padding: 14px 16px;
+      flex: 1;
+    }
+    .mockup-chart-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    /* Animated bar chart */
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 80px;
+    }
+
+    .chart-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, var(--color-primary), #a78bfa);
+      opacity: 0.7;
+      animation: barRise 1s ease both;
+    }
+    .chart-bar:nth-child(odd) { opacity: 0.45; }
+
+    @keyframes barRise {
+      from { transform: scaleY(0); transform-origin: bottom; }
+      to   { transform: scaleY(1); transform-origin: bottom; }
+    }
+
+    /* AI activity feed */
+    .mockup-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .feed-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .feed-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .feed-time { color: var(--text-muted); font-size: 10px; margin-left: auto; }
+
+    /* Floating accent cards */
+    .float-card {
+      position: absolute;
+      z-index: 2;
+      background: rgba(13,20,40,0.95);
+      border: 1px solid rgba(99,149,255,0.25);
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59,130,246,0.1);
+      backdrop-filter: blur(16px);
+    }
+
+    .float-card-left {
+      left: -64px;
+      top: 28%;
+      animation: floatY 4s ease-in-out infinite;
+    }
+
+    .float-card-right {
+      right: -64px;
+      top: 52%;
+      animation: floatY 4s ease-in-out infinite 1.5s;
+    }
+
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .float-card-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .float-card-value {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .float-card-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* hide float cards on small screens */
+    @media (max-width: 900px) {
+      .float-card { display: none; }
+      .mockup-body { grid-template-columns: 1fr; }
+      .mockup-sidebar { display: none; }
+    }
+    @media (max-width: 600px) {
+      .mockup-kpis { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ===========================
+       LOGOS / TRUSTED BY
+    =========================== */
+    .trusted {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .trusted-label {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .trusted-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .trusted-logo {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: -0.02em;
+      transition: color var(--transition);
+      opacity: 0.6;
+    }
+    .trusted-logo:hover { color: var(--text-secondary); opacity: 1; }
+
+    /* ===========================
+       SERVICES
+    =========================== */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: all var(--transition-slow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity var(--transition-slow);
+    }
+
+    .service-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .service-icon svg { width: 24px; height: 24px; stroke-width: 1.75; }
+
+    .service-card h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .service-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-primary-light);
+      transition: gap var(--transition);
+    }
+    .service-link:hover { gap: 10px; }
+    .service-link svg { width: 16px; height: 16px; }
+
+    /* Service icon colors */
+    .icon-blue { background: rgba(59,130,246,0.12); color: var(--color-primary-light); }
+    .icon-purple { background: rgba(167,139,250,0.12); color: #a78bfa; }
+    .icon-cyan { background: rgba(34,211,238,0.12); color: #22d3ee; }
+    .icon-orange { background: rgba(249,115,22,0.12); color: #fb923c; }
+    .icon-green { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .icon-pink { background: rgba(236,72,153,0.12); color: #f472b6; }
+
+    /* ===========================
+       PROCESS
+    =========================== */
+    .process {
+      background: var(--bg-secondary);
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      margin-top: 60px;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+    }
+
+    .process-step {
+      text-align: center;
+      position: relative;
+    }
+
+    .process-step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--color-primary-light);
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-step h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .process-step p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===========================
+       STATS
+    =========================== */
+    .stats-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(59,130,246,0.08) 0%, transparent 70%);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px;
+      background: var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      padding: 40px 32px;
+      text-align: center;
+      transition: background var(--transition);
+    }
+    .stat-card:hover { background: var(--bg-card-hover); }
+
+    .stat-value {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--color-primary-light) 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ===========================
+       CASE STUDIES
+    =========================== */
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .case-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition-slow);
+    }
+
+    .case-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .case-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .case-content {
+      padding: 28px;
+    }
+
+    .case-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-primary-light);
+      padding: 4px 10px;
+      background: rgba(59,130,246,0.1);
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+
+    .case-content h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .case-content p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .case-metric {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .case-metric-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--color-accent-light);
+      letter-spacing: -0.03em;
+    }
+
+    .case-metric-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ===========================
+       TESTIMONIALS
+    =========================== */
+    .testimonials {
+      background: var(--bg-secondary);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: all var(--transition-slow);
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-stars svg {
+      width: 16px;
+      height: 16px;
+      fill: #fbbf24;
+      color: #fbbf24;
+    }
+
+    .testimonial-text {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border-hover);
+    }
+
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .testimonial-role {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ===========================
+       PRICING
+    =========================== */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+      align-items: start;
+    }
+
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      position: relative;
+      transition: all var(--transition-slow);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--color-primary);
+      background: rgba(59,130,246,0.06);
+      box-shadow: 0 0 40px rgba(59,130,246,0.12);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 4px 16px;
+      border-radius: 999px;
+    }
+
+    .pricing-tier {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .pricing-price {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .pricing-period {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .pricing-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .pricing-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .pricing-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .pricing-feature svg {
+      width: 16px;
+      height: 16px;
+      color: var(--color-primary-light);
+      flex-shrink: 0;
+    }
+
+    /* ===========================
+       TEAM
+    =========================== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .team-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition-slow);
+      text-align: center;
+    }
+
+    .team-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .team-photo {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .team-info { padding: 20px; }
+
+    .team-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .team-role {
+      font-size: 13px;
+      color: var(--color-primary-light);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .team-bio {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ===========================
+       CTA SECTION
+    =========================== */
+    .cta-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-inner {
+      background: linear-gradient(135deg, rgba(37,99,235,0.15) 0%, rgba(124,58,237,0.1) 100%);
+      border: 1px solid rgba(99,149,255,0.25);
+      border-radius: var(--radius-xl);
+      padding: 80px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-inner::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-inner h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .cta-inner p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    /* ===========================
+       CONTACT
+    =========================== */
+    .contact {
+      background: var(--bg-secondary);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-top: 60px;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .contact-info p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .contact-item-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon svg { width: 18px; height: 18px; color: var(--color-primary-light); }
+
+    .contact-item-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .contact-item-value {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .contact-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text-primary);
+      transition: border-color var(--transition);
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group select option {
+      background: var(--bg-secondary);
+    }
+
+    /* ===========================
+       FOOTER
+    =========================== */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 64px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col ul li a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--text-primary); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+    .social-link:hover {
+      border-color: var(--border-hover);
+      background: rgba(59,130,246,0.1);
+    }
+    .social-link svg { width: 16px; height: 16px; color: var(--text-secondary); }
+
+    /* ===========================
+       ANIMATIONS
+    =========================== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===========================
+       RESPONSIVE
+    =========================== */
+    @media (max-width: 1024px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 64px 0; }
+
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      .hero-stats { gap: 24px; }
+      .hero-stat-divider { display: none; }
+
+      .process-steps::before { display: none; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-brand { grid-column: 1 / -1; }
+
+      .cta-inner { padding: 48px 28px; }
+
+      .services-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; width: 100%; }
+      .btn { width: 100%; justify-content: center; }
+
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===========================
+       FOCUS STATES (Accessibility)
+    =========================== */
+    :focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================
+       NAVIGATION
+  ========================= -->
+  <nav class="navbar" id="navbar" aria-label="Hauptnavigation">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="#" class="logo" aria-label="FG AI Agentur – Startseite">
+          <div class="logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="lg1" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#60a5fa"/>
+                  <stop offset="100%" stop-color="#a78bfa"/>
+                </linearGradient>
+                <linearGradient id="lg2" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.1"/>
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <!-- Outer hexagon frame -->
+              <polygon points="22,2 40,12 40,32 22,42 4,32 4,12" fill="url(#lg2)" stroke="url(#lg1)" stroke-width="1.2" opacity="0.9"/>
+              <!-- Inner accent lines -->
+              <polygon points="22,7 36,15 36,29 22,37 8,29 8,15" fill="none" stroke="url(#lg1)" stroke-width="0.5" opacity="0.4"/>
+              <!-- Corner tech dots -->
+              <circle cx="22" cy="2"  r="1.5" fill="#60a5fa" filter="url(#glow)"/>
+              <circle cx="40" cy="12" r="1.5" fill="#60a5fa" filter="url(#glow)"/>
+              <circle cx="40" cy="32" r="1.5" fill="#a78bfa" filter="url(#glow)"/>
+              <circle cx="22" cy="42" r="1.5" fill="#a78bfa" filter="url(#glow)"/>
+              <circle cx="4"  cy="32" r="1.5" fill="#a78bfa" filter="url(#glow)"/>
+              <circle cx="4"  cy="12" r="1.5" fill="#60a5fa" filter="url(#glow)"/>
+              <!-- FG letters -->
+              <!-- F -->
+              <text x="7" y="28" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="900" fill="url(#lg1)" letter-spacing="-1" filter="url(#glow)">FG</text>
+              <!-- scan line accent -->
+              <line x1="8" y1="31" x2="36" y2="31" stroke="url(#lg1)" stroke-width="0.6" opacity="0.5"/>
+            </svg>
+          </div>
+          <span class="logo-text">FG <span>AI</span> Agentur</span>
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="#services">Leistungen</a></li>
+          <li><a href="#process">Prozess</a></li>
+          <li><a href="#cases">Projekte</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#pricing">Preise</a></li>
+        </ul>
+
+        <div class="nav-cta">
+          <a href="#contact" class="btn btn-outline" style="padding: 10px 20px; font-size: 14px;">Kontakt</a>
+          <a href="#contact" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Kostenlos starten</a>
+        </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile Navigation">
+    <a href="#services" onclick="closeMobileMenu()">Leistungen</a>
+    <a href="#process" onclick="closeMobileMenu()">Prozess</a>
+    <a href="#cases" onclick="closeMobileMenu()">Projekte</a>
+    <a href="#team" onclick="closeMobileMenu()">Team</a>
+    <a href="#pricing" onclick="closeMobileMenu()">Preise</a>
+    <a href="#contact" onclick="closeMobileMenu()" class="btn btn-primary" style="text-align:center;">Kostenlos starten</a>
+  </div>
+
+  <!-- ========================
+       HERO
+  ========================= -->
+  <main>
+    <section class="hero" id="home" aria-labelledby="hero-heading">
+      <div class="hero-bg" aria-hidden="true">
+        <canvas id="shader-canvas"></canvas>
+      </div>
+
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge" role="status">
+            <span class="hero-badge-dot" aria-hidden="true"></span>
+            Websites · Chatbots · Voice Agents · Lead-Generierung
+          </div>
+
+          <h1 class="hero-title" id="hero-heading">
+            Mehr Kunden.<br>
+            <span class="gradient-text">Weniger Aufwand.</span><br>
+            Durch KI.
+          </h1>
+
+          <p class="hero-subtitle">
+            Wir bauen professionelle Websites, smarte KI-Chatbots und Voice Agents – die rund um die Uhr Leads generieren und Termine direkt in Ihren Kalender buchen.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Kostenlose Beratung
+            </a>
+            <a href="#cases" class="btn btn-outline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Projekte ansehen
+            </a>
+          </div>
+
+          <div class="hero-stats" role="list" aria-label="Kennzahlen">
+            <div class="hero-stat" role="listitem">
+              <div class="hero-stat-number" aria-label="Über 120 abgeschlossene Projekte">120+</div>
+              <div class="hero-stat-label">Projekte umgesetzt</div>
+            </div>
+            <div class="hero-stat-divider" aria-hidden="true"></div>
+            <div class="hero-stat" role="listitem">
+              <div class="hero-stat-number" aria-label="Über 80 zufriedene Kunden">80+</div>
+              <div class="hero-stat-label">Kunden weltweit</div>
+            </div>
+            <div class="hero-stat-divider" aria-hidden="true"></div>
+            <div class="hero-stat" role="listitem">
+              <div class="hero-stat-number" aria-label="Durchschnittlich 40 Prozent Kostensenkung">40%</div>
+              <div class="hero-stat-label">Durchschn. Kostenersparnis</div>
+            </div>
+            <div class="hero-stat-divider" aria-hidden="true"></div>
+            <div class="hero-stat" role="listitem">
+              <div class="hero-stat-number" aria-label="98 Prozent Kundenzufriedenheit">98%</div>
+              <div class="hero-stat-label">Kundenzufriedenheit</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual: Premium UI Mockup -->
+        <div class="hero-visual animate-on-scroll" aria-hidden="true">
+          <div class="hero-mockup">
+
+            <!-- Floating left card -->
+            <div class="float-card float-card-left">
+              <div class="float-card-label">Automatisierungen</div>
+              <div class="float-card-value">3.4k</div>
+              <div class="float-card-sub">↑ 24% diese Woche</div>
+            </div>
+
+            <!-- Floating right card -->
+            <div class="float-card float-card-right">
+              <div class="float-card-label">KI-Genauigkeit</div>
+              <div class="float-card-value">98.7%</div>
+              <div class="float-card-sub">Modell v4.1 aktiv</div>
+            </div>
+
+            <!-- Main dashboard window -->
+            <div class="mockup-window">
+              <!-- Title bar -->
+              <div class="mockup-titlebar">
+                <span class="mockup-dot red"></span>
+                <span class="mockup-dot yellow"></span>
+                <span class="mockup-dot green"></span>
+                <span class="mockup-titlebar-label">FG AI · Intelligence Dashboard</span>
+              </div>
+
+              <!-- Dashboard body -->
+              <div class="mockup-body">
+                <!-- Sidebar -->
+                <nav class="mockup-sidebar">
+                  <div class="sidebar-logo">FG <span>AI</span></div>
+                  <div class="sidebar-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    Übersicht
+                  </div>
+                  <div class="sidebar-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Analytik
+                  </div>
+                  <div class="sidebar-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+                    Automatisierung
+                  </div>
+                  <div class="sidebar-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    KI-Chat
+                  </div>
+                  <div class="sidebar-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Sicherheit
+                  </div>
+                </nav>
+
+                <!-- Main content -->
+                <div class="mockup-main">
+                  <div class="mockup-header">
+                    <span class="mockup-title">KI-Übersicht · März 2025</span>
+                    <span class="mockup-badge">Live</span>
+                  </div>
+
+                  <!-- KPI Cards -->
+                  <div class="mockup-kpis">
+                    <div class="mockup-kpi">
+                      <div class="mockup-kpi-label">Prozesse automatisiert</div>
+                      <div class="mockup-kpi-value" style="background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">12.4k</div>
+                      <div class="mockup-kpi-change up">↑ 18.3%</div>
+                    </div>
+                    <div class="mockup-kpi">
+                      <div class="mockup-kpi-label">Kostenersparnis</div>
+                      <div class="mockup-kpi-value" style="background:linear-gradient(135deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">€84k</div>
+                      <div class="mockup-kpi-change up">↑ 41.2%</div>
+                    </div>
+                    <div class="mockup-kpi">
+                      <div class="mockup-kpi-label">Fehlerquote</div>
+                      <div class="mockup-kpi-value" style="background:linear-gradient(135deg,#fb923c,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">0.3%</div>
+                      <div class="mockup-kpi-change down">↓ 76%</div>
+                    </div>
+                  </div>
+
+                  <!-- Chart -->
+                  <div class="mockup-chart-area">
+                    <div class="mockup-chart-title">KI-Leistung – letzte 12 Wochen</div>
+                    <div class="chart-bars">
+                      <div class="chart-bar" style="height:45%;animation-delay:.05s"></div>
+                      <div class="chart-bar" style="height:62%;animation-delay:.1s"></div>
+                      <div class="chart-bar" style="height:50%;animation-delay:.15s"></div>
+                      <div class="chart-bar" style="height:71%;animation-delay:.2s"></div>
+                      <div class="chart-bar" style="height:55%;animation-delay:.25s"></div>
+                      <div class="chart-bar" style="height:80%;animation-delay:.3s"></div>
+                      <div class="chart-bar" style="height:68%;animation-delay:.35s"></div>
+                      <div class="chart-bar" style="height:88%;animation-delay:.4s"></div>
+                      <div class="chart-bar" style="height:74%;animation-delay:.45s"></div>
+                      <div class="chart-bar" style="height:92%;animation-delay:.5s"></div>
+                      <div class="chart-bar" style="height:85%;animation-delay:.55s"></div>
+                      <div class="chart-bar" style="height:100%;animation-delay:.6s"></div>
+                    </div>
+                  </div>
+
+                  <!-- Activity feed -->
+                  <div class="mockup-feed">
+                    <div class="feed-item">
+                      <span class="feed-dot" style="background:#4ade80"></span>
+                      Rechnungsverarbeitung abgeschlossen · 342 Dokumente
+                      <span class="feed-time">vor 2 Min</span>
+                    </div>
+                    <div class="feed-item">
+                      <span class="feed-dot" style="background:#60a5fa"></span>
+                      Chatbot: 94 Kundenanfragen gelöst
+                      <span class="feed-time">vor 8 Min</span>
+                    </div>
+                    <div class="feed-item">
+                      <span class="feed-dot" style="background:#a78bfa"></span>
+                      Anomalie erkannt – Risikostufe niedrig
+                      <span class="feed-time">vor 15 Min</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         TRUSTED BY
+    ========================= -->
+    <div class="trusted" aria-label="Unsere Kunden und Partner">
+      <div class="container">
+        <p class="trusted-label">Vertrauen von führenden Unternehmen</p>
+        <div class="trusted-logos" role="list">
+          <span class="trusted-logo" role="listitem">TechCorp AG</span>
+          <span class="trusted-logo" role="listitem">Nexus Digital</span>
+          <span class="trusted-logo" role="listitem">Alpine Finance</span>
+          <span class="trusted-logo" role="listitem">MediaPro GmbH</span>
+          <span class="trusted-logo" role="listitem">InnovaHealth</span>
+          <span class="trusted-logo" role="listitem">FutureBuild</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================
+         SERVICES
+    ========================= -->
+    <section id="services" aria-labelledby="services-heading">
+      <div class="container">
+        <div class="animate-on-scroll">
+          <span class="label" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Unsere Leistungen
+          </span>
+          <h2 class="section-title" id="services-heading">Was wir für Sie<br>bauen</h2>
+          <p class="section-subtitle">Von der Website bis zum vollautomatischen Lead-System – alles aus einer Hand.</p>
+        </div>
+
+        <div class="services-grid">
+          <!-- Service 1: Website Building -->
+          <article class="service-card animate-on-scroll">
+            <div class="service-icon icon-blue" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <h3>Website-Erstellung</h3>
+            <p>Professionelle, blitzschnelle Websites die Vertrauen aufbauen und Besucher zu Kunden machen – modern, mobil-optimiert und auf Ihre Marke zugeschnitten.</p>
+            <a href="#contact" class="service-link" aria-label="Mehr über Website-Erstellung erfahren">
+              Mehr erfahren
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <!-- Service 2: KI Chatbot -->
+          <article class="service-card animate-on-scroll">
+            <div class="service-icon icon-purple" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>
+            </div>
+            <h3>KI-Chatbots</h3>
+            <p>Intelligente Chatbots, die Ihre Website-Besucher 24/7 empfangen, qualifizieren und zu Kunden konvertieren – vollständig auf Ihr Unternehmen trainiert.</p>
+            <a href="#contact" class="service-link" aria-label="Mehr über KI-Chatbots erfahren">
+              Mehr erfahren
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <!-- Service 3: KI Voice Agent -->
+          <article class="service-card animate-on-scroll">
+            <div class="service-icon icon-cyan" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </div>
+            <h3>KI Voice Agents</h3>
+            <p>Sprachgesteuerte KI-Agenten, die am Telefon Anfragen entgegennehmen, Kunden beraten und eigenständig Termine vereinbaren – menschlich klingend, rund um die Uhr.</p>
+            <a href="#contact" class="service-link" aria-label="Mehr über KI Voice Agents erfahren">
+              Mehr erfahren
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <!-- Service 4: Lead Generierung -->
+          <article class="service-card animate-on-scroll">
+            <div class="service-icon icon-orange" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3>Lead-Generierung per KI</h3>
+            <p>Unser KI-Chatbot spricht Besucher aktiv an, sammelt Kontaktdaten, qualifiziert Interessenten und übergibt sie als warme Leads direkt an Ihr Vertriebsteam.</p>
+            <a href="#contact" class="service-link" aria-label="Mehr über KI Lead-Generierung erfahren">
+              Mehr erfahren
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <!-- Service 5: Kalender Buchung -->
+          <article class="service-card animate-on-scroll">
+            <div class="service-icon icon-green" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+            </div>
+            <h3>Automatische Kalender-Buchung</h3>
+            <p>Der KI-Chatbot prüft Ihre Verfügbarkeit in Echtzeit und bucht Termine direkt in Ihren Kalender – ohne manuelles Zutun, kompatibel mit Google Calendar & Outlook.</p>
+            <a href="#contact" class="service-link" aria-label="Mehr über automatische Terminbuchung erfahren">
+              Mehr erfahren
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <!-- Service 6: Komplett-Paket -->
+          <article class="service-card animate-on-scroll">
+            <div class="service-icon icon-pink" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <h3>Komplett-System</h3>
+            <p>Website + KI-Chatbot + Voice Agent + Lead-Tracking + Kalender-Integration – alles verbunden zu einem vollautomatischen Kundengewinnungs-System.</p>
+            <a href="#contact" class="service-link" aria-label="Mehr über das Komplett-System erfahren">
+              Mehr erfahren
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         PROCESS
+    ========================= -->
+    <section class="process" id="process" aria-labelledby="process-heading">
+      <div class="container">
+        <div class="animate-on-scroll" style="text-align:center;">
+          <span class="label" aria-hidden="true">Unser Vorgehen</span>
+          <h2 class="section-title" id="process-heading">In 4 Schritten<br>zum automatischen Kundenstrom</h2>
+          <p class="section-subtitle" style="margin: 0 auto;">Schnell, einfach und ohne technisches Vorwissen – wir übernehmen alles.</p>
+        </div>
+
+        <div class="process-steps" role="list">
+          <div class="process-step animate-on-scroll" role="listitem">
+            <div class="process-step-num" aria-label="Schritt 1">01</div>
+            <h3>Kostenloses Erstgespräch</h3>
+            <p>Wir verstehen Ihr Geschäft, Ihre Ziele und zeigen Ihnen, wie ein maßgeschneidertes KI-System für Sie aussehen könnte.</p>
+          </div>
+          <div class="process-step animate-on-scroll" role="listitem">
+            <div class="process-step-num" aria-label="Schritt 2">02</div>
+            <h3>Konzept & Setup</h3>
+            <p>Wir planen Ihre Website, den Chatbot und den Voice Agent – und integrieren alles mit Ihrem Kalender und Ihren Tools.</p>
+          </div>
+          <div class="process-step animate-on-scroll" role="listitem">
+            <div class="process-step-num" aria-label="Schritt 3">03</div>
+            <h3>Launch in 7–14 Tagen</h3>
+            <p>Ihr gesamtes System geht live – Website, KI-Chatbot, Voice Agent und automatische Terminbuchung, fertig eingerichtet.</p>
+          </div>
+          <div class="process-step animate-on-scroll" role="listitem">
+            <div class="process-step-num" aria-label="Schritt 4">04</div>
+            <h3>Leads & Termine automatisch</h3>
+            <p>Ab sofort arbeitet das System für Sie: Besucher werden zu Leads, Leads werden zu Terminen – ohne Ihren Aufwand.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         STATS
+    ========================= -->
+    <section class="stats-section" aria-labelledby="stats-heading">
+      <div class="container">
+        <h2 class="section-title" id="stats-heading" style="text-align:center; margin-bottom:48px;" class="animate-on-scroll">
+          Ergebnisse, die<br><span class="gradient-text">für sich sprechen</span>
+        </h2>
+        <div class="stats-grid" role="list">
+          <div class="stat-card animate-on-scroll" role="listitem">
+            <div class="stat-value" aria-label="120 plus">120+</div>
+            <div class="stat-label">Projekte erfolgreich umgesetzt</div>
+          </div>
+          <div class="stat-card animate-on-scroll" role="listitem">
+            <div class="stat-value" aria-label="40 Prozent">40%</div>
+            <div class="stat-label">Durchschnittliche Kostensenkung</div>
+          </div>
+          <div class="stat-card animate-on-scroll" role="listitem">
+            <div class="stat-value" aria-label="3 mal schneller">3×</div>
+            <div class="stat-label">Schnellere Prozessgeschwindigkeit</div>
+          </div>
+          <div class="stat-card animate-on-scroll" role="listitem">
+            <div class="stat-value" aria-label="98 Prozent">98%</div>
+            <div class="stat-label">Kundenzufriedenheitsrate</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         CASE STUDIES
+    ========================= -->
+    <section id="cases" aria-labelledby="cases-heading">
+      <div class="container">
+        <div class="animate-on-scroll">
+          <span class="label" aria-hidden="true">Fallstudien</span>
+          <h2 class="section-title" id="cases-heading">Ergebnisse unserer<br>Kunden</h2>
+          <p class="section-subtitle">Echte Zahlen, echte Unternehmen – so verändert ein KI-System Ihren Alltag.</p>
+        </div>
+
+        <div class="cases-grid">
+          <article class="case-card animate-on-scroll">
+            <img
+              class="case-image"
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80&auto=format&fit=crop"
+              alt="Dashboard-Visualisierung für Finanzautomatisierung"
+              loading="lazy"
+              width="600"
+              height="200"
+            />
+            <div class="case-content">
+              <span class="case-tag">Handwerksbetrieb</span>
+              <h3>KI-Chatbot + automatische Terminbuchung für Sanitär Bauer</h3>
+              <p>Der Chatbot nimmt Anfragen entgegen, qualifiziert den Bedarf und bucht Vor-Ort-Termine direkt in den Google Calendar des Teams.</p>
+              <div class="case-metric">
+                <span class="case-metric-value">+230%</span>
+                <span class="case-metric-label">mehr Terminbuchungen pro Monat</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="case-card animate-on-scroll">
+            <img
+              class="case-image"
+              src="https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=600&q=80&auto=format&fit=crop"
+              alt="E-Commerce Automatisierung Visualisierung"
+              loading="lazy"
+              width="600"
+              height="200"
+            />
+            <div class="case-content">
+              <span class="case-tag">Immobilienmakler</span>
+              <h3>KI Voice Agent für Immobilien Nexus</h3>
+              <p>Ein Voice Agent beantwortet eingehende Anrufe 24/7, fragt Eckdaten ab und trägt Besichtigungstermine automatisch in den Kalender ein.</p>
+              <div class="case-metric">
+                <span class="case-metric-value">+180%</span>
+                <span class="case-metric-label">qualifizierte Leads pro Woche</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="case-card animate-on-scroll">
+            <img
+              class="case-image"
+              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80&auto=format&fit=crop"
+              alt="Healthcare KI-Lösung Visualisierung"
+              loading="lazy"
+              width="600"
+              height="200"
+            />
+            <div class="case-content">
+              <span class="case-tag">Coaching & Beratung</span>
+              <h3>Neue Website + Lead-Chatbot für Coach Stephanie K.</h3>
+              <p>Komplett neue Website mit integriertem KI-Chatbot – Interessenten beantworten einen kurzen Fragenkatalog und buchen direkt ein Erstgespräch.</p>
+              <div class="case-metric">
+                <span class="case-metric-value">-90%</span>
+                <span class="case-metric-label">weniger No-Shows durch Auto-Erinnerung</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         TESTIMONIALS
+    ========================= -->
+    <section class="testimonials" aria-labelledby="testimonials-heading">
+      <div class="container">
+        <div class="animate-on-scroll" style="text-align:center;">
+          <span class="label" aria-hidden="true">Kundenstimmen</span>
+          <h2 class="section-title" id="testimonials-heading">Was unsere Kunden<br>über uns sagen</h2>
+        </div>
+
+        <div class="testimonials-grid">
+          <article class="testimonial-card animate-on-scroll">
+            <div class="testimonial-stars" aria-label="5 von 5 Sternen">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <blockquote class="testimonial-text">
+              "FG AI Agentur hat unsere Erwartungen übertroffen. Die implementierte KI-Lösung hat unsere Betriebskosten um 45% reduziert und die Qualität massiv verbessert. Absolut empfehlenswert!"
+            </blockquote>
+            <div class="testimonial-author">
+              <img
+                class="testimonial-avatar"
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=88&q=80&auto=format&fit=crop&face"
+                alt="Portrait von Thomas Bauer, CEO bei TechCorp AG"
+                loading="lazy"
+                width="44"
+                height="44"
+              />
+              <div>
+                <div class="testimonial-name">Thomas Bauer</div>
+                <div class="testimonial-role">CEO, TechCorp AG</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card animate-on-scroll">
+            <div class="testimonial-stars" aria-label="5 von 5 Sternen">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <blockquote class="testimonial-text">
+              "Dank des KI-Chatbots hat sich unser Support-Team auf komplexe Fälle konzentrieren können. Die Automatisierungsrate von 85% ist beeindruckend – und die Kundenzufriedenheit ist gestiegen."
+            </blockquote>
+            <div class="testimonial-author">
+              <img
+                class="testimonial-avatar"
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=88&q=80&auto=format&fit=crop&face"
+                alt="Portrait von Sarah Müller, Head of Digital bei Nexus Digital"
+                loading="lazy"
+                width="44"
+                height="44"
+              />
+              <div>
+                <div class="testimonial-name">Sarah Müller</div>
+                <div class="testimonial-role">Head of Digital, Nexus Digital</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card animate-on-scroll">
+            <div class="testimonial-stars" aria-label="5 von 5 Sternen">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <blockquote class="testimonial-text">
+              "Professionelles Team, klare Kommunikation und ein Ergebnis, das wirklich funktioniert. Die Predictive-Maintenance-Lösung hat uns bereits im ersten Jahr über 200.000€ gespart."
+            </blockquote>
+            <div class="testimonial-author">
+              <img
+                class="testimonial-avatar"
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=88&q=80&auto=format&fit=crop&face"
+                alt="Portrait von Dr. Klaus Weber, CTO bei InnovaHealth"
+                loading="lazy"
+                width="44"
+                height="44"
+              />
+              <div>
+                <div class="testimonial-name">Dr. Klaus Weber</div>
+                <div class="testimonial-role">CTO, InnovaHealth</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         TEAM
+    ========================= -->
+    <section id="team" aria-labelledby="team-heading">
+      <div class="container">
+        <div class="animate-on-scroll" style="text-align:center;">
+          <span class="label" aria-hidden="true">Das Team</span>
+          <h2 class="section-title" id="team-heading">Experten mit<br>Leidenschaft für KI</h2>
+          <p class="section-subtitle" style="margin:0 auto;">Unser multidisziplinäres Team vereint tiefes KI-Know-how mit Branchen-Expertise.</p>
+        </div>
+
+        <div class="team-grid">
+          <article class="team-card animate-on-scroll">
+            <img
+              class="team-photo"
+              src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=440&q=80&auto=format&fit=crop&face"
+              alt="Francesco Giudice, Gründer und CEO"
+              loading="lazy"
+              width="440"
+              height="220"
+            />
+            <div class="team-info">
+              <div class="team-name">Francesco Giudice</div>
+              <div class="team-role">Gründer & CEO</div>
+              <div class="team-bio">10+ Jahre KI-Erfahrung, ex-Google, spezialisiert auf Unternehmenstransformation.</div>
+            </div>
+          </article>
+
+          <article class="team-card animate-on-scroll">
+            <img
+              class="team-photo"
+              src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=440&q=80&auto=format&fit=crop&face"
+              alt="Maria Schmidt, Lead AI Engineer"
+              loading="lazy"
+              width="440"
+              height="220"
+            />
+            <div class="team-info">
+              <div class="team-name">Maria Schmidt</div>
+              <div class="team-role">Lead AI Engineer</div>
+              <div class="team-bio">PhD Informatik, Expertin für NLP und Large Language Models.</div>
+            </div>
+          </article>
+
+          <article class="team-card animate-on-scroll">
+            <img
+              class="team-photo"
+              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=440&q=80&auto=format&fit=crop&face"
+              alt="Lukas Hoffmann, Head of Data Science"
+              loading="lazy"
+              width="440"
+              height="220"
+            />
+            <div class="team-info">
+              <div class="team-name">Lukas Hoffmann</div>
+              <div class="team-role">Head of Data Science</div>
+              <div class="team-bio">Spezialist für Predictive Analytics und Machine Learning Pipelines.</div>
+            </div>
+          </article>
+
+          <article class="team-card animate-on-scroll">
+            <img
+              class="team-photo"
+              src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=440&q=80&auto=format&fit=crop&face"
+              alt="Anna Klein, UX & Product Lead"
+              loading="lazy"
+              width="440"
+              height="220"
+            />
+            <div class="team-info">
+              <div class="team-name">Anna Klein</div>
+              <div class="team-role">UX & Product Lead</div>
+              <div class="team-bio">Verbindet KI-Technologie mit außergewöhnlicher Nutzererfahrung.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         PRICING
+    ========================= -->
+    <section id="pricing" style="background: var(--bg-secondary);" aria-labelledby="pricing-heading">
+      <div class="container">
+        <div class="animate-on-scroll" style="text-align:center;">
+          <span class="label" aria-hidden="true">Preismodelle</span>
+          <h2 class="section-title" id="pricing-heading">Transparente<br>Preisgestaltung</h2>
+          <p class="section-subtitle" style="margin:0 auto;">Flexible Pakete für jede Unternehmensgröße – keine versteckten Kosten.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Starter -->
+          <div class="pricing-card animate-on-scroll">
+            <div class="pricing-tier">Starter</div>
+            <div class="pricing-price">€1.499</div>
+            <div class="pricing-period">/ Monat</div>
+            <p class="pricing-desc">Ideal für kleine Unternehmen, die erste KI-Schritte gehen wollen.</p>
+            <ul class="pricing-features" role="list">
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                1 KI-Automatisierung
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Basis Chatbot
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Monatliches Reporting
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                E-Mail Support
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-outline" style="width:100%; justify-content:center;">Jetzt starten</a>
+          </div>
+
+          <!-- Pro (featured) -->
+          <div class="pricing-card featured animate-on-scroll">
+            <div class="pricing-badge" aria-label="Beliebtestes Paket">Beliebteste Wahl</div>
+            <div class="pricing-tier">Professional</div>
+            <div class="pricing-price">€3.999</div>
+            <div class="pricing-period">/ Monat</div>
+            <p class="pricing-desc">Für wachsende Unternehmen mit ambitionierten KI-Zielen.</p>
+            <ul class="pricing-features" role="list">
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Bis zu 5 KI-Automatisierungen
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Erweiterter KI-Assistent
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Datenanalyse-Dashboard
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Wöchentliche Reviews
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Priority Support 24/7
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-primary" style="width:100%; justify-content:center;">Jetzt starten</a>
+          </div>
+
+          <!-- Enterprise -->
+          <div class="pricing-card animate-on-scroll">
+            <div class="pricing-tier">Enterprise</div>
+            <div class="pricing-price">Individuell</div>
+            <div class="pricing-period">Auf Anfrage</div>
+            <p class="pricing-desc">Maßgeschneiderte Enterprise-Lösungen für große Organisationen.</p>
+            <ul class="pricing-features" role="list">
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Unbegrenzte Automatisierungen
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Dediziertes KI-Team
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                On-Premise Deployment
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                SLA-Garantie
+              </li>
+              <li class="pricing-feature" role="listitem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Persönlicher Account Manager
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-outline" style="width:100%; justify-content:center;">Anfrage senden</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         CTA
+    ========================= -->
+    <section class="cta-section" aria-labelledby="cta-heading">
+      <div class="container">
+        <div class="cta-inner animate-on-scroll">
+          <h2 id="cta-heading">Bereit für die<br><span class="gradient-text">KI-Revolution?</span></h2>
+          <p>Starten Sie noch heute mit einer kostenlosen 30-minütigen Beratung und entdecken Sie das KI-Potenzial Ihres Unternehmens.</p>
+          <div class="cta-actions">
+            <a href="#contact" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Kostenlose Beratung buchen
+            </a>
+            <a href="tel:+4912345678" class="btn btn-outline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l1.06-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.76 16l.16.92z"/></svg>
+              Jetzt anrufen
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         CONTACT
+    ========================= -->
+    <section class="contact" id="contact" aria-labelledby="contact-heading">
+      <div class="container">
+        <div class="animate-on-scroll">
+          <span class="label" aria-hidden="true">Kontakt</span>
+          <h2 class="section-title" id="contact-heading">Lassen Sie uns<br>sprechen</h2>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-info animate-on-scroll">
+            <h3>Wir freuen uns auf Ihre Anfrage</h3>
+            <p>Ob Sie eine spezifische KI-Herausforderung haben oder einfach mehr über unsere Leistungen erfahren möchten – wir sind für Sie da.</p>
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l1.06-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.76 16l.16.92z"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Telefon</div>
+                <a href="tel:+4912345678" class="contact-item-value">+49 123 45678</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">E-Mail</div>
+                <a href="mailto:hello@fg-ai-agentur.de" class="contact-item-value">hello@fg-ai-agentur.de</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="contact-item-label">Adresse</div>
+                <div class="contact-item-value">Musterstraße 42, 80333 München</div>
+              </div>
+            </div>
+
+            <!-- Map placeholder image -->
+            <img
+              src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&q=80&auto=format&fit=crop"
+              alt="München Stadtansicht – Standort der FG AI Agentur"
+              style="width:100%; height:200px; object-fit:cover; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-top:24px;"
+              loading="lazy"
+              width="600"
+              height="200"
+            />
+          </div>
+
+          <div class="animate-on-scroll">
+            <form class="contact-form" action="#" method="POST" novalidate aria-label="Kontaktformular">
+              <div class="form-group">
+                <label for="name">Vollständiger Name <span aria-label="Pflichtfeld">*</span></label>
+                <input type="text" id="name" name="name" placeholder="Max Mustermann" required autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="email">E-Mail-Adresse <span aria-label="Pflichtfeld">*</span></label>
+                <input type="email" id="email" name="email" placeholder="max@unternehmen.de" required autocomplete="email" />
+              </div>
+              <div class="form-group">
+                <label for="company">Unternehmen</label>
+                <input type="text" id="company" name="company" placeholder="Ihr Unternehmen GmbH" autocomplete="organization" />
+              </div>
+              <div class="form-group">
+                <label for="service">Gewünschte Leistung</label>
+                <select id="service" name="service">
+                  <option value="" disabled selected>Bitte wählen...</option>
+                  <option value="website">Website-Erstellung</option>
+                  <option value="chatbot">KI-Chatbot</option>
+                  <option value="voice">KI Voice Agent</option>
+                  <option value="leads">Lead-Generierung</option>
+                  <option value="calendar">Automatische Terminbuchung</option>
+                  <option value="bundle">Komplett-System</option>
+                  <option value="other">Sonstiges</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="message">Ihre Nachricht <span aria-label="Pflichtfeld">*</span></label>
+                <textarea id="message" name="message" placeholder="Beschreiben Sie kurz Ihre Herausforderung oder Ihr Projekt..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" onclick="handleFormSubmit(event)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Nachricht senden
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================
+       FOOTER
+  ========================= -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo" aria-label="FG AI Agentur – zur Startseite">
+            <div class="logo-icon" aria-hidden="true">
+              <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="lg1f" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a78bfa"/>
+                  </linearGradient>
+                  <linearGradient id="lg2f" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/><stop offset="100%" stop-color="#7c3aed" stop-opacity="0.1"/>
+                  </linearGradient>
+                </defs>
+                <polygon points="22,2 40,12 40,32 22,42 4,32 4,12" fill="url(#lg2f)" stroke="url(#lg1f)" stroke-width="1.2" opacity="0.9"/>
+                <polygon points="22,7 36,15 36,29 22,37 8,29 8,15" fill="none" stroke="url(#lg1f)" stroke-width="0.5" opacity="0.4"/>
+                <circle cx="22" cy="2"  r="1.5" fill="#60a5fa"/>
+                <circle cx="40" cy="12" r="1.5" fill="#60a5fa"/>
+                <circle cx="40" cy="32" r="1.5" fill="#a78bfa"/>
+                <circle cx="22" cy="42" r="1.5" fill="#a78bfa"/>
+                <circle cx="4"  cy="32" r="1.5" fill="#a78bfa"/>
+                <circle cx="4"  cy="12" r="1.5" fill="#60a5fa"/>
+                <text x="7" y="28" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="900" fill="url(#lg1f)" letter-spacing="-1">FG</text>
+                <line x1="8" y1="31" x2="36" y2="31" stroke="url(#lg1f)" stroke-width="0.6" opacity="0.5"/>
+              </svg>
+            </div>
+            <span class="logo-text">FG <span>AI</span> Agentur</span>
+          </a>
+          <p>Websites, KI-Chatbots, Voice Agents & automatische Lead-Generierung mit direkter Kalender-Buchung – alles aus einer Hand.</p>
+          <div class="social-links" style="margin-top:20px;" aria-label="Social Media Links">
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Twitter / X">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Leistungen</h4>
+          <ul role="list">
+            <li><a href="#services">Website-Erstellung</a></li>
+            <li><a href="#services">KI-Chatbots</a></li>
+            <li><a href="#services">KI Voice Agents</a></li>
+            <li><a href="#services">Lead-Generierung</a></li>
+            <li><a href="#services">Kalender-Buchung</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Unternehmen</h4>
+          <ul role="list">
+            <li><a href="#team">Über uns</a></li>
+            <li><a href="#cases">Projekte</a></li>
+            <li><a href="#pricing">Preise</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Rechtliches</h4>
+          <ul role="list">
+            <li><a href="#">Impressum</a></li>
+            <li><a href="#">Datenschutz</a></li>
+            <li><a href="#">AGB</a></li>
+            <li><a href="#">Cookie-Einstellungen</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 FG AI Agentur. Alle Rechte vorbehalten.</span>
+        <span>Made with ❤️ in München</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================
+       JAVASCRIPT
+  ========================= -->
+  <script>
+    // ── WebGL Shader Background ──
+    (function initShaderBackground() {
+      const canvas = document.getElementById('shader-canvas');
+      if (!canvas) return;
+
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) { console.warn('WebGL not supported – shader background disabled.'); return; }
+
+      const vsSource = `
+        attribute vec4 aVertexPosition;
+        void main() {
+          gl_Position = aVertexPosition;
+        }
+      `;
+
+      const fsSource = `
+        precision highp float;
+        uniform vec2 iResolution;
+        uniform float iTime;
+
+        const float overallSpeed = 0.2;
+        const float gridSmoothWidth = 0.015;
+        const float axisWidth = 0.05;
+        const float majorLineWidth = 0.025;
+        const float minorLineWidth = 0.0125;
+        const float majorLineFrequency = 5.0;
+        const float minorLineFrequency = 1.0;
+        const float scale = 5.0;
+        const vec4 lineColor = vec4(0.4, 0.2, 0.8, 1.0);
+        const float minLineWidth = 0.01;
+        const float maxLineWidth = 0.2;
+        const float lineSpeed = 1.0 * overallSpeed;
+        const float lineAmplitude = 1.0;
+        const float lineFrequency = 0.2;
+        const float warpSpeed = 0.2 * overallSpeed;
+        const float warpFrequency = 0.5;
+        const float warpAmplitude = 1.0;
+        const float offsetFrequency = 0.5;
+        const float offsetSpeed = 1.33 * overallSpeed;
+        const float minOffsetSpread = 0.6;
+        const float maxOffsetSpread = 2.0;
+        const int linesPerGroup = 16;
+
+        #define drawCircle(pos, radius, coord) smoothstep(radius + gridSmoothWidth, radius, length(coord - (pos)))
+        #define drawSmoothLine(pos, halfWidth, t) smoothstep(halfWidth, 0.0, abs(pos - (t)))
+        #define drawCrispLine(pos, halfWidth, t) smoothstep(halfWidth + gridSmoothWidth, halfWidth, abs(pos - (t)))
+        #define drawPeriodicLine(freq, width, t) drawCrispLine(freq / 2.0, width, abs(mod(t, freq) - (freq) / 2.0))
+
+        float drawGridLines(float axis) {
+          return drawCrispLine(0.0, axisWidth, axis)
+                + drawPeriodicLine(majorLineFrequency, majorLineWidth, axis)
+                + drawPeriodicLine(minorLineFrequency, minorLineWidth, axis);
+        }
+
+        float random(float t) {
+          return (cos(t) + cos(t * 1.3 + 1.3) + cos(t * 1.4 + 1.4)) / 3.0;
+        }
+
+        float getPlasmaY(float x, float horizontalFade, float offset) {
+          return random(x * lineFrequency + iTime * lineSpeed) * horizontalFade * lineAmplitude + offset;
+        }
+
+        void main() {
+          vec2 fragCoord = gl_FragCoord.xy;
+          vec2 uv = fragCoord.xy / iResolution.xy;
+          vec2 space = (fragCoord - iResolution.xy / 2.0) / iResolution.x * 2.0 * scale;
+
+          float horizontalFade = 1.0 - (cos(uv.x * 6.28) * 0.5 + 0.5);
+          float verticalFade = 1.0 - (cos(uv.y * 6.28) * 0.5 + 0.5);
+
+          space.y += random(space.x * warpFrequency + iTime * warpSpeed) * warpAmplitude * (0.5 + horizontalFade);
+          space.x += random(space.y * warpFrequency + iTime * warpSpeed + 2.0) * warpAmplitude * horizontalFade;
+
+          vec4 lines = vec4(0.0);
+          vec4 bgColor1 = vec4(0.04, 0.04, 0.14, 1.0);
+          vec4 bgColor2 = vec4(0.10, 0.04, 0.20, 1.0);
+
+          for(int l = 0; l < linesPerGroup; l++) {
+            float normalizedLineIndex = float(l) / float(linesPerGroup);
+            float offsetTime = iTime * offsetSpeed;
+            float offsetPosition = float(l) + space.x * offsetFrequency;
+            float rand = random(offsetPosition + offsetTime) * 0.5 + 0.5;
+            float halfWidth = mix(minLineWidth, maxLineWidth, rand * horizontalFade) / 2.0;
+            float offset = random(offsetPosition + offsetTime * (1.0 + normalizedLineIndex)) * mix(minOffsetSpread, maxOffsetSpread, horizontalFade);
+            float linePosition = getPlasmaY(space.x, horizontalFade, offset);
+            float line = drawSmoothLine(linePosition, halfWidth, space.y) / 2.0 + drawCrispLine(linePosition, halfWidth * 0.15, space.y);
+
+            float circleX = mod(float(l) + iTime * lineSpeed, 25.0) - 12.0;
+            vec2 circlePosition = vec2(circleX, getPlasmaY(circleX, horizontalFade, offset));
+            float circle = drawCircle(circlePosition, 0.01, space) * 4.0;
+
+            line = line + circle;
+            lines += line * lineColor * rand;
+          }
+
+          vec4 fragColor = mix(bgColor1, bgColor2, uv.x);
+          fragColor *= verticalFade;
+          fragColor.a = 1.0;
+          fragColor += lines;
+
+          gl_FragColor = fragColor;
+        }
+      `;
+
+      function loadShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+          gl.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      }
+
+      const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+      const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+      if (!vertexShader || !fragmentShader) return;
+
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error('Shader link error:', gl.getProgramInfoLog(program));
+        return;
+      }
+
+      const positionBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+      const vertexPosition = gl.getAttribLocation(program, 'aVertexPosition');
+      const uResolution = gl.getUniformLocation(program, 'iResolution');
+      const uTime = gl.getUniformLocation(program, 'iTime');
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+      resizeCanvas();
+
+      const startTime = Date.now();
+      let animId;
+
+      // Pause when hero is out of view (performance)
+      const heroSection = document.getElementById('home');
+      let shaderVisible = true;
+      if (heroSection && 'IntersectionObserver' in window) {
+        new IntersectionObserver(entries => {
+          shaderVisible = entries[0].isIntersecting;
+        }, { threshold: 0 }).observe(heroSection);
+      }
+
+      function render() {
+        animId = requestAnimationFrame(render);
+        if (!shaderVisible) return;
+
+        const currentTime = (Date.now() - startTime) / 1000;
+        gl.clearColor(0, 0, 0, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.useProgram(program);
+        gl.uniform2f(uResolution, canvas.width, canvas.height);
+        gl.uniform1f(uTime, currentTime);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.vertexAttribPointer(vertexPosition, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(vertexPosition);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+
+      render();
+    })();
+
+    // ── Navbar scroll effect ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ── Mobile menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open', menuOpen);
+      hamburger.setAttribute('aria-expanded', String(menuOpen));
+    });
+
+    function closeMobileMenu() {
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (menuOpen && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // ── Scroll animations (IntersectionObserver) ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+      observer.observe(el);
+    });
+
+    // ── Counter animation ──
+    function animateCounter(el, end, suffix = '') {
+      const duration = 1800;
+      const step = 16;
+      const increment = end / (duration / step);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= end) {
+          el.textContent = end + suffix;
+          clearInterval(timer);
+        } else {
+          el.textContent = Math.floor(current) + suffix;
+        }
+      }, step);
+    }
+
+    // Animate stats when visible
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const statValues = entry.target.querySelectorAll('.stat-value');
+          const data = [
+            { value: 120, suffix: '+' },
+            { value: 40, suffix: '%' },
+            { value: 3, suffix: '×' },
+            { value: 98, suffix: '%' }
+          ];
+          statValues.forEach((el, i) => {
+            if (data[i]) animateCounter(el, data[i].value, data[i].suffix);
+          });
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const statsGrid = document.querySelector('.stats-grid');
+    if (statsGrid) statsObserver.observe(statsGrid);
+
+    // ── Contact form ──
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const btn = e.target;
+      btn.disabled = true;
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Nachricht gesendet!';
+      btn.style.background = '#16a34a';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Nachricht senden';
+        btn.style.background = '';
+      }, 4000);
+    }
+
+    // ── Smooth active nav link ──
+    const sections = document.querySelectorAll('section[id], div[id="home"]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          navLinks.forEach((link) => {
+            link.style.color = '';
+            if (link.getAttribute('href') === '#' + entry.target.id) {
+              link.style.color = 'var(--text-primary)';
+            }
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach((s) => navObserver.observe(s));
+  </script>
+
+</body>
+</html>
