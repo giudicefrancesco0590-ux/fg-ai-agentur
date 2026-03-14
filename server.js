@@ -118,6 +118,84 @@ Schritt 5: Lade zum kostenlosen Erstgespräch ein.
 - Wenn du etwas nicht weißt: "Das beantworte ich gerne im persönlichen Gespräch!"
 - Calendly-Link für Terminbuchung: https://calendly.com/fg-ai-agentur`;
 
+// ── System-Prompt: Restaurant Demo ───────────────────────────────────────────
+const RESTAURANT_PROMPT = `Du bist der freundliche KI-Assistent eines Restaurants.
+Dein Name ist "Restaurant-Assistent". Du sprichst auf Deutsch.
+
+## Deine Aufgabe in dieser DEMO
+Du demonstrierst einem Restaurantbesitzer, wie sein eigener KI-Assistent funktionieren würde.
+Verhalte dich so, als wärst du bereits der Assistent seines Restaurants.
+
+## Was du kannst (simuliere es realistisch)
+- **Tischreservierungen** entgegennehmen: frage nach Datum, Uhrzeit, Personenzahl, Name, Telefon
+- **Speisekarte** beschreiben: klassische Restaurant-Gerichte, täglich wechselnde Specials
+- **Öffnungszeiten** nennen: Mo-Sa 11:30-22:00 Uhr, So 12:00-21:00 Uhr
+- **Vegane/allergene** Optionen erklären
+- **Eventbuchungen** (Geburtstage, Firmenfeiern) vormerken
+- **Wartezeiten** kommunizieren
+- **Takeaway & Lieferung** koordinieren
+- **Beschwerden** freundlich weiterleiten
+
+## Sales-Hinweis (subtil einbauen)
+Nach 2-3 Nachrichten darf du kurz erwähnen:
+"Übrigens – dieser Assistent könnte 24/7 für Ihr Restaurant arbeiten. Schauen Sie sich gerne unten an, wie das funktioniert!"
+→ Dann zum Formular scrollen lassen.
+
+## Stil
+- Freundlich, gastfreundlich, professionell
+- Kurze Antworten (max. 3 Sätze)
+- Gäste werden gesiezt`;
+
+// ── Lead speichern ───────────────────────────────────────────────────────────
+import { appendFileSync } from "fs";
+
+app.post("/api/lead", (req, res) => {
+  const lead = {
+    timestamp: new Date().toISOString(),
+    ...req.body
+  };
+  console.log("📥 Neuer Lead:", lead);
+  // In Datei speichern (später durch CRM/E-Mail ersetzen)
+  try {
+    appendFileSync("leads.jsonl", JSON.stringify(lead) + "\n");
+  } catch (e) { /* ignore */ }
+  res.json({ ok: true });
+});
+
+// ── Restaurant Demo Endpoint ─────────────────────────────────────────────────
+app.post("/api/chat-demo", async (req, res) => {
+  const { messages } = req.body;
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ error: "messages array required" });
+  }
+  const validMessages = messages.filter(m => m.role && m.content && typeof m.content === "string");
+  if (validMessages.length === 0) return res.status(400).json({ error: "No valid messages" });
+
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+
+  try {
+    const stream = client.messages.stream({
+      model: "claude-opus-4-6",
+      max_tokens: 350,
+      system: RESTAURANT_PROMPT,
+      messages: validMessages,
+    });
+    for await (const event of stream) {
+      if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+        res.write(`data: ${JSON.stringify({ text: event.delta.text })}\n\n`);
+      }
+    }
+    res.write("data: [DONE]\n\n");
+    res.end();
+  } catch (err) {
+    console.error("Demo API error:", err.message);
+    res.write(`data: ${JSON.stringify({ error: "Fehler aufgetreten." })}\n\n`);
+    res.end();
+  }
+});
+
 // ── Chat-Endpoint ─────────────────────────────────────────────────────────────
 app.post("/api/chat", async (req, res) => {
   const { messages } = req.body;
