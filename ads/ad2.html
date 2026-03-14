@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Ad 2 – Wachstum</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Inter', sans-serif;
+}
+
+.ad {
+  width: 1080px;
+  height: 1080px;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Diagonal gradient bg */
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(0,255,204,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0,153,255,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0,80,180,0.05) 0%, transparent 60%);
+}
+
+/* Dot grid */
+.dot-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(0,153,255,0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Top border */
+.top-border {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #00ffcc 25%, #09f 50%, #00ffcc 75%, transparent);
+}
+
+/* Left accent bar */
+.left-bar {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, transparent, #09f 30%, #00ffcc 70%, transparent);
+}
+
+/* Corner brackets */
+.corner { position: absolute; width: 60px; height: 60px; }
+.corner-tl { top: 40px; left: 48px; border-top: 2px solid rgba(0,255,204,0.5); border-left: 2px solid rgba(0,255,204,0.5); }
+.corner-tr { top: 40px; right: 40px; border-top: 2px solid rgba(0,255,204,0.5); border-right: 2px solid rgba(0,255,204,0.5); }
+.corner-bl { bottom: 100px; left: 48px; border-bottom: 2px solid rgba(0,255,204,0.5); border-left: 2px solid rgba(0,255,204,0.5); }
+.corner-br { bottom: 100px; right: 40px; border-bottom: 2px solid rgba(0,255,204,0.5); border-right: 2px solid rgba(0,255,204,0.5); }
+
+/* Scanlines */
+.scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 80px;
+  width: 100%;
+}
+
+/* Number badge */
+.badge-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 52px;
+}
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.badge-num {
+  font-family: 'Raleway', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #09f, #00ffcc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+.badge-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.badge-sep {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(180deg, transparent, rgba(0,153,255,0.4), transparent);
+  align-self: center;
+}
+
+/* Tag */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0,255,204,0.08);
+  border: 1px solid rgba(0,255,204,0.25);
+  border-radius: 100px;
+  padding: 10px 24px;
+  margin-bottom: 44px;
+}
+.tag-dot {
+  width: 8px; height: 8px;
+  background: #09f;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #09f;
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.tag-text {
+  font-family: 'Raleway', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+
+/* Headline */
+.headline {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: 82px;
+  line-height: 1.0;
+  color: #fff;
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
+}
+.headline .line1 {
+  display: block;
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.headline .line2 {
+  display: block;
+  background: linear-gradient(135deg, #09f 0%, #00ffcc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 88px;
+}
+
+/* Subheadline */
+.subheadline {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.03em;
+  margin-bottom: 56px;
+  line-height: 1.6;
+}
+
+/* CTA */
+.cta-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+.cta {
+  display: inline-block;
+  background: transparent;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  color: #fff;
+  font-family: 'Raleway', sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 22px 60px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0099ff, #00ffcc);
+  opacity: 1;
+  z-index: -1;
+}
+.cta-text {
+  position: relative;
+  color: #000;
+  font-weight: 800;
+}
+.cta-arrow {
+  position: relative;
+  color: #000;
+  font-size: 22px;
+  margin-left: 8px;
+}
+.cta-glow {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #0099ff, #00ffcc);
+  border-radius: 6px;
+  z-index: -2;
+  filter: blur(12px);
+  opacity: 0.5;
+}
+
+/* Chart visual */
+.chart-visual {
+  position: absolute;
+  bottom: 90px;
+  right: 50px;
+  opacity: 0.12;
+  z-index: 3;
+}
+
+/* Footer */
+.footer-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: rgba(0,0,0,0.85);
+  border-top: 1px solid rgba(0,255,204,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 20;
+}
+.footer-name {
+  font-family: 'Raleway', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.08em;
+}
+.footer-sep {
+  width: 4px; height: 4px;
+  background: #09f;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #09f;
+}
+.footer-brand {
+  font-family: 'Raleway', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #09f, #00ffcc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+<div class="ad">
+  <!-- Backgrounds -->
+  <div class="bg-gradient"></div>
+  <div class="dot-grid"></div>
+  <div class="scanline"></div>
+  <div class="top-border"></div>
+  <div class="left-bar"></div>
+
+  <!-- Corners -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Growth chart SVG background -->
+  <svg class="chart-visual" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- Grid -->
+    <line x1="0" y1="60" x2="400" y2="60" stroke="rgba(0,255,204,1)" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="0" y1="120" x2="400" y2="120" stroke="rgba(0,255,204,1)" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="0" y1="180" x2="400" y2="180" stroke="rgba(0,255,204,1)" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="0" y1="240" x2="400" y2="240" stroke="rgba(0,255,204,1)" stroke-width="1" stroke-dasharray="4,4"/>
+    <!-- Growth line -->
+    <polyline
+      points="0,280 60,240 120,200 180,150 240,100 300,60 360,20 400,5"
+      fill="none"
+      stroke="rgba(0,255,204,1)"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <!-- Area fill -->
+    <polygon
+      points="0,280 60,240 120,200 180,150 240,100 300,60 360,20 400,5 400,300 0,300"
+      fill="url(#areaGrad)"
+    />
+    <defs>
+      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" style="stop-color:rgba(0,255,204,0.4)"/>
+        <stop offset="100%" style="stop-color:rgba(0,153,255,0)"/>
+      </linearGradient>
+    </defs>
+    <!-- Dots on line -->
+    <circle cx="0" cy="280" r="5" fill="#00ffcc"/>
+    <circle cx="120" cy="200" r="5" fill="#09f"/>
+    <circle cx="240" cy="100" r="5" fill="#00ffcc"/>
+    <circle cx="400" cy="5" r="7" fill="#00ffcc" filter="drop-shadow(0 0 6px #00ffcc)"/>
+    <!-- Up arrow at end -->
+    <polygon points="400,5 390,25 410,25" fill="#00ffcc"/>
+  </svg>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Stats row -->
+    <div class="badge-row">
+      <div class="badge">
+        <span class="badge-num">3x</span>
+        <span class="badge-label">Mehr Leads</span>
+      </div>
+      <div class="badge-sep"></div>
+      <div class="badge">
+        <span class="badge-num">80%</span>
+        <span class="badge-label">Zeitersparnis</span>
+      </div>
+      <div class="badge-sep"></div>
+      <div class="badge">
+        <span class="badge-num">24/7</span>
+        <span class="badge-label">KI aktiv</span>
+      </div>
+    </div>
+
+    <div class="tag">
+      <div class="tag-dot"></div>
+      <span class="tag-text">Intelligente KI-Systeme</span>
+    </div>
+
+    <h1 class="headline">
+      <span class="line1">Mehr Kunden.</span>
+      <span class="line2">Weniger Aufwand.</span>
+    </h1>
+
+    <p class="subheadline">Intelligente KI-Systeme die für dich arbeiten</p>
+
+    <div class="cta-wrap">
+      <div class="cta">
+        <div class="cta-glow"></div>
+        <span class="cta-text">Kostenlose Strategie anfragen</span>
+        <span class="cta-arrow">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-bar">
+    <span class="footer-name">Francesco Giudice</span>
+    <div class="footer-sep"></div>
+    <span class="footer-brand">AI Agentur</span>
+  </div>
+</div>
+</body>
+</html>

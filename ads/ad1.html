@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Ad 1 – Automatisierung</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 1080px;
+  height: 1080px;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Inter', sans-serif;
+}
+
+.ad {
+  width: 1080px;
+  height: 1080px;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animated grid background */
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 153, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 153, 255, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 60px); }
+}
+
+/* Circuit lines SVG overlay */
+.circuit-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+}
+
+/* Radial glow center */
+.glow-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(ellipse at center,
+    rgba(0, 153, 255, 0.18) 0%,
+    rgba(0, 255, 204, 0.08) 35%,
+    transparent 70%);
+  border-radius: 50%;
+}
+
+/* Corner accents */
+.corner {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+}
+.corner-tl { top: 40px; left: 40px; border-top: 2px solid rgba(0,153,255,0.6); border-left: 2px solid rgba(0,153,255,0.6); }
+.corner-tr { top: 40px; right: 40px; border-top: 2px solid rgba(0,153,255,0.6); border-right: 2px solid rgba(0,153,255,0.6); }
+.corner-bl { bottom: 100px; left: 40px; border-bottom: 2px solid rgba(0,153,255,0.6); border-left: 2px solid rgba(0,153,255,0.6); }
+.corner-br { bottom: 100px; right: 40px; border-bottom: 2px solid rgba(0,153,255,0.6); border-right: 2px solid rgba(0,153,255,0.6); }
+
+/* Floating nodes */
+.node {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,204,0.9), rgba(0,153,255,0.4));
+  box-shadow: 0 0 20px rgba(0,255,204,0.8), 0 0 40px rgba(0,153,255,0.4);
+  animation: nodePulse 3s ease-in-out infinite;
+}
+.node-1 { width: 8px; height: 8px; top: 180px; left: 120px; animation-delay: 0s; }
+.node-2 { width: 5px; height: 5px; top: 320px; right: 150px; animation-delay: 0.8s; }
+.node-3 { width: 10px; height: 10px; top: 500px; left: 80px; animation-delay: 1.6s; }
+.node-4 { width: 6px; height: 6px; top: 700px; right: 120px; animation-delay: 0.4s; }
+.node-5 { width: 7px; height: 7px; top: 260px; left: 260px; animation-delay: 1.2s; }
+.node-6 { width: 4px; height: 4px; top: 820px; left: 300px; animation-delay: 2s; }
+
+@keyframes nodePulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* Connection lines between nodes */
+.connections {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Main content */
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 80px;
+  width: 100%;
+}
+
+/* Top tag */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 153, 255, 0.1);
+  border: 1px solid rgba(0, 153, 255, 0.3);
+  border-radius: 100px;
+  padding: 10px 24px;
+  margin-bottom: 52px;
+}
+.tag-dot {
+  width: 8px; height: 8px;
+  background: #00ffcc;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ffcc;
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.tag-text {
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Headline */
+.headline {
+  font-family: 'Raleway', sans-serif;
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1.05;
+  color: #fff;
+  margin-bottom: 28px;
+  text-shadow: 0 0 60px rgba(0,153,255,0.3);
+}
+.headline .highlight {
+  background: linear-gradient(135deg, #09f 0%, #00ffcc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subheadline */
+.subheadline {
+  font-family: 'Inter', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.04em;
+  margin-bottom: 64px;
+  line-height: 1.5;
+}
+
+/* CTA Button */
+.cta {
+  display: inline-block;
+  background: linear-gradient(135deg, #0099ff 0%, #00ffcc 100%);
+  color: #000;
+  font-family: 'Raleway', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 22px 64px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  box-shadow: 0 0 40px rgba(0,153,255,0.5), 0 0 80px rgba(0,255,204,0.2);
+  position: relative;
+}
+.cta::after {
+  content: ' →';
+}
+
+/* Divider line */
+.divider {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,153,255,0.5), transparent);
+  margin: 0 auto 0;
+}
+
+/* Footer bar */
+.footer-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: rgba(0,0,0,0.8);
+  border-top: 1px solid rgba(0,153,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 20;
+}
+.footer-name {
+  font-family: 'Raleway', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.08em;
+}
+.footer-sep {
+  width: 4px; height: 4px;
+  background: #00ffcc;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ffcc;
+}
+.footer-brand {
+  font-family: 'Raleway', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #09f, #00ffcc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Scan line effect */
+.scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Top border gradient */
+.top-border {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #09f 30%, #00ffcc 50%, #09f 70%, transparent 100%);
+}
+
+/* AI brain visual */
+.brain-visual {
+  position: absolute;
+  right: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 380px;
+  height: 380px;
+  opacity: 0.08;
+}
+</style>
+</head>
+<body>
+<div class="ad">
+  <!-- Background layers -->
+  <div class="grid-bg"></div>
+  <div class="glow-center"></div>
+  <div class="scanline"></div>
+  <div class="top-border"></div>
+
+  <!-- Corner accents -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Floating nodes -->
+  <div class="node node-1"></div>
+  <div class="node node-2"></div>
+  <div class="node node-3"></div>
+  <div class="node node-4"></div>
+  <div class="node node-5"></div>
+  <div class="node node-6"></div>
+
+  <!-- SVG Circuit connections -->
+  <svg class="circuit-overlay" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:rgba(0,153,255,0);"/>
+        <stop offset="50%" style="stop-color:rgba(0,153,255,1);"/>
+        <stop offset="100%" style="stop-color:rgba(0,255,204,0);"/>
+      </linearGradient>
+    </defs>
+    <!-- Horizontal lines -->
+    <line x1="0" y1="200" x2="300" y2="200" stroke="rgba(0,153,255,0.4)" stroke-width="1"/>
+    <circle cx="300" cy="200" r="4" fill="rgba(0,153,255,0.6)"/>
+    <line x1="300" y1="200" x2="300" y2="340" stroke="rgba(0,153,255,0.4)" stroke-width="1"/>
+    <circle cx="300" cy="340" r="3" fill="rgba(0,255,204,0.6)"/>
+    <line x1="300" y1="340" x2="180" y2="340" stroke="rgba(0,255,204,0.3)" stroke-width="1"/>
+
+    <line x1="1080" y1="280" x2="780" y2="280" stroke="rgba(0,153,255,0.4)" stroke-width="1"/>
+    <circle cx="780" cy="280" r="4" fill="rgba(0,153,255,0.6)"/>
+    <line x1="780" y1="280" x2="780" y2="420" stroke="rgba(0,153,255,0.4)" stroke-width="1"/>
+    <circle cx="780" cy="420" r="3" fill="rgba(0,255,204,0.5)"/>
+
+    <line x1="0" y1="700" x2="200" y2="700" stroke="rgba(0,255,204,0.3)" stroke-width="1"/>
+    <circle cx="200" cy="700" r="4" fill="rgba(0,255,204,0.6)"/>
+    <line x1="200" y1="700" x2="200" y2="820" stroke="rgba(0,255,204,0.3)" stroke-width="1"/>
+
+    <line x1="1080" y1="650" x2="860" y2="650" stroke="rgba(0,153,255,0.3)" stroke-width="1"/>
+    <circle cx="860" cy="650" r="3" fill="rgba(0,153,255,0.5)"/>
+    <line x1="860" y1="650" x2="860" y2="760" stroke="rgba(0,153,255,0.3)" stroke-width="1"/>
+    <circle cx="860" cy="760" r="5" fill="rgba(0,255,204,0.4)"/>
+
+    <!-- Central neural net hint -->
+    <circle cx="540" cy="480" r="60" stroke="rgba(0,153,255,0.15)" stroke-width="1" fill="none"/>
+    <circle cx="540" cy="480" r="100" stroke="rgba(0,153,255,0.08)" stroke-width="1" fill="none"/>
+    <circle cx="540" cy="480" r="140" stroke="rgba(0,153,255,0.05)" stroke-width="1" fill="none"/>
+
+    <!-- Dots on circles -->
+    <circle cx="600" cy="480" r="3" fill="rgba(0,153,255,0.5)"/>
+    <circle cx="480" cy="480" r="3" fill="rgba(0,153,255,0.5)"/>
+    <circle cx="540" cy="420" r="3" fill="rgba(0,255,204,0.5)"/>
+    <circle cx="540" cy="540" r="3" fill="rgba(0,255,204,0.5)"/>
+    <circle cx="626" cy="446" r="2" fill="rgba(0,255,204,0.4)"/>
+    <circle cx="454" cy="514" r="2" fill="rgba(0,255,204,0.4)"/>
+
+    <!-- Lines from center dots -->
+    <line x1="540" y1="480" x2="600" y2="480" stroke="rgba(0,153,255,0.3)" stroke-width="1"/>
+    <line x1="540" y1="480" x2="480" y2="480" stroke="rgba(0,153,255,0.3)" stroke-width="1"/>
+    <line x1="540" y1="480" x2="540" y2="420" stroke="rgba(0,255,204,0.3)" stroke-width="1"/>
+    <line x1="540" y1="480" x2="540" y2="540" stroke="rgba(0,255,204,0.3)" stroke-width="1"/>
+    <line x1="540" y1="480" x2="626" y2="446" stroke="rgba(0,153,255,0.2)" stroke-width="1"/>
+    <line x1="540" y1="480" x2="454" y2="514" stroke="rgba(0,153,255,0.2)" stroke-width="1"/>
+  </svg>
+
+  <!-- Main Content -->
+  <div class="content">
+    <div class="tag">
+      <div class="tag-dot"></div>
+      <span class="tag-text">KI-Automatisierung</span>
+    </div>
+
+    <h1 class="headline">
+      Dein Business läuft.<br>
+      <span class="highlight">Auch wenn du schläfst.</span>
+    </h1>
+
+    <p class="subheadline">KI-Automatisierung für Unternehmen</p>
+
+    <div class="cta">Jetzt kostenlos beraten</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-bar">
+    <span class="footer-name">Francesco Giudice</span>
+    <div class="footer-sep"></div>
+    <span class="footer-brand">AI Agentur</span>
+  </div>
+</div>
+</body>
+</html>
