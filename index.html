@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <script>if('scrollRestoration'in history){history.scrollRestoration='manual';}window.scrollTo(0,0);</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FG AI Agentur – Websites, KI-Chatbots & Voice Agents</title>
@@ -61,7 +62,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html {
-      scroll-behavior: smooth;
+      scroll-behavior: auto;
       -webkit-text-size-adjust: 100%;
     }
 
@@ -2970,6 +2971,14 @@
     // ── Always start at top ──
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
+
+    // ── Enable smooth scroll only for anchor clicks ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
 
     // ── Navbar scroll effect ──
     const navbar = document.getElementById('navbar');
