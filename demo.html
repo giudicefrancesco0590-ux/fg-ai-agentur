@@ -1021,26 +1021,26 @@ footer a {
     <h2 class="lead-title">Kostenlose <em>Demo anfordern</em></h2>
     <p class="lead-subtitle">Trag deine Daten ein – wir erstellen dir innerhalb von 48h eine Demo passend auf dein Unternehmen. 100% kostenlos & unverbindlich.</p>
 
-    <form onsubmit="submitForm(event)">
+    <form id="leadForm" onsubmit="submitForm(event)">
       <div class="form-row">
         <div class="form-group">
           <label>Vorname *</label>
-          <input type="text" placeholder="Max" required>
+          <input type="text" name="vorname" placeholder="Max" required>
         </div>
         <div class="form-group">
           <label>Nachname *</label>
-          <input type="text" placeholder="Mustermann" required>
+          <input type="text" name="nachname" placeholder="Mustermann" required>
         </div>
       </div>
 
       <div class="form-group">
         <label>Unternehmensname *</label>
-        <input type="text" placeholder="z.B. Pizzeria Bella Italia" required>
+        <input type="text" name="firma" placeholder="z.B. Pizzeria Bella Italia" required>
       </div>
 
       <div class="form-group">
         <label>Branche *</label>
-        <select required>
+        <select name="branche" required>
           <option value="" disabled selected>Branche auswählen...</option>
           <option>Restaurant / Gastronomie</option>
           <option>Einzelhandel / Shop</option>
@@ -1056,17 +1056,17 @@ footer a {
       <div class="form-row">
         <div class="form-group">
           <label>E-Mail *</label>
-          <input type="email" placeholder="max@firma.de" required>
+          <input type="email" name="email" placeholder="max@firma.de" required>
         </div>
         <div class="form-group">
           <label>Telefon</label>
-          <input type="tel" placeholder="+49 ...">
+          <input type="tel" name="telefon" placeholder="+49 ...">
         </div>
       </div>
 
       <div class="form-group">
         <label>Was soll der Chatbot können? (optional)</label>
-        <textarea placeholder="z.B. Reservierungen annehmen, Speisekarte erklären, FAQ beantworten..."></textarea>
+        <textarea name="nachricht" placeholder="z.B. Reservierungen annehmen, Speisekarte erklären, FAQ beantworten..."></textarea>
       </div>
 
       <button type="submit" class="submit-btn">🚀 Demo jetzt anfordern</button>
@@ -1225,32 +1225,34 @@ async function sendToTrello(name, firma, branche, email, telefon, nachricht) {
 async function submitForm(e) {
   e.preventDefault();
   const f = e.target;
-  const vorname = f.querySelector('input[placeholder="Max"]')?.value || '';
-  const nachname = f.querySelector('input[placeholder="Mustermann"]')?.value || '';
-  const name    = (vorname + ' ' + nachname).trim();
-  const firma   = f.querySelector('input[placeholder="z.B. Pizzeria Bella Italia"]')?.value || '';
-  const branche = f.querySelector('select')?.value || '';
-  const email   = f.querySelector('input[type="email"]')?.value || '';
-  const telefon = f.querySelector('input[type="tel"]')?.value || '';
-  const text    = f.querySelector('textarea')?.value || '';
+  const vorname = f.vorname.value.trim();
+  const nachname = f.nachname.value.trim();
+  const name    = vorname + ' ' + nachname;
+  const firma   = f.firma.value.trim();
+  const branche = f.branche.value;
+  const email   = f.email.value.trim();
+  const telefon = f.telefon.value.trim();
+  const text    = f.nachricht.value.trim();
 
   // Send email via Web3Forms
   try {
-    await fetch('https://api.web3forms.com/submit', {
+    const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
         access_key: '28a38929-3f14-4621-b019-89ea2e778b04',
-        subject: `🚀 Neue Demo-Anfrage: ${firma} (${branche})`,
+        subject: 'Neue Demo-Anfrage: ' + firma + ' (' + branche + ')',
         from_name: 'FG AI Agentur Demo',
         name: name,
         email: email,
-        'Firma': firma,
-        'Branche': branche,
-        'Telefon': telefon || '–',
-        'Nachricht': text || '–'
+        Firma: firma,
+        Branche: branche,
+        Telefon: telefon || '–',
+        Nachricht: text || '–'
       })
     });
+    const data = await res.json();
+    console.log('Web3Forms response:', data);
   } catch(err) { console.warn('Email send error:', err); }
 
   // Also send to Trello if configured
