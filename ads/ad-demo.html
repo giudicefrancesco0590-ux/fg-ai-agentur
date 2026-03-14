@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Ad – Demo Link</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 1080px; height: 1080px; overflow: hidden; background: #000; }
+
+.ad {
+  width: 1080px;
+  height: 1080px;
+  position: relative;
+  background: #050505;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Grid bg */
+.grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,153,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,153,255,0.05) 1px, transparent 1px);
+  background-size: 54px 54px;
+}
+
+/* Glow blobs */
+.glow1 {
+  position: absolute;
+  top: -100px; left: -100px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,153,255,0.12), transparent 70%);
+  border-radius: 50%;
+}
+.glow2 {
+  position: absolute;
+  bottom: -100px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0,255,204,0.08), transparent 70%);
+  border-radius: 50%;
+}
+.glow3 {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(167,139,250,0.04), transparent 65%);
+  border-radius: 50%;
+}
+
+/* Top border */
+.top-border {
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #7c3aed, #09f, #00ffcc, #09f, #7c3aed);
+}
+
+/* Corner brackets */
+.corner { position: absolute; width: 50px; height: 50px; }
+.tl { top: 36px; left: 36px; border-top: 2px solid rgba(0,153,255,0.5); border-left: 2px solid rgba(0,153,255,0.5); }
+.tr { top: 36px; right: 36px; border-top: 2px solid rgba(0,153,255,0.5); border-right: 2px solid rgba(0,153,255,0.5); }
+.bl { bottom: 36px; left: 36px; border-bottom: 2px solid rgba(0,153,255,0.5); border-left: 2px solid rgba(0,153,255,0.5); }
+.br { bottom: 36px; right: 36px; border-bottom: 2px solid rgba(0,153,255,0.5); border-right: 2px solid rgba(0,153,255,0.5); }
+
+/* Scanlines */
+.scan {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+}
+
+/* Content */
+.content {
+  position: relative; z-index: 10;
+  text-align: center;
+  padding: 0 70px;
+  width: 100%;
+}
+
+/* Live badge */
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.25);
+  border-radius: 100px;
+  padding: 10px 24px;
+  margin-bottom: 44px;
+}
+.live-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; }
+.live-text { font-family: 'Raleway', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+
+/* 3 service pills */
+.services {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.svc {
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.svc-1 { background: rgba(0,153,255,0.12); border: 1px solid rgba(0,153,255,0.35); color: #09f; }
+.svc-2 { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.35); color: #a78bfa; }
+.svc-3 { background: rgba(0,255,204,0.08); border: 1px solid rgba(0,255,204,0.25); color: #00ffcc; }
+
+/* Main headline */
+.headline {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: 80px;
+  line-height: 1.0;
+  color: #fff;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+.headline .line2 {
+  display: block;
+  background: linear-gradient(135deg, #09f 0%, #00ffcc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtitle */
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 56px;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CTA box */
+.cta-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(135deg, rgba(0,153,255,0.15), rgba(0,255,204,0.08));
+  border: 1px solid rgba(0,153,255,0.3);
+  border-radius: 16px;
+  padding: 20px 36px;
+  margin-bottom: 48px;
+}
+.cta-arrow {
+  font-size: 22px;
+  color: var(--cyan);
+}
+.cta-texts { text-align: left; }
+.cta-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 4px;
+}
+.cta-url {
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #09f, #00ffcc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+}
+
+/* Bottom row */
+.bottom-row {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: rgba(0,0,0,0.85);
+  border-top: 1px solid rgba(0,153,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 52px;
+  z-index: 20;
+}
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #09f, #00ffcc);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.brand-name {
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.06em;
+}
+.brand-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.1); }
+.brand-sub {
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #09f, #00ffcc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.insta-handle {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.05em;
+}
+.insta-handle strong { color: rgba(255,255,255,0.6); }
+</style>
+</head>
+<body>
+<div class="ad">
+  <div class="grid"></div>
+  <div class="glow1"></div>
+  <div class="glow2"></div>
+  <div class="glow3"></div>
+  <div class="scan"></div>
+  <div class="top-border"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- SVG decorations -->
+  <svg style="position:absolute;inset:0;opacity:0.07;pointer-events:none;" width="1080" height="1080" viewBox="0 0 1080 1080">
+    <circle cx="540" cy="500" r="220" stroke="#09f" stroke-width="1" fill="none"/>
+    <circle cx="540" cy="500" r="310" stroke="#00ffcc" stroke-width="0.5" fill="none"/>
+    <line x1="0" y1="300" x2="280" y2="300" stroke="#09f" stroke-width="1"/>
+    <circle cx="280" cy="300" r="4" fill="#09f"/>
+    <line x1="280" y1="300" x2="280" y2="420" stroke="#09f" stroke-width="1"/>
+    <line x1="1080" y1="700" x2="800" y2="700" stroke="#00ffcc" stroke-width="1"/>
+    <circle cx="800" cy="700" r="4" fill="#00ffcc"/>
+    <line x1="800" y1="700" x2="800" y2="580" stroke="#00ffcc" stroke-width="1"/>
+  </svg>
+
+  <div class="content">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span class="live-text">Jetzt kostenlos testen</span>
+    </div>
+
+    <div class="services">
+      <span class="svc svc-1">🤖 KI-Chatbot</span>
+      <span class="svc svc-2">🎙️ Voice Agent</span>
+      <span class="svc svc-3">🌐 Restaurant-Website</span>
+    </div>
+
+    <h1 class="headline">
+      Sieh es live –
+      <span class="line2">Teste die Demo.</span>
+    </h1>
+
+    <p class="sub">KI-Chatbot · Voice Agent · automatisch in Trello – alles für dein Restaurant. Klick auf den Link und erleb es selbst.</p>
+
+    <div class="cta-box">
+      <div style="font-size:32px;">👆</div>
+      <div class="cta-texts">
+        <div class="cta-label">Link in Bio · Demo ansehen</div>
+        <div class="cta-url">fg-ai-agentur.github.io/demo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="brand-left">
+      <div class="brand-icon">⚡</div>
+      <span class="brand-name">Francesco Giudice</span>
+      <div class="brand-sep"></div>
+      <span class="brand-sub">AI Agentur</span>
+    </div>
+    <span class="insta-handle">🔗 <strong>Link in Bio</strong> · Kostenlose Demo</span>
+  </div>
+</div>
+</body>
+</html>
