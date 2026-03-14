@@ -3104,5 +3104,590 @@
   }
   </script>
 
+  <!-- ═══════════════════════════════════════════════════════
+       FG AI CHATBOT WIDGET
+  ════════════════════════════════════════════════════════ -->
+  <style>
+    /* ── Chat Toggle Button ── */
+    #fg-chat-toggle {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0099ff 0%, #00ffcc 100%);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 0 rgba(0,153,255,0.4), 0 8px 32px rgba(0,0,0,0.5);
+      animation: chatPulse 2.5s infinite;
+      z-index: 9998;
+      transition: transform 0.2s ease;
+    }
+    #fg-chat-toggle:hover { transform: scale(1.08); }
+    #fg-chat-toggle svg { width: 26px; height: 26px; color: #fff; transition: opacity 0.2s; }
+    @keyframes chatPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,153,255,0.35), 0 8px 32px rgba(0,0,0,0.5); }
+      50%      { box-shadow: 0 0 0 10px rgba(0,153,255,0),  0 8px 32px rgba(0,0,0,0.5); }
+    }
+
+    /* ── Notification Badge ── */
+    #fg-chat-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ff4757;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #000;
+    }
+
+    /* ── Chat Window ── */
+    #fg-chat-window {
+      position: fixed;
+      bottom: 100px;
+      right: 28px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      height: 540px;
+      max-height: calc(100vh - 120px);
+      background: rgba(10,10,15,0.97);
+      border: 1px solid rgba(0,153,255,0.25);
+      border-radius: 20px;
+      box-shadow: 0 0 60px rgba(0,153,255,0.15), 0 24px 64px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9997;
+      transform: translateY(20px) scale(0.95);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      backdrop-filter: blur(20px);
+    }
+    #fg-chat-window.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── Header ── */
+    .fg-chat-header {
+      padding: 16px 20px;
+      background: linear-gradient(135deg, rgba(0,153,255,0.15) 0%, rgba(0,255,204,0.08) 100%);
+      border-bottom: 1px solid rgba(0,153,255,0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .fg-chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0099ff, #00ffcc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .fg-chat-meta { flex: 1; min-width: 0; }
+    .fg-chat-name { font-weight: 700; font-size: 15px; color: #fff; }
+    .fg-chat-status {
+      font-size: 12px;
+      color: #00ffcc;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .fg-chat-status::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #00ffcc;
+      display: inline-block;
+      animation: statusBlink 2s infinite;
+    }
+    @keyframes statusBlink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.4; }
+    }
+    .fg-chat-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .fg-chat-close:hover { background: rgba(255,60,60,0.15); color: #ff6b6b; }
+
+    /* ── Messages Area ── */
+    .fg-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,153,255,0.3) transparent;
+    }
+    .fg-chat-messages::-webkit-scrollbar { width: 4px; }
+    .fg-chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .fg-chat-messages::-webkit-scrollbar-thumb { background: rgba(0,153,255,0.3); border-radius: 2px; }
+
+    /* ── Message Bubbles ── */
+    .fg-msg {
+      display: flex;
+      gap: 8px;
+      max-width: 88%;
+      animation: msgIn 0.2s ease;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fg-msg.bot { align-self: flex-start; }
+    .fg-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+
+    .fg-msg-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0099ff, #00ffcc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .fg-msg-bubble {
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+    .fg-msg.bot .fg-msg-bubble {
+      background: rgba(0,153,255,0.1);
+      border: 1px solid rgba(0,153,255,0.2);
+      color: rgba(255,255,255,0.9);
+      border-bottom-left-radius: 4px;
+    }
+    .fg-msg.user .fg-msg-bubble {
+      background: linear-gradient(135deg, #0099ff 0%, #0077cc 100%);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    /* ── Typing Indicator ── */
+    .fg-typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 14px;
+      background: rgba(0,153,255,0.08);
+      border: 1px solid rgba(0,153,255,0.15);
+      border-radius: 14px;
+      border-bottom-left-radius: 4px;
+      width: fit-content;
+    }
+    .fg-typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(0,153,255,0.6);
+      animation: typingDot 1.2s infinite;
+    }
+    .fg-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .fg-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingDot {
+      0%,60%,100% { transform: translateY(0); opacity: 0.5; }
+      30%          { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* ── Quick Replies ── */
+    .fg-quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 16px 10px;
+    }
+    .fg-quick-btn {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,153,255,0.08);
+      border: 1px solid rgba(0,153,255,0.25);
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .fg-quick-btn:hover {
+      background: rgba(0,153,255,0.2);
+      border-color: rgba(0,153,255,0.5);
+      color: #fff;
+    }
+
+    /* ── Input Area ── */
+    .fg-chat-input-row {
+      padding: 12px 16px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    #fg-chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      min-height: 42px;
+      max-height: 100px;
+      overflow-y: auto;
+      transition: border-color 0.15s;
+      line-height: 1.5;
+    }
+    #fg-chat-input::placeholder { color: rgba(255,255,255,0.3); }
+    #fg-chat-input:focus { border-color: rgba(0,153,255,0.5); }
+
+    #fg-chat-send {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0099ff, #0077cc);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    #fg-chat-send:hover { transform: scale(1.05); box-shadow: 0 0 16px rgba(0,153,255,0.4); }
+    #fg-chat-send:disabled { opacity: 0.4; cursor: default; transform: none; }
+    #fg-chat-send svg { width: 18px; height: 18px; color: #fff; }
+
+    /* ── Calendly CTA ── */
+    .fg-calendly-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(0,153,255,0.2), rgba(0,255,204,0.1));
+      border: 1px solid rgba(0,153,255,0.4);
+      color: #0099ff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .fg-calendly-btn:hover {
+      background: linear-gradient(135deg, rgba(0,153,255,0.35), rgba(0,255,204,0.2));
+      color: #33ccff;
+    }
+  </style>
+
+  <!-- Toggle Button -->
+  <button id="fg-chat-toggle" aria-label="Chat öffnen">
+    <span id="fg-chat-badge">1</span>
+    <svg id="fg-icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    <svg id="fg-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- Chat Window -->
+  <div id="fg-chat-window" role="dialog" aria-label="FG AI Assistent" aria-modal="true">
+    <!-- Header -->
+    <div class="fg-chat-header">
+      <div class="fg-chat-avatar">🤖</div>
+      <div class="fg-chat-meta">
+        <div class="fg-chat-name">FG Assistant</div>
+        <div class="fg-chat-status">Online – Antwortet sofort</div>
+      </div>
+      <button class="fg-chat-close" id="fg-chat-close-btn" aria-label="Chat schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div class="fg-chat-messages" id="fg-chat-messages" role="log" aria-live="polite"></div>
+
+    <!-- Quick Replies -->
+    <div class="fg-quick-replies" id="fg-quick-replies">
+      <button class="fg-quick-btn" data-msg="Was kostet ein KI-Chatbot?">💬 Chatbot-Kosten</button>
+      <button class="fg-quick-btn" data-msg="Was ist ein Voice Agent?">📞 Voice Agent</button>
+      <button class="fg-quick-btn" data-msg="Wie funktioniert die Lead-Automatisierung?">🚀 Lead-Automation</button>
+      <button class="fg-quick-btn" data-msg="Welche Automatisierungen bietet ihr an?">⚙️ Automatisierungen</button>
+    </div>
+
+    <!-- Input -->
+    <div class="fg-chat-input-row">
+      <textarea id="fg-chat-input" placeholder="Schreib eine Nachricht..." rows="1" maxlength="1000" aria-label="Nachricht eingeben"></textarea>
+      <button id="fg-chat-send" aria-label="Senden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    const toggle      = document.getElementById('fg-chat-toggle');
+    const chatWindow  = document.getElementById('fg-chat-window');
+    const closeBtn    = document.getElementById('fg-chat-close-btn');
+    const messagesEl  = document.getElementById('fg-chat-messages');
+    const inputEl     = document.getElementById('fg-chat-input');
+    const sendBtn     = document.getElementById('fg-chat-send');
+    const quickEl     = document.getElementById('fg-quick-replies');
+    const iconChat    = document.getElementById('fg-icon-chat');
+    const iconClose   = document.getElementById('fg-icon-close');
+    const badge       = document.getElementById('fg-chat-badge');
+
+    let isOpen   = false;
+    let isLoading = false;
+    let history   = []; // {role, content}
+    let welcomeSent = false;
+
+    // ── Open / Close ──────────────────────────────────────────────
+    function openChat() {
+      isOpen = true;
+      chatWindow.classList.add('open');
+      iconChat.style.display  = 'none';
+      iconClose.style.display = '';
+      badge.style.display     = 'none';
+      inputEl.focus();
+      if (!welcomeSent) { sendWelcome(); welcomeSent = true; }
+    }
+
+    function closeChat() {
+      isOpen = false;
+      chatWindow.classList.remove('open');
+      iconChat.style.display  = '';
+      iconClose.style.display = 'none';
+    }
+
+    toggle.addEventListener('click', () => isOpen ? closeChat() : openChat());
+    closeBtn.addEventListener('click', closeChat);
+
+    // ── Welcome Message ───────────────────────────────────────────
+    function sendWelcome() {
+      appendMessage('bot', 'Hallo! 👋 Ich bin der KI-Assistent von FG AI Agentur.\n\nWir automatisieren dein Business mit KI-Chatbots, Voice Agents und smarten Workflows. Womit kann ich dir heute helfen?');
+    }
+
+    // ── Append a message bubble ───────────────────────────────────
+    function appendMessage(role, text, streaming = false) {
+      const wrap = document.createElement('div');
+      wrap.className = `fg-msg ${role}`;
+
+      if (role === 'bot') {
+        const av = document.createElement('div');
+        av.className = 'fg-msg-avatar';
+        av.textContent = '🤖';
+        wrap.appendChild(av);
+      }
+
+      const bubble = document.createElement('div');
+      bubble.className = 'fg-msg-bubble';
+      bubble.style.whiteSpace = 'pre-wrap';
+      bubble.textContent = text;
+      wrap.appendChild(bubble);
+
+      messagesEl.appendChild(wrap);
+      scrollToBottom();
+      return bubble;
+    }
+
+    function scrollToBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    // ── Typing indicator ─────────────────────────────────────────
+    function showTyping() {
+      const wrap = document.createElement('div');
+      wrap.className = 'fg-msg bot';
+      wrap.id = 'fg-typing-indicator';
+
+      const av = document.createElement('div');
+      av.className = 'fg-msg-avatar';
+      av.textContent = '🤖';
+      wrap.appendChild(av);
+
+      const dots = document.createElement('div');
+      dots.className = 'fg-typing';
+      dots.innerHTML = '<span></span><span></span><span></span>';
+      wrap.appendChild(dots);
+
+      messagesEl.appendChild(wrap);
+      scrollToBottom();
+    }
+
+    function hideTyping() {
+      const el = document.getElementById('fg-typing-indicator');
+      if (el) el.remove();
+    }
+
+    // ── Calendly button helper ────────────────────────────────────
+    function addCalendlyButton(afterBubble) {
+      const link = document.createElement('a');
+      link.href   = 'https://calendly.com/fg-ai-agentur';
+      link.target = '_blank';
+      link.rel    = 'noopener';
+      link.className = 'fg-calendly-btn';
+      link.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Kostenlosen Termin buchen →
+      `;
+      afterBubble.parentElement.appendChild(link);
+    }
+
+    // ── Send a message ────────────────────────────────────────────
+    async function sendMessage(text) {
+      text = text.trim();
+      if (!text || isLoading) return;
+
+      // Hide quick replies after first user message
+      quickEl.style.display = 'none';
+
+      // Show user bubble
+      appendMessage('user', text);
+      history.push({ role: 'user', content: text });
+
+      inputEl.value = '';
+      inputEl.style.height = 'auto';
+      isLoading = true;
+      sendBtn.disabled = true;
+
+      showTyping();
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: history })
+        });
+
+        if (!res.ok) throw new Error('Server error');
+
+        hideTyping();
+
+        const bubble = appendMessage('bot', '');
+        const reader  = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let fullText = '';
+        let showedCalendly = false;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            const data = line.slice(6);
+            if (data === '[DONE]') break;
+
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.error) {
+                bubble.textContent = parsed.error;
+              } else if (parsed.text) {
+                fullText += parsed.text;
+                bubble.textContent = fullText;
+                scrollToBottom();
+
+                // Show Calendly button when bot mentions Termin/buchen
+                if (!showedCalendly && /termin|buchung|calendly|gespräch/i.test(fullText)) {
+                  addCalendlyButton(bubble);
+                  showedCalendly = true;
+                }
+              }
+            } catch (e) { /* skip malformed */ }
+          }
+        }
+
+        history.push({ role: 'assistant', content: fullText });
+
+      } catch (err) {
+        hideTyping();
+        appendMessage('bot', '⚠️ Entschuldigung, ein Fehler ist aufgetreten. Bitte versuche es gleich erneut.');
+      } finally {
+        isLoading = false;
+        sendBtn.disabled = false;
+        inputEl.focus();
+      }
+    }
+
+    // ── Quick Reply Buttons ───────────────────────────────────────
+    quickEl.querySelectorAll('.fg-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => sendMessage(btn.dataset.msg));
+    });
+
+    // ── Send Button ───────────────────────────────────────────────
+    sendBtn.addEventListener('click', () => sendMessage(inputEl.value));
+
+    // ── Enter to send (Shift+Enter = newline) ─────────────────────
+    inputEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage(inputEl.value);
+      }
+    });
+
+    // ── Auto-resize textarea ──────────────────────────────────────
+    inputEl.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+
+    // ── ESC to close ──────────────────────────────────────────────
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isOpen) closeChat();
+    });
+  })();
+  </script>
+
 </body>
 </html>
