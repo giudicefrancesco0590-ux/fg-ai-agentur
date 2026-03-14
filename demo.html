@@ -1225,13 +1225,38 @@ async function sendToTrello(name, firma, branche, email, telefon, nachricht) {
 async function submitForm(e) {
   e.preventDefault();
   const f = e.target;
-  const name    = f.querySelector('input[placeholder="Max"]')?.value + ' ' + f.querySelector('input[placeholder="Mustermann"]')?.value;
-  const firma   = f.querySelector('input[placeholder="z.B. Pizzeria Bella Italia"]')?.value;
-  const branche = f.querySelector('select')?.value;
-  const email   = f.querySelector('input[type="email"]')?.value;
-  const telefon = f.querySelector('input[type="tel"]')?.value;
-  const text    = f.querySelector('textarea')?.value;
+  const vorname = f.querySelector('input[placeholder="Max"]')?.value || '';
+  const nachname = f.querySelector('input[placeholder="Mustermann"]')?.value || '';
+  const name    = (vorname + ' ' + nachname).trim();
+  const firma   = f.querySelector('input[placeholder="z.B. Pizzeria Bella Italia"]')?.value || '';
+  const branche = f.querySelector('select')?.value || '';
+  const email   = f.querySelector('input[type="email"]')?.value || '';
+  const telefon = f.querySelector('input[type="tel"]')?.value || '';
+  const text    = f.querySelector('textarea')?.value || '';
+
+  // Send email via Formsubmit
+  const formData = new FormData();
+  formData.append('_subject', `🚀 Neue Demo-Anfrage: ${firma} (${branche})`);
+  formData.append('_template', 'table');
+  formData.append('_captcha', 'false');
+  formData.append('Name', name);
+  formData.append('Firma', firma);
+  formData.append('Branche', branche);
+  formData.append('Email', email);
+  formData.append('Telefon', telefon || '–');
+  formData.append('Nachricht', text || '–');
+
+  try {
+    await fetch('https://formsubmit.co/info@master-closing.de', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+  } catch(err) { console.warn('Email send error:', err); }
+
+  // Also send to Trello if configured
   await sendToTrello(name, firma, branche, email, telefon, text);
+
   document.getElementById('leadSection').style.display = 'none';
   document.getElementById('thankyouSection').classList.add('visible');
   document.getElementById('thankyouSection').scrollIntoView({ behavior: 'smooth' });
