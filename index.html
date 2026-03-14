@@ -17,9 +17,9 @@
     =========================== */
     :root {
       /* ── Lamaratcha-Style: schwarz + Cyan ── */
-      --bg-primary:    #000000;
-      --bg-secondary:  #080808;
-      --bg-card:       rgba(255,255,255,0.04);
+      --bg-primary:    transparent;
+      --bg-secondary:  rgba(0,0,0,0.55);
+      --bg-card:       rgba(255,255,255,0.05);
       --bg-card-hover: rgba(255,255,255,0.08);
       --border:        rgba(255,255,255,0.1);
       --border-hover:  rgba(255,255,255,0.28);
@@ -67,7 +67,7 @@
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background-color: var(--bg-primary);
+      background-color: #000;
       color: var(--text-primary);
       line-height: 1.6;
       overflow-x: hidden;
@@ -294,7 +294,9 @@
       display: none;
       position: fixed;
       inset: 72px 0 0 0;
-      background: var(--bg-secondary);
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border);
       padding: 32px 24px;
       z-index: 999;
@@ -328,22 +330,31 @@
       z-index: 0;
     }
 
-    /* Hero background video */
+    /* Global background video – fixed, covers entire site */
     #hero-video {
       position: fixed;
       top: 0; left: 0;
-      width: 100%; height: 100vh;
+      width: 100%; height: 100%;
       object-fit: cover;
-      z-index: 0;
+      z-index: -2;
       pointer-events: none;
     }
 
-    /* Dark overlay over video – like lamaratcha.de */
-    .hero-bg::before {
-      content: '';
+    /* Global dark overlay over video */
+    #video-overlay {
       position: fixed;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.50) 100%);
+      background: rgba(0,0,0,0.60);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Hero gradient overlays */
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.10) 100%);
       pointer-events: none;
       z-index: 1;
     }
@@ -1557,7 +1568,9 @@
        FOOTER
     =========================== */
     footer {
-      background: var(--bg-secondary);
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border-top: 1px solid var(--border);
       padding: 64px 0 32px;
     }
@@ -1632,6 +1645,92 @@
       background: rgba(59,130,246,0.1);
     }
     .social-link svg { width: 16px; height: 16px; color: var(--text-secondary); }
+
+    /* ===========================
+       MODALS (Impressum / Datenschutz)
+    =========================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 720px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 48px;
+      position: relative;
+    }
+    @media (max-width: 600px) { .modal-box { padding: 28px 20px; } }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+    .modal-close:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .modal-close svg { width: 16px; height: 16px; }
+
+    .modal-box h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-box h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 24px 0 8px;
+      color: var(--text-primary);
+    }
+    .modal-box p, .modal-box address {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-style: normal;
+    }
+    .modal-box a { color: var(--color-primary-light); }
+
+    /* Calendly popup button */
+    .btn-calendar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: opacity var(--transition);
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-calendar:hover { opacity: 0.88; }
+    .btn-calendar svg { width: 18px; height: 18px; flex-shrink: 0; }
 
     /* ===========================
        ANIMATIONS
@@ -1752,6 +1851,12 @@
 </head>
 <body>
 
+  <!-- Global background video (fixed, covers entire site) -->
+  <video id="hero-video" autoplay muted loop playsinline webkit-playsinline x-webkit-airplay="deny" preload="auto" disablePictureInPicture aria-hidden="true">
+    <source src="https://res.cloudinary.com/ddntlvfpn/video/upload/q_auto,f_auto/k2yolwcnrXqeeA3kpXqJydMJj3I_qebouc.mp4" type="video/mp4" />
+  </video>
+  <div id="video-overlay" aria-hidden="true"></div>
+
   <!-- ========================
        NAVIGATION
   ========================= -->
@@ -1828,11 +1933,7 @@
   ========================= -->
   <main>
     <section class="hero" id="home" aria-labelledby="hero-heading">
-      <div class="hero-bg" aria-hidden="true">
-        <video id="hero-video" autoplay muted loop playsinline>
-          <source src="https://framerusercontent.com/assets/k2yolwcnrXqeeA3kpXqJydMJj3I.mp4" type="video/mp4" />
-        </video>
-      </div>
+      <div class="hero-bg" aria-hidden="true"></div>
 
       <div class="container">
         <div class="hero-content">
@@ -2611,22 +2712,56 @@
               </div>
             </div>
 
-            <!-- Map placeholder image -->
-            <img
-              src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&q=80&auto=format&fit=crop"
-              alt="München Stadtansicht – Standort der FG AI Agentur"
-              style="width:100%; height:200px; object-fit:cover; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-top:24px;"
-              loading="lazy"
-              width="600"
-              height="200"
-            />
+            <!-- Calendly popup button -->
+            <button
+              class="btn-calendar"
+              onclick="Calendly.initPopupWidget({url:'https://calendly.com/giudicefrancesco0590/30min?hide_event_type_details=0&hide_gdpr_banner=1&primary_color=0099ff'}); return false;"
+              aria-label="Kostenloses Erstgespräch buchen"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Kostenloses Erstgespräch buchen
+            </button>
           </div>
 
-          <div class="animate-on-scroll calendly-wrap">
-            <div
-              class="calendly-inline-widget"
-              data-url="https://calendly.com/giudicefrancesco0590/30min?hide_event_type_details=0&hide_gdpr_banner=1&background_color=ffffff&text_color=111111&primary_color=0099ff"
-            ></div>
+          <!-- Contact Form -->
+          <div class="contact-form animate-on-scroll">
+            <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:8px;">Nachricht senden</h3>
+            <p style="font-size:14px; color:var(--text-muted); margin-bottom:28px;">Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
+            <form id="contact-form" novalidate>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div class="form-group">
+                  <label for="cf-name">Name *</label>
+                  <input type="text" id="cf-name" name="name" placeholder="Max Mustermann" required />
+                </div>
+                <div class="form-group">
+                  <label for="cf-company">Unternehmen</label>
+                  <input type="text" id="cf-company" name="company" placeholder="Musterfirma GmbH" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cf-email">E-Mail *</label>
+                <input type="email" id="cf-email" name="email" placeholder="max@musterfirma.de" required />
+              </div>
+              <div class="form-group">
+                <label for="cf-subject">Betreff</label>
+                <select id="cf-subject" name="subject">
+                  <option value="">Bitte wählen …</option>
+                  <option>Website-Erstellung</option>
+                  <option>KI-Chatbot</option>
+                  <option>KI Voice Agent</option>
+                  <option>Lead-Generierung</option>
+                  <option>Sonstiges</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cf-message">Nachricht *</label>
+                <textarea id="cf-message" name="message" placeholder="Beschreiben Sie kurz Ihr Projekt oder Ihre Anfrage …" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" id="cf-submit" style="width:100%; justify-content:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Nachricht senden
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -2717,10 +2852,10 @@
         <div class="footer-col">
           <h4>Rechtliches</h4>
           <ul role="list">
-            <li><a href="#">Impressum</a></li>
-            <li><a href="#">Datenschutz</a></li>
-            <li><a href="#">AGB</a></li>
-            <li><a href="#">Cookie-Einstellungen</a></li>
+            <li><a href="#" onclick="openModal('modal-impressum'); return false;">Impressum</a></li>
+            <li><a href="#" onclick="openModal('modal-datenschutz'); return false;">Datenschutz</a></li>
+            <li><a href="#" onclick="openModal('modal-agb'); return false;">AGB</a></li>
+            <li><a href="#contact">Kontakt</a></li>
           </ul>
         </div>
       </div>
@@ -2731,6 +2866,84 @@
       </div>
     </div>
   </footer>
+
+  <!-- ========================
+       MODALS
+  ========================= -->
+
+  <!-- Impressum -->
+  <div class="modal-overlay" id="modal-impressum" role="dialog" aria-modal="true" aria-labelledby="impressum-title" onclick="closeModalOverlay(event, 'modal-impressum')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-impressum')" aria-label="Schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="impressum-title">Impressum</h2>
+      <h3>Angaben gemäß § 5 TMG</h3>
+      <address>
+        FG AI Agentur<br>
+        Francesco Giudice<br>
+        Musterstraße 42<br>
+        80333 München<br>
+        Deutschland
+      </address>
+      <h3>Kontakt</h3>
+      <p>
+        Telefon: +49 123 45678<br>
+        E-Mail: <a href="mailto:hello@fg-ai-agentur.de">hello@fg-ai-agentur.de</a>
+      </p>
+      <h3>Umsatzsteuer-ID</h3>
+      <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:<br>DE [Ihre USt-ID hier eintragen]</p>
+      <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+      <p>Francesco Giudice<br>Musterstraße 42, 80333 München</p>
+      <h3>Streitschlichtung</h3>
+      <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a>. Unsere E-Mail-Adresse finden Sie oben im Impressum. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    </div>
+  </div>
+
+  <!-- Datenschutz -->
+  <div class="modal-overlay" id="modal-datenschutz" role="dialog" aria-modal="true" aria-labelledby="datenschutz-title" onclick="closeModalOverlay(event, 'modal-datenschutz')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-datenschutz')" aria-label="Schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="datenschutz-title">Datenschutzerklärung</h2>
+      <h3>1. Datenschutz auf einen Blick</h3>
+      <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
+      <h3>2. Verantwortliche Stelle</h3>
+      <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br><br>Francesco Giudice – FG AI Agentur<br>Musterstraße 42, 80333 München<br>E-Mail: <a href="mailto:hello@fg-ai-agentur.de">hello@fg-ai-agentur.de</a></p>
+      <h3>3. Datenerfassung auf dieser Website</h3>
+      <p><strong>Kontaktformular:</strong> Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+      <p><strong>Calendly:</strong> Für die Terminbuchung nutzen wir den Dienst Calendly (Calendly LLC, 271 17th St NW, Atlanta, GA 30363, USA). Bei der Nutzung von Calendly werden Daten auf Servern in den USA verarbeitet. Weitere Informationen finden Sie in der Datenschutzerklärung von Calendly: <a href="https://calendly.com/pages/privacy" target="_blank" rel="noopener">calendly.com/pages/privacy</a>.</p>
+      <h3>4. Ihre Rechte</h3>
+      <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung Ihrer gespeicherten personenbezogenen Daten. Wenden Sie sich hierfür an: <a href="mailto:hello@fg-ai-agentur.de">hello@fg-ai-agentur.de</a></p>
+      <h3>5. Hosting</h3>
+      <p>Diese Website wird bei Hostinger gehostet. Anbieter: Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Zypern. Weitere Informationen: <a href="https://www.hostinger.de/datenschutzrichtlinie" target="_blank" rel="noopener">hostinger.de/datenschutzrichtlinie</a>.</p>
+    </div>
+  </div>
+
+  <!-- AGB -->
+  <div class="modal-overlay" id="modal-agb" role="dialog" aria-modal="true" aria-labelledby="agb-title" onclick="closeModalOverlay(event, 'modal-agb')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-agb')" aria-label="Schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="agb-title">Allgemeine Geschäftsbedingungen</h2>
+      <h3>§ 1 Geltungsbereich</h3>
+      <p>Diese AGB gelten für alle Verträge zwischen FG AI Agentur (Francesco Giudice) und dem Auftraggeber über die Erbringung von Dienstleistungen im Bereich Webentwicklung, KI-Implementierung und digitales Marketing.</p>
+      <h3>§ 2 Vertragsschluss</h3>
+      <p>Ein Vertrag kommt durch die schriftliche Bestätigung des Angebots durch den Auftraggeber oder durch beiderseitige Unterzeichnung eines Projektvertrags zustande.</p>
+      <h3>§ 3 Leistungsumfang</h3>
+      <p>Der genaue Leistungsumfang ergibt sich aus dem jeweiligen Angebot oder Projektvertrag. Änderungen oder Erweiterungen des Leistungsumfangs bedürfen der schriftlichen Vereinbarung.</p>
+      <h3>§ 4 Vergütung & Zahlung</h3>
+      <p>Die Vergütung richtet sich nach der aktuellen Preisliste oder dem individuellen Angebot. Rechnungen sind innerhalb von 14 Tagen nach Ausstellung ohne Abzug zu begleichen.</p>
+      <h3>§ 5 Urheberrecht</h3>
+      <p>Alle erstellten Werke bleiben bis zur vollständigen Bezahlung Eigentum von FG AI Agentur. Nach vollständiger Zahlung erhält der Auftraggeber ein einfaches, nicht übertragbares Nutzungsrecht.</p>
+      <h3>§ 6 Haftungsbeschränkung</h3>
+      <p>FG AI Agentur haftet nur bei Vorsatz und grober Fahrlässigkeit. Die Haftung für leichte Fahrlässigkeit ist – soweit gesetzlich zulässig – ausgeschlossen.</p>
+      <h3>§ 7 Anwendbares Recht</h3>
+      <p>Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist München.</p>
+    </div>
+  </div>
 
   <!-- ========================
        JAVASCRIPT
@@ -2819,19 +3032,43 @@
     const statsGrid = document.querySelector('.stats-grid');
     if (statsGrid) statsObserver.observe(statsGrid);
 
-    // ── Contact form ──
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      const btn = e.target;
-      btn.disabled = true;
-      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Nachricht gesendet!';
-      btn.style.background = '#16a34a';
+    // ── Modal ──
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeModalOverlay(e, id) {
+      if (e.target === e.currentTarget) closeModal(id);
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => {
+          m.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      }
+    });
 
-      setTimeout(() => {
-        btn.disabled = false;
-        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Nachricht senden';
-        btn.style.background = '';
-      }, 4000);
+    // ── Contact form ──
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('cf-submit');
+        btn.disabled = true;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Nachricht gesendet!';
+        btn.style.background = '#16a34a';
+        contactForm.reset();
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Nachricht senden';
+          btn.style.background = '';
+        }, 4000);
+      });
     }
 
     // ── Smooth active nav link ──
@@ -2852,6 +3089,23 @@
     }, { threshold: 0.4 });
 
     sections.forEach((s) => navObserver.observe(s));
+
+  // Mobile video autoplay (iOS + Android)
+  const heroVideo = document.getElementById('hero-video');
+  if (heroVideo) {
+    heroVideo.muted = true;
+    heroVideo.load();
+    const tryPlay = () => heroVideo.play().catch(() => {});
+    tryPlay();
+    // Retry on first user interaction (iOS Low Power Mode)
+    ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
+      document.addEventListener(evt, tryPlay, { once: true, passive: true });
+    });
+    // Also retry when page becomes visible (tab switch, app resume)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) tryPlay();
+    });
+  }
   </script>
 
 </body>
