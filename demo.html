@@ -1247,7 +1247,7 @@ async function submitForm(e) {
   formData.append('Nachricht', text || '–');
 
   try {
-    await fetch('https://formsubmit.co/info@master-closing.de', {
+    await fetch('https://formsubmit.co/ajax/info@master-closing.de', {
       method: 'POST',
       body: formData,
       headers: { 'Accept': 'application/json' }
