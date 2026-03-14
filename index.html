@@ -2967,6 +2967,10 @@
        JAVASCRIPT
   ========================= -->
   <script>
+    // ── Always start at top ──
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
     // ── Navbar scroll effect ──
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
