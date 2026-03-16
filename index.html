@@ -2971,6 +2971,8 @@
     // ── Always start at top ──
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
+    window.addEventListener('load', () => { window.scrollTo(0, 0); });
+    document.addEventListener('DOMContentLoaded', () => { window.scrollTo(0, 0); });
 
     // ── Enable smooth scroll only for anchor clicks ──
     document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -3126,7 +3128,8 @@
   if (heroVideo) {
     heroVideo.muted = true;
     heroVideo.load();
-    const tryPlay = () => heroVideo.play().catch(() => {});
+    heroVideo.blur();
+    const tryPlay = () => heroVideo.play().catch(() => {}).then(() => { heroVideo.blur(); window.scrollTo(0,0); });
     tryPlay();
     // Retry on first user interaction (iOS Low Power Mode)
     ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
