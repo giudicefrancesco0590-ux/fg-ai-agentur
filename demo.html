@@ -32,7 +32,6 @@ body {
 /* ── GRID BG ── */
 body::before {
   content: '';
-  z-index: 1;
   position: fixed;
   inset: 0;
   background-image:
@@ -733,16 +732,16 @@ footer a {
   <a href="mailto:info@francescogiudice.de" class="nav-cta">Kontakt</a>
 </nav>
 
-<!-- HERO VIDEO BG -->
-<div id="hero-video-wrap" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;pointer-events:none;">
-  <video id="hero-bg-video" autoplay muted loop playsinline webkit-playsinline style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;">
-    <source src="https://res.cloudinary.com/ddntlvfpn/video/upload/q_auto/5eb58d95bb1cdfe7c195b5dd651cfdc0_1774129046_t7spxu7z_hedlad.mp4" type="video/mp4" />
-  </video>
-  <div style="position:absolute;inset:0;background:rgba(5,5,5,0.82);"></div>
-</div>
-
 <!-- HERO -->
-<section class="hero" style="position:relative;z-index:1;">
+<section class="hero" style="position:relative;z-index:1;overflow:hidden;">
+  <!-- VIDEO NUR IN HERO -->
+  <div style="position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
+    <video id="hero-bg-video" autoplay muted loop playsinline webkit-playsinline style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;">
+      <source src="https://res.cloudinary.com/ddntlvfpn/video/upload/q_auto/5eb58d95bb1cdfe7c195b5dd651cfdc0_1774129046_t7spxu7z_hedlad.mp4" type="video/mp4" />
+    </video>
+    <div style="position:absolute;inset:0;background:rgba(5,5,5,0.80);"></div>
+  </div>
+  <div style="position:relative;z-index:1;display:contents;">
   <div class="hero-eyebrow">
     <div class="live-dot"></div>
     <span>Live Demo – KI-Chatbot</span>
@@ -759,6 +758,7 @@ footer a {
     <span>Demo ansehen</span>
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
   </div>
+  </div><!-- end z-index wrapper -->
 </section>
 
 <!-- CHATBOT DEMO -->
