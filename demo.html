@@ -237,8 +237,10 @@ nav {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   animation: bounce 2s infinite;
+  cursor: pointer;
+  text-decoration: none;
 }
-.scroll-cta svg { opacity: 0.4; }
+.scroll-cta svg { opacity: 0.7; }
 @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
 
 /* ── DEMO SECTION ── */
@@ -897,15 +899,15 @@ footer a {
       Sieh selbst wie ein KI-Chatbot deine Kunden begrüßt, Tische reserviert, Fragen beantwortet – vollautomatisch, 24/7.
     </p>
     <p class="hero-note">↓ Scroll und schreib dem Chatbot – er antwortet sofort</p>
-    <div class="scroll-cta">
+    <a class="scroll-cta" href="#demo" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'});return false;">
       <span>Demo ansehen</span>
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </div>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="#09f" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </a>
   </div>
 </section>
 
 <!-- CHATBOT DEMO -->
-<section class="demo-section">
+<section class="demo-section" id="demo">
   <div class="section-label">
     <div class="tag">⚡ Live Demo</div>
     <h2>So funktioniert dein <em>KI-Chatbot</em></h2>
