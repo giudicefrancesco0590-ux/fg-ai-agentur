@@ -668,6 +668,71 @@ nav {
 }
 .nothanks a:hover { text-decoration: underline; }
 
+/* ── MODALS ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: #0d0d0d;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px 36px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyan) transparent;
+}
+.modal-box h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--cyan);
+  margin-bottom: 24px;
+  letter-spacing: 0.03em;
+}
+.modal-box h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cyan-light);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 20px 0 8px;
+}
+.modal-box p, .modal-box address {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.65);
+  font-style: normal;
+}
+.modal-box a { color: var(--cyan); text-decoration: none; }
+.modal-box a:hover { text-decoration: underline; }
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  border-radius: 8px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.5);
+  transition: background 0.2s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+.modal-close svg { width: 16px; height: 16px; }
+
 /* ── FOOTER ── */
 footer {
   position: relative;
@@ -1101,8 +1166,72 @@ footer a {
 <!-- FOOTER -->
 <footer>
   <p>© 2026 Francesco Giudice · AI Agentur</p>
-  <a href="mailto:info@francescogiudice.de">info@francescogiudice.de</a>
+  <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+    <a href="mailto:info@francescogiudice.de">info@francescogiudice.de</a>
+    <a href="#" onclick="document.getElementById('modal-impressum').classList.add('open');return false;">Impressum</a>
+    <a href="#" onclick="document.getElementById('modal-datenschutz').classList.add('open');return false;">Datenschutz</a>
+  </div>
 </footer>
+
+<!-- IMPRESSUM MODAL -->
+<div class="modal-overlay" id="modal-impressum" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('modal-impressum').classList.remove('open')" aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h2>Impressum</h2>
+    <h3>Angaben gemäß § 5 TMG</h3>
+    <address>
+      Elite Sales Partners LLC<br>
+      30 N Gould St Ste N<br>
+      Sheridan, Wyoming, 82801<br>
+      USA
+    </address>
+    <h3>Vertreten durch</h3>
+    <p>Francesco Giudice</p>
+    <h3>Kontakt</h3>
+    <p>
+      Telefon: <a href="tel:+4901751538745">0175 1538745</a><br>
+      E-Mail: <a href="mailto:info@master-closing.de">info@master-closing.de</a>
+    </p>
+    <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+    <p>Francesco Giudice<br>Elite Sales Partners LLC, 30 N Gould St Ste N, Sheridan, Wyoming, 82801</p>
+    <h3>Streitschlichtung</h3>
+    <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a>. Unsere E-Mail-Adresse finden Sie oben im Impressum. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    <p style="margin-top:16px">Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit widersprochen.</p>
+  </div>
+</div>
+
+<!-- DATENSCHUTZ MODAL -->
+<div class="modal-overlay" id="modal-datenschutz" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('modal-datenschutz').classList.remove('open')" aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h2>Datenschutzerklärung</h2>
+    <h3>1. Datenschutz auf einen Blick</h3>
+    <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
+    <h3>2. Verantwortliche Stelle</h3>
+    <p>Francesco Giudice – FG AI Agentur<br>
+    Elite Sales Partners LLC<br>
+    30 N Gould St Ste N, Sheridan, Wyoming, 82801, USA<br>
+    Telefon: <a href="tel:+4901751538745">0175 1538745</a><br>
+    E-Mail: <a href="mailto:info@master-closing.de">info@master-closing.de</a></p>
+    <h3>3. Datenerfassung auf dieser Website</h3>
+    <p><strong style="color:#e8e8e8">Server-Log-Dateien:</strong> Der Provider der Seiten erhebt und speichert automatisch Informationen in Server-Log-Dateien, die Ihr Browser automatisch übermittelt (Browsertyp, Betriebssystem, Referrer URL, IP-Adresse, Uhrzeit). Diese Daten werden nicht mit anderen Quellen zusammengeführt.</p>
+    <p style="margin-top:10px"><strong style="color:#e8e8e8">Kontaktformular:</strong> Angaben aus dem Kontaktformular werden zwecks Bearbeitung gespeichert und nicht ohne Einwilligung weitergegeben. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+    <p style="margin-top:10px"><strong style="color:#e8e8e8">Calendly:</strong> Für Terminbuchungen nutzen wir Calendly (Calendly LLC, Atlanta, GA, USA). Details: <a href="https://calendly.com/pages/privacy" target="_blank" rel="noopener">calendly.com/pages/privacy</a>.</p>
+    <p style="margin-top:10px"><strong style="color:#e8e8e8">Google Fonts:</strong> Diese Seite nutzt Google Fonts (Google LLC, Mountain View, CA, USA). Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+    <h3>4. Ihre Rechte</h3>
+    <p>Sie haben jederzeit das Recht auf Auskunft, Berichtigung, Sperrung oder Löschung Ihrer gespeicherten personenbezogenen Daten.<br>
+    E-Mail: <a href="mailto:info@master-closing.de">info@master-closing.de</a><br>
+    Telefon: <a href="tel:+4901751538745">0175 1538745</a></p>
+    <h3>5. Hosting</h3>
+    <p>Diese Website wird über GitHub Pages gehostet (GitHub Inc., 88 Colin P Kelly Jr Street, San Francisco, CA 94107, USA). Details: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>.</p>
+    <h3>6. Widerspruch gegen Werbe-E-Mails</h3>
+    <p>Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten zur Übersendung von nicht ausdrücklich angeforderter Werbung wird hiermit widersprochen.</p>
+  </div>
+</div>
 
 <script>
 // ── HERO VIDEO FIX (iOS) ──
