@@ -167,8 +167,28 @@ nav {
     min-height: 100svh;
     padding: 90px 20px 48px;
   }
+  .hero-video-bg video {
+    /* On portrait screens: focus on center of video */
+    object-position: center center;
+    /* Scale up slightly to fill portrait frame */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Slow down animation feel — video looks less jittery */
+    transform: translateZ(0) scale(1.05);
+  }
   .hero-overlay {
-    background: rgba(5,5,5,0.30);
+    /* Slightly stronger overlay on mobile for text readability */
+    background: linear-gradient(
+      to bottom,
+      rgba(5,5,5,0.45) 0%,
+      rgba(5,5,5,0.20) 40%,
+      rgba(5,5,5,0.20) 70%,
+      rgba(5,5,5,0.55) 100%
+    );
+  }
+  .hero-content {
+    filter: drop-shadow(0 0 30px rgba(0,0,0,0.8));
   }
 }
 .hero-eyebrow {
