@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+pl<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -32,6 +32,7 @@ body {
 /* ── GRID BG ── */
 body::before {
   content: '';
+  z-index: 1;
   position: fixed;
   inset: 0;
   background-image:
@@ -732,8 +733,16 @@ footer a {
   <a href="mailto:info@francescogiudice.de" class="nav-cta">Kontakt</a>
 </nav>
 
+<!-- HERO VIDEO BG -->
+<div id="hero-video-wrap" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;pointer-events:none;">
+  <video id="hero-bg-video" autoplay muted loop playsinline webkit-playsinline style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;">
+    <source src="https://res.cloudinary.com/ddntlvfpn/video/upload/q_auto/5eb58d95bb1cdfe7c195b5dd651cfdc0_1774129046_t7spxu7z_hedlad.mp4" type="video/mp4" />
+  </video>
+  <div style="position:absolute;inset:0;background:rgba(5,5,5,0.82);"></div>
+</div>
+
 <!-- HERO -->
-<section class="hero">
+<section class="hero" style="position:relative;z-index:1;">
   <div class="hero-eyebrow">
     <div class="live-dot"></div>
     <span>Live Demo – KI-Chatbot</span>
@@ -1096,6 +1105,23 @@ footer a {
 </footer>
 
 <script>
+// ── HERO VIDEO FIX (iOS) ──
+window.addEventListener('load', () => {
+  const v = document.getElementById('hero-bg-video');
+  if (v) {
+    v.muted = true;
+    v.load();
+    v.play().catch(() => {});
+    setTimeout(() => v.play().catch(() => {}), 500);
+  }
+});
+['touchstart','click'].forEach(evt => {
+  document.addEventListener(evt, () => {
+    const v = document.getElementById('hero-bg-video');
+    if (v && v.paused) v.play().catch(() => {});
+  }, { once: true, passive: true });
+});
+
 // ── CHATBOT LOGIC ──
 const chatBody = document.getElementById('chatBody');
 const chatInput = document.getElementById('chatInput');
