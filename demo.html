@@ -126,13 +126,8 @@ nav {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  /* Gradient: darker at top/bottom for nav + text readability, lighter in centre */
-  background:
-    linear-gradient(to bottom,
-      rgba(5,5,5,0.70) 0%,
-      rgba(5,5,5,0.45) 35%,
-      rgba(5,5,5,0.45) 65%,
-      rgba(5,5,5,0.75) 100%);
+  /* Very light overlay — video fully visible, just slight darkening */
+  background: rgba(5,5,5,0.22);
 }
 
 .hero-content {
@@ -144,6 +139,8 @@ nav {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
+  /* Subtle dark glow behind text block for readability */
+  filter: drop-shadow(0 0 40px rgba(0,0,0,0.6));
 }
 
 /* ── DESKTOP LARGE (MacBook / iMac) ── */
@@ -153,15 +150,7 @@ nav {
     padding: 120px 40px 80px;
   }
   .hero-video-bg video {
-    object-position: center 25%;
-  }
-  .hero-overlay {
-    background:
-      linear-gradient(to bottom,
-        rgba(5,5,5,0.65) 0%,
-        rgba(5,5,5,0.38) 30%,
-        rgba(5,5,5,0.38) 70%,
-        rgba(5,5,5,0.70) 100%);
+    object-position: center center;
   }
 }
 
@@ -179,7 +168,7 @@ nav {
     padding: 90px 20px 48px;
   }
   .hero-overlay {
-    background: rgba(5,5,5,0.68);
+    background: rgba(5,5,5,0.30);
   }
 }
 .hero-eyebrow {
@@ -215,6 +204,7 @@ nav {
   line-height: 1.05;
   color: #fff;
   margin-bottom: 20px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.9), 0 0 60px rgba(0,0,0,0.7);
 }
 .hero-title .accent {
   background: linear-gradient(135deg, var(--cyan), var(--cyan-light));
@@ -224,10 +214,11 @@ nav {
 }
 .hero-subtitle {
   font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--text-dim);
+  color: #ccc;
   max-width: 560px;
   line-height: 1.7;
   margin-bottom: 16px;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.95);
 }
 .hero-note {
   font-size: 13px;
