@@ -100,21 +100,43 @@ nav {
   justify-content: center;
   text-align: center;
   padding: 100px 24px 60px;
+  overflow: hidden;
+}
+
+.hero-video-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-video-bg video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5,5,5,0.72);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 @media (max-width: 600px) {
   .hero {
     min-height: 100svh;
     padding: 90px 20px 48px;
-  }
-  #hero-bg-video {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: unset !important;
-    min-height: unset !important;
-    object-fit: cover !important;
-    top: 0 !important; left: 0 !important;
-    transform: none !important;
   }
 }
 .hero-eyebrow {
@@ -814,32 +836,33 @@ footer a {
 </nav>
 
 <!-- HERO -->
-<section class="hero" style="position:relative;z-index:1;overflow:hidden;">
-  <!-- VIDEO NUR IN HERO -->
-  <div style="position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video id="hero-bg-video" autoplay muted loop playsinline webkit-playsinline style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);min-width:100%;min-height:100%;width:auto;height:auto;object-fit:cover;">
+<section class="hero">
+  <!-- BG VIDEO -->
+  <div class="hero-video-bg">
+    <video id="hero-bg-video" autoplay muted loop playsinline webkit-playsinline>
       <source src="https://res.cloudinary.com/ddntlvfpn/video/upload/q_auto/5eb58d95bb1cdfe7c195b5dd651cfdc0_1774129046_t7spxu7z_hedlad.mp4" type="video/mp4" />
     </video>
-    <div style="position:absolute;inset:0;background:rgba(5,5,5,0.80);"></div>
+    <div class="hero-overlay"></div>
   </div>
-  <div style="position:relative;z-index:1;display:contents;">
-  <div class="hero-eyebrow">
-    <div class="live-dot"></div>
-    <span>Live Demo – KI-Chatbot</span>
+  <!-- CONTENT -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="live-dot"></div>
+      <span>Live Demo – KI-Chatbot</span>
+    </div>
+    <h1 class="hero-title">
+      Dein Restaurant-Chatbot<br>
+      <span class="accent">der nie schläft.</span>
+    </h1>
+    <p class="hero-subtitle">
+      Sieh selbst wie ein KI-Chatbot deine Kunden begrüßt, Tische reserviert, Fragen beantwortet – vollautomatisch, 24/7.
+    </p>
+    <p class="hero-note">↓ Scroll und schreib dem Chatbot – er antwortet sofort</p>
+    <div class="scroll-cta">
+      <span>Demo ansehen</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
   </div>
-  <h1 class="hero-title">
-    Dein Restaurant-Chatbot<br>
-    <span class="accent">der nie schläft.</span>
-  </h1>
-  <p class="hero-subtitle">
-    Sieh selbst wie ein KI-Chatbot deine Kunden begrüßt, Tische reserviert, Fragen beantwortet – vollautomatisch, 24/7.
-  </p>
-  <p class="hero-note">↓ Scroll und schreib dem Chatbot – er antwortet sofort</p>
-  <div class="scroll-cta">
-    <span>Demo ansehen</span>
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
-  </div>
-  </div><!-- end z-index wrapper -->
 </section>
 
 <!-- CHATBOT DEMO -->
