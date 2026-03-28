@@ -215,6 +215,18 @@
     .footer-bottom p { font-size:11px;color:rgba(255,255,255,.2); }
     @media(max-width:768px) { footer { padding:48px 24px 32px; } .footer-inner { flex-direction:column;gap:32px; } .footer-links { flex-wrap:wrap;gap:20px; } }
 
+    /* MODAL */
+    .modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;padding:40px 20px; }
+    .modal-overlay.open { display:flex;align-items:flex-start;justify-content:center; }
+    .modal { background:#111;border:1px solid var(--faint);max-width:680px;width:100%;padding:56px;position:relative;margin:auto; }
+    .modal-close { position:absolute;top:24px;right:28px;font-size:24px;color:var(--muted);cursor:none;transition:color .2s;background:none;border:none;font-family:inherit; }
+    .modal-close:hover { color:var(--white); }
+    .modal h2 { font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:500;margin-bottom:32px;letter-spacing:-.02em; }
+    .modal h3 { font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:28px 0 10px; }
+    .modal p { font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:8px; }
+    .modal a { color:var(--off);border-bottom:1px solid var(--faint); }
+    @media(max-width:640px) { .modal { padding:36px 24px; } }
+
     /* REVEAL */
     .reveal { opacity:0;transform:translateY(32px); }
     .reveal.in { opacity:1;transform:translateY(0);transition:opacity .9s var(--ease),transform .9s var(--ease); }
@@ -662,8 +674,8 @@
       <a href="#system">System</a>
       <a href="#ergebnisse">Ergebnisse</a>
       <a href="#till">Gründer</a>
-      <a href="#">Impressum</a>
-      <a href="#">Datenschutz</a>
+      <a href="#" onclick="openModal('impressum');return false;">Impressum</a>
+      <a href="#" onclick="openModal('datenschutz');return false;">Datenschutz</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -671,6 +683,46 @@
     <p>@kuhn.capital</p>
   </div>
 </footer>
+
+<!-- IMPRESSUM MODAL -->
+<div class="modal-overlay" id="modal-impressum">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('impressum')">×</button>
+    <h2>Impressum</h2>
+    <h3>Angaben gemäß § 5 TMG</h3>
+    <p>Kuhn Capital Ltd.<br/>Pentadaktylou 45 A2<br/>Maroni 7737, Larnaca<br/>Cyprus</p>
+    <h3>Vertreten durch</h3>
+    <p>Till Kuhn (CEO)</p>
+    <h3>Kontakt</h3>
+    <p>E-Mail: info@kuhncapital.de</p>
+    <h3>Hinweis</h3>
+    <p>Dieses Angebot richtet sich ausschließlich an Unternehmer und Gewerbetreibende im Sinne des § 14 BGB. Es handelt sich nicht um ein Verbraucherangebot. Ein Widerrufsrecht besteht nicht.</p>
+    <h3>Haftungsausschluss</h3>
+    <p>Die auf dieser Website genannten Einkommenszahlen und Ergebnisse sind Beispiele und stellen keine Garantie für zukünftige Ergebnisse dar. Individuelle Ergebnisse können abweichen und hängen von verschiedenen Faktoren ab.</p>
+  </div>
+</div>
+
+<!-- DATENSCHUTZ MODAL -->
+<div class="modal-overlay" id="modal-datenschutz">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('datenschutz')">×</button>
+    <h2>Datenschutzerklärung</h2>
+    <h3>1. Verantwortliche Stelle</h3>
+    <p>Kuhn Capital Ltd., Pentadaktylou 45 A2, Maroni 7737, Larnaca, Cyprus<br/>E-Mail: info@kuhncapital.de</p>
+    <h3>2. Datenerfassung</h3>
+    <p>Beim Besuch dieser Website werden automatisch Informationen allgemeiner Natur erfasst (Server-Logfiles). Diese umfassen den Browsertyp, das Betriebssystem, die Referrer-URL, die IP-Adresse und die Uhrzeit der Serveranfrage.</p>
+    <h3>3. Calendly</h3>
+    <p>Für die Terminbuchung nutzen wir Calendly (Calendly LLC, USA). Bei der Buchung eines Termins werden die von Ihnen eingegebenen Daten an Calendly übermittelt. Datenschutzrichtlinie: <a href="https://calendly.com/privacy" target="_blank">calendly.com/privacy</a></p>
+    <h3>4. Meta Pixel</h3>
+    <p>Diese Website nutzt das Meta Pixel zur Analyse des Nutzerverhaltens und zur Optimierung von Werbeanzeigen. Dabei werden Daten an Meta Platforms Inc. übermittelt.</p>
+    <h3>5. Hosting</h3>
+    <p>Diese Website wird bei Vercel Inc. gehostet. Vercel kann bei Aufruf der Website Logfiles speichern.</p>
+    <h3>6. Ihre Rechte</h3>
+    <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Kontakt: info@kuhncapital.de</p>
+    <h3>7. SSL-Verschlüsselung</h3>
+    <p>Diese Seite nutzt SSL-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie an „https://" in der Adresszeile.</p>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -756,6 +808,20 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     t.scrollIntoView({behavior:'smooth', block:'start'});
   });
 });
+
+// MODALS
+function openModal(id) {
+  document.getElementById('modal-'+id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id) {
+  document.getElementById('modal-'+id).classList.remove('open');
+  document.body.style.overflow='';
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if(e.target===overlay) closeModal(overlay.id.replace('modal-','')); });
+});
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open')); document.body.style.overflow=''; });
 
 // MAGNETIC BUTTONS
 document.querySelectorAll('.btn-dark,.btn-ghost,.nav-cta').forEach(btn => {
