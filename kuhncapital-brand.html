@@ -97,8 +97,8 @@
     .problem-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--faint);margin-top:64px; }
     .problem-card { background:var(--bg);padding:48px 40px;transition:background .2s; }
     .problem-card:hover { background:rgba(255,255,255,.02); }
-    .problem-icon { width:40px;height:40px;margin-bottom:20px;opacity:.7; }
-    .problem-icon svg { width:100%;height:100%;stroke:var(--white);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
+    .problem-icon { width:52px;height:52px;margin-bottom:24px;position:relative; }
+    .problem-icon svg { width:100%;height:100%; }
     .problem-card h3 { font-size:20px;margin-bottom:12px; }
     .problem-card p { font-size:14px;color:var(--muted);line-height:1.6; }
     @media(max-width:768px) { .problem-grid { grid-template-columns:1fr; } }
@@ -171,8 +171,8 @@
     /* TIMING */
     .timing-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--faint);margin-top:64px; }
     .timing-card { background:var(--bg);padding:48px 40px; }
-    .timing-icon { width:40px;height:40px;margin-bottom:16px;opacity:.7; }
-    .timing-icon svg { width:100%;height:100%;stroke:var(--white);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
+    .timing-icon { width:52px;height:52px;margin-bottom:16px;position:relative; }
+    .timing-icon svg { width:100%;height:100%; }
     .timing-card h3 { font-size:20px;margin-bottom:10px; }
     .timing-card p { font-size:14px;color:var(--muted);line-height:1.6; }
     @media(max-width:768px) { .timing-grid { grid-template-columns:1fr; } }
@@ -319,22 +319,50 @@
   <p class="body-text reveal" style="max-width:560px;margin-top:16px">Die meisten Angestellten tauschen Zeit gegen Geld — ohne Hebel, ohne Perspektive. Jeden Monat verlierst du Kaufkraft.</p>
   <div class="problem-grid">
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.8 9A2 2 0 0 0 13 8h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4H11a2 2 0 0 1-1.8-1M12 7v1m0 8v1"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <path d="M26 14v2M26 36v2" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M31 19.5A5 5 0 0 0 26 17h-1a4 4 0 0 0 0 8h2a4 4 0 0 1 0 8h-1a5 5 0 0 1-5-4.5" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M18 26h-4M38 26h-4" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-opacity="0.4"/>
+        <circle cx="26" cy="26" r="14" stroke="#c9a84c" stroke-width="0.8" stroke-opacity="0.2"/>
+        <path d="M14 38l-2 2M40 14l-2 2" stroke="#c9a84c" stroke-width="0.8" stroke-opacity="0.3"/>
+      </svg></div>
       <h3>Jeden Monat weniger Kaufkraft</h3>
       <p>Dein Gehalt bleibt gleich, aber alles wird teurer. Miete, Einkäufe, Versicherungen — nach Steuerklasse und Abgaben bleibt weniger übrig als du denkst. Und nächstes Jahr wird es noch weniger.</p>
     </div>
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <circle cx="26" cy="26" r="13" stroke="#c9a84c" stroke-width="1.2" stroke-opacity="0.9"/>
+        <circle cx="26" cy="26" r="1.5" fill="#c9a84c"/>
+        <path d="M26 16v10l6 4" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 13v-2M26 41v-2M13 26h-2M41 26h-2" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-opacity="0.4"/>
+        <path d="M17.5 17.5l-1.4-1.4M35.9 35.9l-1.4-1.4M34.5 17.5l1.4-1.4M16.1 35.9l1.4-1.4" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.25"/>
+      </svg></div>
       <h3>Keine Zeit, kein Hebel</h3>
       <p>Du tauschst 40 Stunden pro Woche gegen ein festes Gehalt. Mehr Stunden = nicht mehr Geld. Du hast keinen Hebel. Kein Wachstum. Nur ein Hamsterrad mit netter Jobbezeichnung.</p>
     </div>
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <rect x="13" y="24" width="26" height="18" rx="2" stroke="#c9a84c" stroke-width="1.2"/>
+        <path d="M19 24v-7a7 7 0 0 1 14 0v7" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="26" cy="33" r="2.5" stroke="#c9a84c" stroke-width="1.2"/>
+        <path d="M26 35.5v3" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M9 42h2M41 42h2M9 24h2M41 24h2" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.3"/>
+      </svg></div>
       <h3>Gebunden an Ort und Chef</h3>
       <p>Du musst sein, wo dein Arbeitgeber es will. Du darfst machen, was dein Chef entscheidet. Dein ganzes Leben richtet sich nach dem Arbeitsvertrag eines anderen Menschen.</p>
     </div>
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m4.9 4.9 14.2 14.2"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <path d="M26 14l1.8 5.5H33l-4.5 3.3 1.7 5.2L26 25l-4.2 3 1.7-5.2L19 19.5h5.2z" stroke="#c9a84c" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M26 28v10" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M21 38h10" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M14 20l-2-4M40 20l2-4M13 32l-3 1M39 32l3 1" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.35"/>
+        <circle cx="26" cy="26" r="17" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.15" stroke-dasharray="2 3"/>
+      </svg></div>
       <h3>Selbstständigkeit? Zu riskant.</h3>
       <p>Du willst mehr — aber alles allein aufbauen? Eigene Produkte, eigenes Marketing, eigenes Team? Die meisten scheitern in den ersten 12 Monaten. Das Risiko ist real.</p>
     </div>
@@ -356,22 +384,57 @@
 
   <div class="problem-grid" style="margin-top:4px">
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <path d="M8 27L26 12l18 15" stroke="#c9a84c" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 23.5V40h8V31h10v9h8V23.5" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 40v-9h8v9" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.5"/>
+        <path d="M30 15h5v5" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4"/>
+        <path d="M26 40v2M8 40h36" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.3"/>
+      </svg></div>
       <h3>Inflationsschutz & Wertsteigerung</h3>
       <p>Immobilien steigen langfristig im Wert. Käufer schützen ihr Vermögen vor Inflation — das ist der #1 Kaufgrund.</p>
     </div>
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h2m4 0h4"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <rect x="9" y="15" width="34" height="22" rx="2" stroke="#c9a84c" stroke-width="1.2"/>
+        <path d="M9 22h34" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.6"/>
+        <path d="M9 29h34" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.2"/>
+        <rect x="14" y="26" width="8" height="5" rx="0.5" stroke="#c9a84c" stroke-width="1" fill="#c9a84c" fill-opacity="0.15"/>
+        <path d="M28 28h8M28 30.5h5" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-opacity="0.5"/>
+        <circle cx="13" cy="18.5" r="1" fill="#c9a84c" fill-opacity="0.4"/>
+        <circle cx="17" cy="18.5" r="1" fill="#c9a84c" fill-opacity="0.4"/>
+        <circle cx="21" cy="18.5" r="1" fill="#c9a84c" fill-opacity="0.4"/>
+      </svg></div>
       <h3>Steuervorteile durch Kapitalanlage</h3>
       <p>Zinsen, Abschreibung, Verwaltungskosten — Kapitalanlage-Immobilien bieten massive Steuervorteile. Das zieht Käufer an.</p>
     </div>
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21V12h6v9"/><path d="M7 7h.01M17 7h.01"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <path d="M7 28L26 13l19 15" stroke="#c9a84c" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="17" y="30" width="18" height="11" rx="1" stroke="#c9a84c" stroke-width="1.2"/>
+        <rect x="22" y="30" width="8" height="11" rx="0.5" stroke="#c9a84c" stroke-width="0.8" stroke-opacity="0.4"/>
+        <path d="M26 34v4" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-opacity="0.5"/>
+        <circle cx="26" cy="22" r="3" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.5"/>
+        <path d="M7 41h38" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.3"/>
+        <path d="M38 20v-5h5" stroke="#c9a84c" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.35"/>
+      </svg></div>
       <h3>Passives Einkommen durch Miete</h3>
       <p>Die Immobilie wird vermietet, der Mieter zahlt den Kredit ab. Der Käufer baut Vermögen auf, ohne eigenes Geld einzusetzen.</p>
     </div>
     <div class="problem-card reveal">
-      <div class="problem-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      <div class="problem-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <circle cx="26" cy="26" r="14" stroke="#c9a84c" stroke-width="1.2"/>
+        <ellipse cx="26" cy="26" rx="6" ry="14" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.6"/>
+        <path d="M12 26h28" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.5"/>
+        <path d="M13.5 20h25M13.5 32h25" stroke="#c9a84c" stroke-width="0.7" stroke-opacity="0.3"/>
+        <circle cx="38" cy="14" r="5" fill="#0a0a0a" stroke="#c9a84c" stroke-width="1"/>
+        <path d="M38 11v3l2 1" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 12l4-4 4 4" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.4"/>
+      </svg></div>
       <h3>Riesiger Markt, wenig Digitalpräsenz</h3>
       <p>Die meisten Immobilien-Vermittler arbeiten noch analog. Wer digital Anfragen generiert, hat einen unfairen Vorteil — genau das machst du.</p>
     </div>
@@ -536,22 +599,56 @@
   <h2 class="reveal">Warum genau jetzt<br/>der richtige Zeitpunkt ist.</h2>
   <div class="timing-grid">
     <div class="timing-card reveal">
-      <div class="timing-icon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></div>
+      <div class="timing-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <rect x="14" y="16" width="24" height="28" rx="1.5" stroke="#c9a84c" stroke-width="1.2"/>
+        <rect x="20" y="12" width="12" height="7" rx="1" stroke="#c9a84c" stroke-width="1"/>
+        <path d="M20 26h12M20 31h9M20 36h6" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-opacity="0.6"/>
+        <path d="M32 21l4-5" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.35"/>
+        <circle cx="38" cy="15" r="4" stroke="#c9a84c" stroke-width="0.9" stroke-opacity="0.4"/>
+        <path d="M36.5 15h3M38 13.5v3" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.4"/>
+      </svg></div>
       <h3>Die Lücke im Markt ist jetzt da</h3>
       <p>Der Immobilien-Vertrieb in DACH läuft noch zu 90% analog. Wer jetzt digital Marketing macht, hat einen unfairen Vorteil. Diese Lücke schließt sich mit der Zeit.</p>
     </div>
     <div class="timing-card reveal">
-      <div class="timing-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="5" r="2"/><path d="M7 15h.01M12 15h.01M17 15h.01"/></svg></div>
+      <div class="timing-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <rect x="11" y="22" width="30" height="18" rx="2" stroke="#c9a84c" stroke-width="1.2"/>
+        <path d="M20 22v-4a6 6 0 0 1 12 0v4" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="26" cy="31" r="3" stroke="#c9a84c" stroke-width="1"/>
+        <path d="M26 34v3" stroke="#c9a84c" stroke-width="1" stroke-linecap="round"/>
+        <path d="M17 13l-2-2M35 13l2-2M26 10V8" stroke="#c9a84c" stroke-width="0.9" stroke-linecap="round" stroke-opacity="0.4"/>
+        <path d="M11 31h-2M43 31h-2" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.3"/>
+        <path d="M17 28h2M33 28h2M17 34h2M33 34h2" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.25"/>
+      </svg></div>
       <h3>KI macht Marketing 10× einfacher</h3>
       <p>Vor 2 Jahren hättest du für dieses Marketing eine Agentur gebraucht. Heute erstellt KI in Minuten, wofür früher Tage nötig waren. Der Einstieg war nie leichter.</p>
     </div>
     <div class="timing-card reveal">
-      <div class="timing-icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+      <div class="timing-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <path d="M10 38l10-11 7 6 13-15" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 18h8v8" stroke="#c9a84c" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 42h32" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.3"/>
+        <path d="M10 10v32" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.3"/>
+        <circle cx="20" cy="27" r="1.5" fill="#c9a84c" fill-opacity="0.7"/>
+        <circle cx="27" cy="33" r="1.5" fill="#c9a84c" fill-opacity="0.7"/>
+        <path d="M10 34h2M10 28h2M10 22h2" stroke="#c9a84c" stroke-width="0.7" stroke-linecap="round" stroke-opacity="0.25"/>
+      </svg></div>
       <h3>Nachfrage nach Kapitalanlagen steigt</h3>
       <p>Inflation, unsichere Renten, steigende Lebenshaltungskosten — immer mehr Menschen suchen nach Wegen, ihr Geld sicher anzulegen. Immobilien sind die #1 Kapitalanlage in Deutschland.</p>
     </div>
     <div class="timing-card reveal">
-      <div class="timing-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M5 3 2 6M22 6l-3-3"/></svg></div>
+      <div class="timing-icon"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="50" height="50" rx="2" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.3"/>
+        <circle cx="26" cy="28" r="13" stroke="#c9a84c" stroke-width="1.2"/>
+        <path d="M26 18v10l5 3.5" stroke="#c9a84c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="26" cy="28" r="1.5" fill="#c9a84c"/>
+        <path d="M19 10l-3-3M33 10l3-3" stroke="#c9a84c" stroke-width="1.1" stroke-linecap="round" stroke-opacity="0.5"/>
+        <path d="M13 28h-2M41 28h-2M26 15v-2" stroke="#c9a84c" stroke-width="0.9" stroke-linecap="round" stroke-opacity="0.3"/>
+        <path d="M16 17.5l-1.5-1.5M36 17.5l1.5-1.5" stroke="#c9a84c" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.25"/>
+      </svg></div>
       <h3>5 Plätze pro Monat — nicht mehr</h3>
       <p>Wir arbeiten nicht mit der Masse. Wir nehmen maximal 5 neue Partner pro Monat auf, weil wir jeden einzelnen persönlich begleiten. Wer jetzt nicht dabei ist, wartet auf den nächsten Platz.</p>
     </div>
