@@ -33,11 +33,17 @@
     button { font-family: inherit; cursor: none; border: none; background: none; }
     img { max-width: 100%; height: auto; display: block; }
 
-    /* CURSOR */
-    .cur { position:fixed;top:0;left:0;width:8px;height:8px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s; }
-    .cur-ring { position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(255,255,255,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%); }
-    .cur.hov { width:4px;height:4px; }
-    .cur-ring.hov { width:52px;height:52px;border-color:rgba(255,255,255,.6); }
+    /* CURSOR (desktop only) */
+    @media (pointer: fine) {
+      .cur { position:fixed;top:0;left:0;width:8px;height:8px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s; }
+      .cur-ring { position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid rgba(255,255,255,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%); }
+      .cur.hov { width:4px;height:4px; }
+      .cur-ring.hov { width:52px;height:52px;border-color:rgba(255,255,255,.6); }
+    }
+    @media (pointer: coarse) {
+      body, a, button, .faq-q { cursor: auto !important; }
+      .cur, .cur-ring { display: none !important; }
+    }
 
     /* GRAIN */
     .grain { position:fixed;inset:-200%;width:400%;height:400%;pointer-events:none;z-index:998;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 8s steps(10) infinite; }
@@ -830,20 +836,28 @@
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
 
-// CURSOR
+// CURSOR (desktop only)
 const cur = document.getElementById('cur'), ring = document.getElementById('curRing');
-let cx=0,cy=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { cx=e.clientX; cy=e.clientY; });
-document.querySelectorAll('a,button,.faq-q').forEach(el => {
-  el.addEventListener('mouseenter', () => { cur.classList.add('hov'); ring.classList.add('hov'); });
-  el.addEventListener('mouseleave', () => { cur.classList.remove('hov'); ring.classList.remove('hov'); });
-});
-(function animC() {
-  cur.style.left=cx+'px'; cur.style.top=cy+'px';
-  rx+=(cx-rx)*.1; ry+=(cy-ry)*.1;
-  ring.style.left=rx+'px'; ring.style.top=ry+'px';
-  requestAnimationFrame(animC);
-})();
+const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+if (isTouchDevice) {
+  if(cur) cur.style.display='none';
+  if(ring) ring.style.display='none';
+  document.querySelectorAll('a,button,.faq-q').forEach(el => el.style.cursor='');
+  document.body.style.cursor='';
+} else {
+  let cx=0,cy=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => { cx=e.clientX; cy=e.clientY; });
+  document.querySelectorAll('a,button,.faq-q').forEach(el => {
+    el.addEventListener('mouseenter', () => { cur.classList.add('hov'); ring.classList.add('hov'); });
+    el.addEventListener('mouseleave', () => { cur.classList.remove('hov'); ring.classList.remove('hov'); });
+  });
+  (function animC() {
+    cur.style.left=cx+'px'; cur.style.top=cy+'px';
+    rx+=(cx-rx)*.1; ry+=(cy-ry)*.1;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(animC);
+  })();
+}
 
 // HERO ENTRANCE
 gsap.registerPlugin(ScrollTrigger);
