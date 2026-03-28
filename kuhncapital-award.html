@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuhn Capital — Digitales Franchise-System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --gold:         #c9a84c;
+      --gold-light:   #e8c96a;
+      --gold-dark:    #9a7930;
+      --gold-glow:    rgba(201,168,76,.18);
+      --gold-subtle:  rgba(201,168,76,.07);
+      --bg:           #060606;
+      --bg2:          #0d0d0d;
+      --white:        #ffffff;
+      --off-white:    rgba(255,255,255,.85);
+      --muted:        rgba(255,255,255,.4);
+      --faint:        rgba(255,255,255,.08);
+      --border:       rgba(201,168,76,.2);
+      --radius:       4px;
+      --ease:         cubic-bezier(.25,.46,.45,.94);
+      --ease-out:     cubic-bezier(0,0,.2,1);
+    }
+
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; cursor: none; }
+    button { font-family: inherit; cursor: none; border: none; background: none; }
+    ::selection { background: var(--gold-glow); }
+
+    /* ─── GRAIN OVERLAY ──────────────────────────────────── */
+    .grain {
+      position: fixed; inset: -200%;
+      width: 400%; height: 400%;
+      pointer-events: none; z-index: 999;
+      opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      animation: grain 8s steps(10) infinite;
+    }
+    @keyframes grain {
+      0%,100%{transform:translate(0,0)}
+      10%{transform:translate(-2%,-3%)}
+      20%{transform:translate(3%,1%)}
+      30%{transform:translate(-1%,3%)}
+      40%{transform:translate(2%,-2%)}
+      50%{transform:translate(-3%,2%)}
+      60%{transform:translate(1%,-1%)}
+      70%{transform:translate(-2%,3%)}
+      80%{transform:translate(3%,-3%)}
+      90%{transform:translate(-1%,2%)}
+    }
+
+    /* ─── CUSTOM CURSOR ──────────────────────────────────── */
+    .cursor {
+      position: fixed; top: 0; left: 0;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .25s var(--ease), height .25s var(--ease), background .25s;
+      mix-blend-mode: normal;
+    }
+    .cursor-ring {
+      position: fixed; top: 0; left: 0;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(201,168,76,.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .4s var(--ease), height .4s var(--ease), border-color .3s;
+    }
+    .cursor.hover { width: 6px; height: 6px; background: var(--gold-light); }
+    .cursor-ring.hover { width: 60px; height: 60px; border-color: var(--gold); }
+    .cursor.clicking { width: 14px; height: 14px; }
+
+    /* ─── CANVAS (Three.js) ──────────────────────────────── */
+    #hero-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 24px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .4s, backdrop-filter .4s, padding .4s;
+    }
+    nav.scrolled {
+      background: rgba(6,6,6,.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 18px 60px;
+      border-bottom: 1px solid rgba(201,168,76,.1);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -.01em;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo-mark {
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: var(--gold);
+      font-weight: 600; letter-spacing: .05em;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px; font-weight: 400;
+      color: var(--muted);
+      letter-spacing: .03em;
+      transition: color .2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s var(--ease);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      font-size: 13px; font-weight: 500;
+      padding: 10px 22px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      letter-spacing: .05em;
+      transition: background .25s, color .25s;
+      position: relative; overflow: hidden;
+    }
+    .nav-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold);
+      transform: translateY(101%);
+      transition: transform .35s var(--ease);
+    }
+    .nav-cta span { position: relative; z-index: 1; }
+    .nav-cta:hover::before { transform: translateY(0); }
+    .nav-cta:hover { color: var(--bg); }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 0 60px 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(201,168,76,.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 80% at 20% 80%, rgba(201,168,76,.04) 0%, transparent 60%);
+    }
+    .hero-line {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: .3;
+      left: 60px;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .2em; color: var(--gold);
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 32px;
+      opacity: 0; transform: translateY(20px);
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 32px; height: 1px; background: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(52px, 7.5vw, 110px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -.03em;
+      max-width: 900px;
+      margin-bottom: 32px;
+      opacity: 0;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold);
+      position: relative;
+    }
+    .hero-title em::after {
+      content: '';
+      position: absolute; bottom: 8px; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .hero-sub {
+      font-size: clamp(16px, 1.4vw, 20px);
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 540px;
+      line-height: 1.6;
+      margin-bottom: 52px;
+      opacity: 0; transform: translateY(20px);
+    }
+    .hero-sub strong { color: var(--off-white); font-weight: 500; }
+    .hero-actions {
+      display: flex; align-items: center; gap: 24px;
+      margin-bottom: 100px;
+      opacity: 0; transform: translateY(20px);
+    }
+    .btn-primary {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 18px 44px;
+      background: var(--gold);
+      color: var(--bg);
+      position: relative; overflow: hidden;
+      transition: transform .2s var(--ease);
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold-light);
+      transform: translateX(-101%);
+      transition: transform .4s var(--ease);
+    }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost {
+      font-size: 14px; font-weight: 400;
+      color: var(--muted);
+      display: flex; align-items: center; gap: 10px;
+      letter-spacing: .03em;
+      transition: color .2s;
+    }
+    .btn-ghost svg { transition: transform .3s var(--ease); }
+    .btn-ghost:hover { color: var(--white); }
+    .btn-ghost:hover svg { transform: translateX(6px); }
+    .hero-stats {
+      display: flex; gap: 0;
+      border-top: 1px solid var(--faint);
+      padding-top: 40px;
+      width: 100%;
+      max-width: 700px;
+      opacity: 0; transform: translateY(20px);
+    }
+    .stat-item {
+      flex: 1;
+      padding-right: 48px;
+      border-right: 1px solid var(--faint);
+    }
+    .stat-item:last-child { border-right: none; padding-right: 0; padding-left: 48px; }
+    .stat-item:not(:first-child):not(:last-child) { padding-left: 48px; }
+    .stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: -.03em;
+      display: block; margin-bottom: 6px;
+    }
+    .stat-label {
+      font-size: 13px; color: var(--muted);
+      font-weight: 300; letter-spacing: .03em;
+    }
+    .scroll-indicator {
+      position: absolute; bottom: 40px; right: 60px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; letter-spacing: .15em;
+      color: var(--muted); text-transform: uppercase;
+      opacity: 0;
+    }
+    .scroll-line {
+      width: 40px; height: 1px; background: var(--muted);
+      transform-origin: left;
+      animation: scrollLine 2s var(--ease) infinite;
+    }
+    @keyframes scrollLine {
+      0%,100%{transform:scaleX(1);opacity:1}
+      50%{transform:scaleX(.3);opacity:.4}
+    }
+
+    /* ─── SECTION BASE ───────────────────────────────────── */
+    section { padding: 140px 60px; position: relative; }
+    .section-tag {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .2em; color: var(--gold);
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-tag::before {
+      content: ''; width: 28px; height: 1px; background: var(--gold);
+    }
+    .section-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px; color: rgba(201,168,76,.4);
+      letter-spacing: .15em;
+    }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+
+    /* ─── PROBLEM ────────────────────────────────────────── */
+    .problem {
+      background: var(--bg);
+      border-top: 1px solid var(--faint);
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 80px;
+    }
+    .problem-left { max-width: 480px; }
+    .problem-left p {
+      font-size: 17px; color: var(--muted);
+      font-weight: 300; line-height: 1.7;
+      margin-top: 24px;
+    }
+    .problem-cards { display: flex; flex-direction: column; gap: 2px; }
+    .problem-card {
+      padding: 36px 40px;
+      background: var(--bg2);
+      border: 1px solid var(--faint);
+      position: relative; overflow: hidden;
+      transition: border-color .35s, background .35s;
+      opacity: 0; transform: translateX(40px);
+    }
+    .problem-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--gold);
+      transform: scaleY(0); transform-origin: bottom;
+      transition: transform .4s var(--ease);
+    }
+    .problem-card:hover {
+      border-color: var(--border);
+      background: rgba(201,168,76,.04);
+    }
+    .problem-card:hover::before { transform: scaleY(1); }
+    .problem-card-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px; color: var(--gold);
+      letter-spacing: .15em; margin-bottom: 16px;
+    }
+    .problem-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px; font-weight: 600;
+      letter-spacing: -.02em; margin-bottom: 8px;
+    }
+    .problem-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ─── IMMOBILIEN ─────────────────────────────────────── */
+    .immobilien {
+      background: var(--bg2);
+      border-top: 1px solid var(--faint);
+    }
+    .immo-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 100px; align-items: center;
+    }
+    .immo-visual {
+      position: relative;
+      aspect-ratio: 4/3;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .immo-visual-inner {
+      text-align: center;
+    }
+    .immo-big-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 120px; font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,76,.3);
+      line-height: 1; letter-spacing: -.05em;
+    }
+    .immo-big-label {
+      font-size: 13px; color: var(--muted);
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-top: -8px;
+    }
+    .immo-corner {
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+      border-width: 0;
+    }
+    .immo-corner.tl { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+    .immo-corner.tr { top: -1px; right: -1px; border-top-width: 2px; border-right-width: 2px; }
+    .immo-corner.bl { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
+    .immo-corner.br { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+    .immo-content h2 { margin-bottom: 24px; }
+    .immo-content p {
+      font-size: 16px; color: var(--muted); font-weight: 300;
+      line-height: 1.7; margin-bottom: 16px;
+    }
+    .immo-features { display: flex; flex-direction: column; gap: 12px; margin-top: 36px; }
+    .immo-feature {
+      display: flex; align-items: center; gap: 14px;
+      font-size: 14px; color: var(--off-white);
+    }
+    .immo-feature::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold); border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── SYSTEM ─────────────────────────────────────────── */
+    .system { background: var(--bg); border-top: 1px solid var(--faint); }
+    .system-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 100px;
+    }
+    .system-header p {
+      font-size: 16px; color: var(--muted); font-weight: 300;
+      max-width: 360px; line-height: 1.6; text-align: right;
+    }
+    .system-steps { display: flex; flex-direction: column; gap: 0; }
+    .system-step {
+      display: grid; grid-template-columns: 80px 1fr auto;
+      align-items: start; gap: 48px;
+      padding: 48px 0;
+      border-top: 1px solid var(--faint);
+      position: relative;
+      opacity: 0; transform: translateY(30px);
+    }
+    .system-step:last-child { border-bottom: 1px solid var(--faint); }
+    .system-step-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 48px; font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,76,.3);
+      line-height: 1; letter-spacing: -.04em;
+      transition: -webkit-text-stroke-color .3s;
+    }
+    .system-step:hover .system-step-num {
+      -webkit-text-stroke-color: var(--gold);
+    }
+    .system-step-body h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px; font-weight: 600;
+      letter-spacing: -.02em; margin-bottom: 12px;
+      transition: color .2s;
+    }
+    .system-step:hover .system-step-body h3 { color: var(--gold-light); }
+    .system-step-body p {
+      font-size: 15px; color: var(--muted); font-weight: 300;
+      line-height: 1.6; max-width: 480px;
+    }
+    .system-step-tag {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .15em; color: var(--gold);
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      align-self: flex-start;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .system-step:hover .system-step-tag { opacity: 1; }
+
+    /* ─── RESULTS ────────────────────────────────────────── */
+    .results {
+      background: var(--bg2);
+      border-top: 1px solid var(--faint);
+      overflow: hidden;
+    }
+    .results-stats {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 2px; margin: 80px 0;
+    }
+    .result-stat {
+      padding: 64px 48px;
+      background: var(--bg);
+      border: 1px solid var(--faint);
+      text-align: center;
+      opacity: 0; transform: translateY(30px);
+      transition: border-color .3s, background .3s;
+    }
+    .result-stat:hover {
+      border-color: var(--border);
+      background: rgba(201,168,76,.04);
+    }
+    .result-stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: -.04em;
+      display: block; margin-bottom: 12px;
+    }
+    .result-stat-label {
+      font-size: 13px; color: var(--muted);
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    /* Marquee */
+    .marquee-wrap {
+      border-top: 1px solid var(--faint);
+      border-bottom: 1px solid var(--faint);
+      padding: 20px 0; overflow: hidden;
+    }
+    .marquee-track {
+      display: flex; gap: 60px; width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+    .marquee-item {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 24px;
+    }
+    .marquee-item::after {
+      content: '◆'; color: var(--gold); font-size: 8px;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ─── TESTIMONIAL CARD ───────────────────────────────── */
+    .testimonials {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 2px; margin-top: 60px;
+    }
+    .tcard {
+      padding: 48px 40px;
+      background: var(--bg);
+      border: 1px solid var(--faint);
+      position: relative;
+      transition: border-color .3s;
+      opacity: 0; transform: translateY(30px);
+    }
+    .tcard:hover { border-color: var(--border); }
+    .tcard-quote {
+      font-size: 32px; color: var(--gold); line-height: 1;
+      margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif;
+    }
+    .tcard-text {
+      font-size: 15px; color: var(--off-white);
+      font-weight: 300; line-height: 1.7;
+      font-style: italic; margin-bottom: 32px;
+    }
+    .tcard-author {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .tcard-avatar {
+      width: 42px; height: 42px;
+      background: var(--gold-subtle);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 600; color: var(--gold);
+    }
+    .tcard-name { font-size: 14px; font-weight: 500; }
+    .tcard-role { font-size: 12px; color: var(--muted); }
+
+    /* ─── CTA / TERMIN ───────────────────────────────────── */
+    .cta-section {
+      background: var(--bg);
+      border-top: 1px solid var(--faint);
+      text-align: center;
+      padding: 160px 60px;
+    }
+    .cta-inner {
+      max-width: 800px; margin: 0 auto;
+    }
+    .cta-section h2 {
+      font-size: clamp(44px, 6vw, 88px);
+      margin-bottom: 24px;
+    }
+    .cta-section h2 span { color: var(--gold); }
+    .cta-section p {
+      font-size: 17px; color: var(--muted);
+      font-weight: 300; line-height: 1.6;
+      margin-bottom: 52px;
+    }
+    .guarantee {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-top: 36px;
+      font-size: 13px; color: var(--muted);
+      padding: 14px 24px;
+      border: 1px solid var(--faint);
+    }
+    .guarantee-icon { color: var(--gold); font-size: 16px; }
+
+    /* ─── TILL KUHN ──────────────────────────────────────── */
+    .founder {
+      background: var(--bg2);
+      border-top: 1px solid var(--faint);
+    }
+    .founder-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 100px; align-items: center;
+    }
+    .founder-img-wrap {
+      position: relative; aspect-ratio: 3/4;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .founder-placeholder {
+      text-align: center;
+    }
+    .founder-initials {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 80px; font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,76,.4);
+    }
+    .founder-img-tag {
+      position: absolute; bottom: 24px; left: 24px;
+      font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gold); background: rgba(6,6,6,.9);
+      padding: 8px 14px; border: 1px solid var(--border);
+    }
+    .founder-content blockquote {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(22px, 2.5vw, 32px);
+      font-weight: 500;
+      line-height: 1.4;
+      letter-spacing: -.02em;
+      color: var(--white);
+      padding-left: 28px;
+      border-left: 2px solid var(--gold);
+      margin-bottom: 40px;
+    }
+    .founder-content p {
+      font-size: 15px; color: var(--muted);
+      font-weight: 300; line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .founder-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px; font-weight: 600;
+      color: var(--gold); margin-top: 36px;
+    }
+    .founder-title { font-size: 13px; color: var(--muted); }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--faint);
+      padding: 60px 60px 40px;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid var(--faint);
+    }
+    .footer-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 700;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .footer-tagline { font-size: 13px; color: var(--muted); margin-top: 8px; }
+    .footer-links {
+      display: flex; gap: 80px;
+    }
+    .footer-col h4 {
+      font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px; font-weight: 500;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 14px; color: var(--muted); transition: color .2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-bottom p { font-size: 12px; color: rgba(255,255,255,.2); }
+
+    /* ─── REVEAL UTILITY ─────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(40px); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      nav, section, .hero, footer { padding-left: 32px; padding-right: 32px; }
+      nav.scrolled { padding-left: 32px; padding-right: 32px; }
+      .problem-grid, .immo-inner, .founder-inner { grid-template-columns: 1fr; gap: 60px; }
+      .results-stats, .testimonials { grid-template-columns: 1fr; }
+      .system-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .system-header p { text-align: left; }
+      .hero-stats { flex-direction: column; gap: 32px; }
+      .stat-item { border-right: none; padding: 0 0 32px; border-bottom: 1px solid var(--faint); }
+      .stat-item:last-child { border-bottom: none; }
+      .footer-top { flex-direction: column; gap: 48px; }
+      .footer-links { flex-wrap: wrap; gap: 40px; }
+      nav { padding: 18px 32px; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 640px) {
+      .system-step { grid-template-columns: 1fr; gap: 16px; }
+      .system-step-num { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Grain -->
+<div class="grain"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">KC</div>
+    Kuhn Capital
+  </div>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#immobilien">Immobilien</a></li>
+    <li><a href="#system">System</a></li>
+    <li><a href="#ergebnisse">Ergebnisse</a></li>
+    <li><a href="#till">Gründer</a></li>
+  </ul>
+  <a href="#termin" class="nav-cta"><span>Gespräch sichern</span></a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-line"></div>
+
+  <div class="hero-eyebrow" id="hero-eyebrow">
+    Digitales Franchise-System
+  </div>
+
+  <h1 class="hero-title" id="hero-title">
+    Übernimm Marketing<br />für <em>800+ Partner</em> —<br />verdien bares Geld.
+  </h1>
+
+  <p class="hero-sub" id="hero-sub">
+    <strong>Kein Startkapital. Kein Makler-Schein. Kein Risiko.</strong><br />
+    Nur ein funktionierendes System, das dir Monat für Monat Umsatz generiert.
+  </p>
+
+  <div class="hero-actions" id="hero-actions">
+    <a href="#termin" class="btn-primary">
+      <span>Kostenloses Erstgespräch</span>
+    </a>
+    <a href="#system" class="btn-ghost">
+      So funktioniert's
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="hero-stats" id="hero-stats">
+    <div class="stat-item">
+      <span class="stat-number" data-count="800" data-suffix="+">0</span>
+      <span class="stat-label">Vertriebspartner im Netzwerk</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number" data-prefix="€" data-count="20" data-suffix="M+">0</span>
+      <span class="stat-label">Monatlicher Netzwerk-Umsatz</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number" data-prefix="€" data-count="0">0</span>
+      <span class="stat-label">Startkapital erforderlich</span>
+    </div>
+  </div>
+
+  <div class="scroll-indicator" id="scroll-indicator">
+    <span class="scroll-line"></span>
+    Scroll
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="section-tag">
+    <span class="section-num">01</span>
+    Das Problem
+  </div>
+  <div class="problem-grid">
+    <div class="problem-left">
+      <h2 class="reveal">Warum scheitern<br />Quereinsteiger?</h2>
+      <p class="reveal" style="transition-delay:.1s">
+        Der Immobilienmarkt bietet enorme Chancen — doch ohne das richtige System bleiben sie ungenutzt. Drei Hürden halten die meisten davon ab, durchzustarten.
+      </p>
+    </div>
+    <div class="problem-cards">
+      <div class="problem-card">
+        <div class="problem-card-num">01 / 03</div>
+        <h3>Fehlende digitale Kompetenz</h3>
+        <p>Ohne modernes Online-Marketing bleibt Reichweite aus. Lead-Generierung, Social Media, Funnels — das alles klingt überwältigend.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">02 / 03</div>
+        <h3>Keine Skalierung möglich</h3>
+        <p>Wer allein arbeitet, tauscht Zeit gegen Geld. Ein System, das ohne dich läuft, fehlt — und damit fehlt jede Chance auf wirkliche Freiheit.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">03 / 03</div>
+        <h3>Kein Unterstützungsnetzwerk</h3>
+        <p>Als Einzelkämpfer fehlende Struktur, kein Mentoring, keine bewährten Prozesse. Der Weg ist steinig — und einsam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMMOBILIEN -->
+<section class="immobilien" id="immobilien">
+  <div class="section-tag">
+    <span class="section-num">02</span>
+    Immobilien-Franchise
+  </div>
+  <div class="immo-inner">
+    <div class="immo-visual reveal">
+      <div class="immo-corner tl"></div>
+      <div class="immo-corner tr"></div>
+      <div class="immo-corner bl"></div>
+      <div class="immo-corner br"></div>
+      <div class="immo-visual-inner">
+        <div class="immo-big-num">800</div>
+        <div class="immo-big-label">Vertriebspartner warten auf dich</div>
+      </div>
+    </div>
+    <div class="immo-content">
+      <h2 class="reveal">Der größte Markt —<br />ohne eigenes Kapital.</h2>
+      <p class="reveal" style="transition-delay:.1s">
+        Immobilien ist die krisensicherste Branche Deutschlands. Mit dem Kuhn Capital System übernimmst du das digitale Marketing für ein bestehendes Netzwerk — ohne selbst Makler zu sein.
+      </p>
+      <p class="reveal" style="transition-delay:.15s">
+        Du wirst zum digitalen Wachstumsmotor für 800+ etablierte Vertriebspartner. Dein Aufwand. Deren Infrastruktur. Gemeinsamer Umsatz.
+      </p>
+      <div class="immo-features reveal" style="transition-delay:.2s">
+        <div class="immo-feature">Kein Makler-Schein erforderlich</div>
+        <div class="immo-feature">Bewährtes System mit Netzwerk-Effekt</div>
+        <div class="immo-feature">Sofortiger Zugang zu 800+ Partnern</div>
+        <div class="immo-feature">Provisionsbasis — skalierbar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM -->
+<section class="system" id="system">
+  <div class="section-tag">
+    <span class="section-num">03</span>
+    Das System
+  </div>
+  <div class="system-header">
+    <h2 class="reveal">Vier Schritte.<br />Ein System.</h2>
+    <p class="reveal">So funktioniert das Kuhn Capital Franchise-Modell von Anfang bis zur ersten Provision.</p>
+  </div>
+  <div class="system-steps">
+    <div class="system-step">
+      <div class="system-step-num">01</div>
+      <div class="system-step-body">
+        <h3>Netzwerk-Zugang</h3>
+        <p>Du erhältst sofortigen Zugang zu unserem Netzwerk aus 800+ etablierten Immobilien-Vertriebspartnern. Die Infrastruktur steht — du fängst nicht bei null an.</p>
+      </div>
+      <div class="system-step-tag">Sofort</div>
+    </div>
+    <div class="system-step">
+      <div class="system-step-num">02</div>
+      <div class="system-step-body">
+        <h3>Marketing-Automation</h3>
+        <p>Digitale Systeme übernehmen die Lead-Generierung automatisch. Du lernst, die Hebel zu bedienen — kein technisches Vorwissen nötig.</p>
+      </div>
+      <div class="system-step-tag">Woche 1–2</div>
+    </div>
+    <div class="system-step">
+      <div class="system-step-num">03</div>
+      <div class="system-step-body">
+        <h3>Revenue-Sharing</h3>
+        <p>Für jede vermittelte Transaktion erhältst du eine transparente Provision. Das Netzwerk generiert monatlich über 20 Millionen Euro — dein Anteil wächst mit deinem Einsatz.</p>
+      </div>
+      <div class="system-step-tag">Ab Monat 1</div>
+    </div>
+    <div class="system-step">
+      <div class="system-step-num">04</div>
+      <div class="system-step-body">
+        <h3>Support & Skalierung</h3>
+        <p>Dediziertes Coaching, bewährte Playbooks und eine Community, die dich voranbringt. Niemand kämpft allein — wir skalieren gemeinsam.</p>
+      </div>
+      <div class="system-step-tag">Ongoing</div>
+    </div>
+  </div>
+</section>
+
+<!-- ERGEBNISSE -->
+<section class="results" id="ergebnisse">
+  <div class="section-tag">
+    <span class="section-num">04</span>
+    Ergebnisse
+  </div>
+  <h2 class="reveal" style="max-width:600px">Zahlen, die<br />für sich sprechen.</h2>
+
+  <div class="results-stats">
+    <div class="result-stat">
+      <span class="result-stat-num" data-count="800" data-suffix="+">0</span>
+      <span class="result-stat-label">Aktive Partner</span>
+    </div>
+    <div class="result-stat">
+      <span class="result-stat-num" data-prefix="€" data-count="20" data-suffix="M+">0</span>
+      <span class="result-stat-label">Monatlicher Umsatz</span>
+    </div>
+    <div class="result-stat">
+      <span class="result-stat-num" data-count="100" data-suffix="%">0</span>
+      <span class="result-stat-label">Digital — ortsunabhängig</span>
+    </div>
+  </div>
+
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marquee">
+      <span class="marquee-item">800+ Vertriebspartner</span>
+      <span class="marquee-item">€20M+ monatlich</span>
+      <span class="marquee-item">€0 Startkapital</span>
+      <span class="marquee-item">Kein Makler-Schein</span>
+      <span class="marquee-item">100% Digital</span>
+      <span class="marquee-item">Ortsunabhängig</span>
+      <span class="marquee-item">Bewährtes System</span>
+      <span class="marquee-item">800+ Vertriebspartner</span>
+      <span class="marquee-item">€20M+ monatlich</span>
+      <span class="marquee-item">€0 Startkapital</span>
+      <span class="marquee-item">Kein Makler-Schein</span>
+      <span class="marquee-item">100% Digital</span>
+      <span class="marquee-item">Ortsunabhängig</span>
+      <span class="marquee-item">Bewährtes System</span>
+    </div>
+  </div>
+
+  <div class="testimonials">
+    <div class="tcard">
+      <div class="tcard-quote">"</div>
+      <p class="tcard-text">Ich hatte null Ahnung von Immobilien. Heute generiere ich über das System meinen ersten fünfstelligen Monatsumsatz — vollständig digital.</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar">MK</div>
+        <div>
+          <div class="tcard-name">Michael K.</div>
+          <div class="tcard-role">Quereinsteiger, seit 6 Monaten</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-quote">"</div>
+      <p class="tcard-text">Das System hat mich in 8 Wochen weitergebracht als drei Jahre auf eigene Faust. Der Netzwerk-Effekt ist real.</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar">SL</div>
+        <div>
+          <div class="tcard-name">Sandra L.</div>
+          <div class="tcard-role">Quereinsteigerin, seit 8 Monaten</div>
+        </div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-quote">"</div>
+      <p class="tcard-text">Ich war skeptisch gegenüber allem was "ohne Kapital" verspricht. Aber die Zahlen lügen nicht — das System liefert.</p>
+      <div class="tcard-author">
+        <div class="tcard-avatar">TR</div>
+        <div>
+          <div class="tcard-name">Thomas R.</div>
+          <div class="tcard-role">Quereinsteiger, seit 1 Jahr</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder" id="till">
+  <div class="section-tag">
+    <span class="section-num">05</span>
+    Der Gründer
+  </div>
+  <div class="founder-inner">
+    <div class="founder-img-wrap reveal">
+      <div class="founder-placeholder">
+        <div class="founder-initials">TK</div>
+      </div>
+      <div class="founder-img-tag">Till Kuhn — Gründer</div>
+    </div>
+    <div class="founder-content">
+      <blockquote class="reveal">
+        "Ich habe dieses System gebaut, weil ich selbst weiß, wie es ist, ohne Netzwerk und ohne Kapital anzufangen."
+      </blockquote>
+      <p class="reveal" style="transition-delay:.1s">
+        Till Kuhn ist der Kopf hinter Kuhn Capital. Er hat das digitale Franchise-System für Immobilien-Marketing von Grund auf aufgebaut — basierend auf seiner eigenen Erfahrung als Quereinsteiger.
+      </p>
+      <p class="reveal" style="transition-delay:.15s">
+        Was heute 800+ Vertriebspartner nutzen, begann als ein einfacher Ansatz: Marketing-Expertise in einen skalierbaren, digitalen Rahmen bringen.
+      </p>
+      <div class="founder-name reveal" style="transition-delay:.2s">Till Kuhn</div>
+      <div class="founder-title reveal" style="transition-delay:.25s">Gründer & CEO, Kuhn Capital</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / TERMIN -->
+<section class="cta-section" id="termin">
+  <div class="cta-inner">
+    <div class="section-tag" style="justify-content:center; margin-bottom:32px">
+      <span class="section-num">06</span>
+      Termin sichern
+    </div>
+    <h2 class="reveal">Bereit zu starten?<br /><span>Heute.</span></h2>
+    <p class="reveal" style="transition-delay:.1s">
+      Buch dir dein kostenloses Erstgespräch. Kein Verkaufsdruck — wir schauen gemeinsam, ob das System zu dir passt.
+    </p>
+    <div class="reveal" style="transition-delay:.2s">
+      <a href="https://calendly.com/" class="btn-primary" style="display:inline-flex; font-size:15px; padding:20px 52px;">
+        <span>Kostenloses Erstgespräch buchen →</span>
+      </a>
+    </div>
+    <div class="reveal" style="transition-delay:.25s">
+      <div class="guarantee">
+        <span class="guarantee-icon">◆</span>
+        30-Tage Geld-zurück-Garantie — ohne Wenn und Aber
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">
+        <div class="nav-logo-mark" style="width:28px;height:28px;font-size:11px">KC</div>
+        Kuhn Capital
+      </div>
+      <div class="footer-tagline">Digitales Franchise-System für Quereinsteiger</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#problem">Das Problem</a></li>
+          <li><a href="#immobilien">Immobilien</a></li>
+          <li><a href="#system">Das System</a></li>
+          <li><a href="#ergebnisse">Ergebnisse</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="#">Impressum</a></li>
+          <li><a href="#">Datenschutz</a></li>
+          <li><a href="#">AGB</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <ul>
+          <li><a href="#termin">Erstgespräch</a></li>
+          <li><a href="#">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Kuhn Capital. Alle Rechte vorbehalten.</p>
+    <p>Designed with award-level precision.</p>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+<script>
+/* ─────────────────────────────────────────────────────
+   SMOOTH SCROLL (inline Lenis-alternative)
+───────────────────────────────────────────────────── */
+class SmoothScroll {
+  constructor() {
+    this.current = 0;
+    this.target = 0;
+    this.ease = 0.1;
+    this.on = true;
+    this.bind();
+    this.render();
+  }
+  bind() {
+    window.addEventListener('wheel', e => {
+      if (!this.on) return;
+      this.target += e.deltaY;
+      this.target = Math.max(0, Math.min(this.target, document.body.scrollHeight - window.innerHeight));
+    }, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (!this.on) this.current = this.target = window.scrollY;
+    });
+  }
+  render() {
+    this.current += (this.target - this.current) * this.ease;
+    window.scrollTo(0, this.current);
+    requestAnimationFrame(() => this.render());
+  }
+}
+// Only on desktop
+if (window.innerWidth > 1024) new SmoothScroll();
+
+/* ─────────────────────────────────────────────────────
+   THREE.JS HERO BACKGROUND
+───────────────────────────────────────────────────── */
+(function initThree() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+  camera.position.z = 5;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+
+  // Particle field
+  const count = 1200;
+  const geo = new THREE.BufferGeometry();
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    positions[i*3]   = (Math.random()-0.5) * 20;
+    positions[i*3+1] = (Math.random()-0.5) * 12;
+    positions[i*3+2] = (Math.random()-0.5) * 8;
+    const g = Math.random() < 0.3;
+    colors[i*3]   = g ? 0.788 : 0.15;
+    colors[i*3+1] = g ? 0.659 : 0.15;
+    colors[i*3+2] = g ? 0.298 : 0.15;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+  const mat = new THREE.PointsMaterial({ size: 0.025, vertexColors: true, transparent: true, opacity: 0.7 });
+  const particles = new THREE.Points(geo, mat);
+  scene.add(particles);
+
+  // Gold grid lines
+  const gridMat = new THREE.LineBasicMaterial({ color: 0xc9a84c, transparent: true, opacity: 0.06 });
+  for (let i = -5; i <= 5; i++) {
+    const hGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-12, i*1.2, -2), new THREE.Vector3(12, i*1.2, -2)
+    ]);
+    const vGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(i*2.4, -7, -2), new THREE.Vector3(i*2.4, 7, -2)
+    ]);
+    scene.add(new THREE.Line(hGeo, gridMat));
+    scene.add(new THREE.Line(vGeo, gridMat));
+  }
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+    mouseY = -(e.clientY / window.innerHeight - 0.5) * 0.3;
+  });
+
+  let t = 0;
+  function animate() {
+    t += 0.001;
+    particles.rotation.y = t * 0.1 + mouseX * 0.3;
+    particles.rotation.x = mouseY * 0.2;
+    camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+    camera.position.y += (mouseY * 0.3 - camera.position.y) * 0.05;
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const w = canvas.offsetWidth, h = canvas.offsetHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+})();
+
+/* ─────────────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────────────── */
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let cx = 0, cy = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
+document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
+document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); cursorRing.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); cursorRing.classList.remove('hover'); });
+});
+
+(function animateCursor() {
+  cursor.style.left = cx + 'px';
+  cursor.style.top  = cy + 'px';
+  rx += (cx - rx) * 0.12;
+  ry += (cy - ry) * 0.12;
+  cursorRing.style.left = rx + 'px';
+  cursorRing.style.top  = ry + 'px';
+  requestAnimationFrame(animateCursor);
+})();
+
+/* ─────────────────────────────────────────────────────
+   NAV SCROLL
+───────────────────────────────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ─────────────────────────────────────────────────────
+   GSAP ANIMATIONS
+───────────────────────────────────────────────────── */
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance
+const tl = gsap.timeline({ delay: 0.2 });
+tl.to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+  .to('#hero-title', { opacity: 1, duration: 1, ease: 'power3.out' }, '-=0.4')
+  .to('#hero-sub', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.5')
+  .to('#hero-actions', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4')
+  .to('#hero-stats', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.3')
+  .to('#scroll-indicator', { opacity: 1, duration: 0.5 }, '-=0.2');
+
+// Hero title character split
+const titleEl = document.getElementById('hero-title');
+const words = titleEl.innerHTML.split(/((?:<[^>]+>.*?<\/[^>]+>)|<br\s*\/?>)/g);
+// Simple word-by-word animation via clip
+gsap.from('#hero-title', { clipPath: 'inset(0 100% 0 0)', duration: 1.2, ease: 'power4.out', delay: 0.6 });
+
+// Scroll reveals
+gsap.utils.toArray('.reveal').forEach(el => {
+  gsap.to(el, {
+    opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: {
+      trigger: el, start: 'top 88%', toggleActions: 'play none none none'
+    }
+  });
+});
+
+// Problem cards stagger
+gsap.utils.toArray('.problem-card').forEach((card, i) => {
+  gsap.to(card, {
+    opacity: 1, x: 0, duration: 0.8, ease: 'power3.out',
+    delay: i * 0.12,
+    scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play none none none' }
+  });
+});
+
+// System steps
+gsap.utils.toArray('.system-step').forEach((step, i) => {
+  gsap.to(step, {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+    delay: i * 0.1,
+    scrollTrigger: { trigger: step, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+// Results stats
+gsap.utils.toArray('.result-stat').forEach((stat, i) => {
+  gsap.to(stat, {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+    delay: i * 0.1,
+    scrollTrigger: { trigger: stat, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+// Testimonial cards
+gsap.utils.toArray('.tcard').forEach((card, i) => {
+  gsap.to(card, {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+    delay: i * 0.12,
+    scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play none none none' }
+  });
+});
+
+// Counter animation
+function animateCounter(el) {
+  const target  = parseInt(el.dataset.count) || 0;
+  const prefix  = el.dataset.prefix  || '';
+  const suffix  = el.dataset.suffix  || '';
+  const duration = 2000;
+  const start   = performance.now();
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const val = Math.round(eased * target);
+    el.textContent = prefix + val + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+/* ─────────────────────────────────────────────────────
+   MAGNETIC BUTTONS
+───────────────────────────────────────────────────── */
+document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top  + rect.height / 2);
+    gsap.to(btn, { x: dx * 0.25, y: dy * 0.25, duration: 0.3, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+  });
+});
+
+/* ─────────────────────────────────────────────────────
+   PARALLAX HERO LINE
+───────────────────────────────────────────────────── */
+gsap.to('.hero-line', {
+  scaleY: 1.5,
+  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+});
+
+/* ─────────────────────────────────────────────────────
+   SMOOTH ANCHOR
+───────────────────────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    gsap.to(window, {
+      scrollTo: { y: target, offsetY: 80 },
+      duration: 1.2,
+      ease: 'power3.inOut'
+    });
+  });
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+</body>
+</html>
