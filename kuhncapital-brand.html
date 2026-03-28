@@ -936,5 +936,529 @@ document.querySelectorAll('.btn-dark,.btn-ghost,.nav-cta').forEach(btn => {
   });
 });
 </script>
+
+<!-- ═══════════════════════════════════════════
+     KUHN CAPITAL KI CHATBOT
+════════════════════════════════════════════ -->
+<style>
+  /* ── Chat Widget ── */
+  #kc-chat-btn {
+    position: fixed; bottom: 32px; right: 32px; z-index: 500;
+    width: 60px; height: 60px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    box-shadow: 0 0 0 0 rgba(201,168,76,.4);
+    animation: chatPulse 3s ease infinite;
+    transition: transform .25s var(--ease), background .2s;
+  }
+  #kc-chat-btn:hover { transform: scale(1.08); background: var(--gold-light,#e8c96a); }
+  #kc-chat-btn svg { width: 26px; height: 26px; fill: #0a0a0a; transition: opacity .2s; }
+  #kc-chat-btn .close-icon { display: none; }
+  #kc-chat-btn.open .chat-icon { display: none; }
+  #kc-chat-btn.open .close-icon { display: block; }
+  @keyframes chatPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,.35); }
+    50%      { box-shadow: 0 0 0 14px rgba(201,168,76,0); }
+  }
+
+  /* ── Chat Window ── */
+  #kc-chat-window {
+    position: fixed; bottom: 104px; right: 32px; z-index: 499;
+    width: 380px; max-height: 560px;
+    background: #0f0f0f;
+    border: 1px solid rgba(201,168,76,.25);
+    display: flex; flex-direction: column;
+    box-shadow: 0 24px 80px rgba(0,0,0,.8), 0 0 0 1px rgba(201,168,76,.08);
+    transform: translateY(16px) scale(.97);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .35s var(--ease), opacity .3s;
+  }
+  #kc-chat-window.open {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: all;
+  }
+  @media(max-width: 480px) {
+    #kc-chat-window { width: calc(100vw - 32px); right: 16px; bottom: 96px; }
+    #kc-chat-btn { right: 16px; bottom: 20px; }
+  }
+
+  /* ── Header ── */
+  .kc-header {
+    padding: 18px 20px 16px;
+    border-bottom: 1px solid rgba(201,168,76,.15);
+    display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0;
+  }
+  .kc-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(201,168,76,.12);
+    border: 1px solid rgba(201,168,76,.35);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .kc-avatar svg { width: 18px; height: 18px; }
+  .kc-header-info {}
+  .kc-header-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; font-weight: 600; color: #fff;
+    letter-spacing: .01em;
+  }
+  .kc-header-status {
+    font-size: 11px; color: rgba(255,255,255,.4);
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 2px;
+  }
+  .kc-status-dot {
+    width: 6px; height: 6px; background: #22c55e;
+    border-radius: 50%; animation: pulse 2s infinite;
+  }
+
+  /* ── Messages ── */
+  .kc-messages {
+    flex: 1; overflow-y: auto; padding: 20px 16px;
+    display: flex; flex-direction: column; gap: 12px;
+    scroll-behavior: smooth;
+  }
+  .kc-messages::-webkit-scrollbar { width: 3px; }
+  .kc-messages::-webkit-scrollbar-track { background: transparent; }
+  .kc-messages::-webkit-scrollbar-thumb { background: rgba(201,168,76,.2); border-radius: 2px; }
+
+  /* ── Message Bubbles ── */
+  .kc-msg {
+    display: flex; gap: 8px; align-items: flex-end;
+    animation: msgIn .3s var(--ease) both;
+  }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .kc-msg.bot { flex-direction: row; }
+  .kc-msg.user { flex-direction: row-reverse; }
+  .kc-msg-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(201,168,76,.1);
+    border: 1px solid rgba(201,168,76,.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .kc-msg-avatar svg { width: 12px; height: 12px; }
+  .kc-bubble {
+    max-width: 82%; padding: 11px 14px;
+    font-size: 13.5px; line-height: 1.6;
+    border-radius: 2px;
+  }
+  .kc-msg.bot .kc-bubble {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.07);
+    color: rgba(255,255,255,.85);
+    border-bottom-left-radius: 0;
+  }
+  .kc-msg.user .kc-bubble {
+    background: var(--gold);
+    color: #0a0a0a;
+    font-weight: 500;
+    border-bottom-right-radius: 0;
+  }
+  .kc-bubble strong { color: #fff; font-weight: 600; }
+  .kc-msg.user .kc-bubble strong { color: #0a0a0a; }
+  .kc-bubble a {
+    color: var(--gold); border-bottom: 1px solid rgba(201,168,76,.3);
+    text-decoration: none;
+  }
+
+  /* ── Typing ── */
+  .kc-typing .kc-bubble {
+    padding: 14px 16px;
+    display: flex; gap: 5px; align-items: center;
+  }
+  .kc-typing .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(255,255,255,.35);
+    animation: typingDot 1.2s ease infinite;
+  }
+  .kc-typing .dot:nth-child(2) { animation-delay: .2s; }
+  .kc-typing .dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes typingDot {
+    0%,60%,100% { transform: translateY(0); opacity: .35; }
+    30%          { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* ── Suggestions ── */
+  .kc-suggestions {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    padding: 0 16px 12px;
+  }
+  .kc-sug {
+    font-size: 11.5px;
+    padding: 6px 12px;
+    border: 1px solid rgba(201,168,76,.25);
+    color: rgba(201,168,76,.8);
+    background: rgba(201,168,76,.05);
+    cursor: none;
+    border-radius: 1px;
+    transition: background .2s, border-color .2s, color .2s;
+    white-space: nowrap;
+  }
+  .kc-sug:hover { background: rgba(201,168,76,.12); border-color: rgba(201,168,76,.5); color: var(--gold); }
+
+  /* ── Input ── */
+  .kc-input-row {
+    padding: 12px 14px;
+    border-top: 1px solid rgba(201,168,76,.1);
+    display: flex; gap: 8px; align-items: center;
+    flex-shrink: 0;
+  }
+  #kc-input {
+    flex: 1;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    border-radius: 1px;
+    transition: border-color .2s;
+    resize: none;
+  }
+  #kc-input::placeholder { color: rgba(255,255,255,.25); }
+  #kc-input:focus { border-color: rgba(201,168,76,.35); }
+  #kc-send {
+    width: 38px; height: 38px; flex-shrink: 0;
+    background: var(--gold);
+    border: none; cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .15s;
+    border-radius: 1px;
+  }
+  #kc-send:hover { background: #e8c96a; transform: scale(1.05); }
+  #kc-send svg { width: 16px; height: 16px; fill: #0a0a0a; }
+  .kc-powered {
+    text-align: center; font-size: 10px;
+    color: rgba(255,255,255,.15); padding: 6px 0 8px;
+    letter-spacing: .06em;
+  }
+</style>
+
+<!-- Chat Button -->
+<button id="kc-chat-btn" aria-label="Chat öffnen">
+  <svg class="chat-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+  </svg>
+  <svg class="close-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+  </svg>
+</button>
+
+<!-- Chat Window -->
+<div id="kc-chat-window">
+  <div class="kc-header">
+    <div class="kc-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+    </div>
+    <div class="kc-header-info">
+      <div class="kc-header-name">Kuhn Capital KI</div>
+      <div class="kc-header-status">
+        <span class="kc-status-dot"></span>
+        Immer verfügbar · Antwortet sofort
+      </div>
+    </div>
+  </div>
+
+  <div class="kc-messages" id="kc-messages"></div>
+
+  <div class="kc-suggestions" id="kc-suggestions">
+    <button class="kc-sug" onclick="kcSend('Wie funktioniert das System?')">Wie funktioniert's?</button>
+    <button class="kc-sug" onclick="kcSend('Was kann ich verdienen?')">Was verdiene ich?</button>
+    <button class="kc-sug" onclick="kcSend('Brauche ich Erfahrung?')">Erfahrung nötig?</button>
+    <button class="kc-sug" onclick="kcSend('Wie viele Plätze gibt es noch?')">Plätze frei?</button>
+  </div>
+
+  <div class="kc-input-row">
+    <input id="kc-input" type="text" placeholder="Stell mir eine Frage …" maxlength="200" autocomplete="off" />
+    <button id="kc-send">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="kc-powered">Kuhn Capital · KI-Assistent</div>
+</div>
+
+<script>
+(function() {
+  // ── Knowledge Base ────────────────────────────────────────
+  const KB = [
+    {
+      keys: ['hallo','hi','hey','guten tag','guten morgen','guten abend','servus','moin','grüß'],
+      answers: [
+        'Hallo! Ich bin der KI-Assistent von Kuhn Capital. Ich beantworte dir alle Fragen rund um unser digitales Franchise-System für Immobilien-Marketing. Womit kann ich dir helfen?',
+        'Hey, schön dass du da bist! Ich kann dir alles über das Kuhn Capital Franchise-System erklären — vom Ablauf bis zu möglichen Einnahmen. Was möchtest du wissen?'
+      ]
+    },
+    {
+      keys: ['wie funktioniert','system erklär','was ist das','worum geht','was macht','erkläre','überblick','zusammenfassung'],
+      answers: [
+        'Das Kuhn Capital System funktioniert in **3 Schritten**:\n\n**01 Du schaltest Werbung** — Mit unseren KI-Tools und erprobten Vorlagen erstellst du Anzeigen für Menschen, die Immobilien als Kapitalanlage suchen. 1–2 Stunden pro Tag reichen.\n\n**02 Leads kommen rein** — Die Zielgruppe sind Angestellte und Selbstständige im DACH-Raum, die ihr Geld sicher anlegen wollen. Über 20 Millionen potenzielle Käufer.\n\n**03 Verkaufsteam schließt ab** — Du musst niemanden beraten oder verkaufen. Unser Team übernimmt jeden Abschluss — du verdienst deine Provision.\n\nKurz: Du machst Marketing. Der Rest läuft automatisch.'
+      ]
+    },
+    {
+      keys: ['verdien','einkommen','provision','gehalt','geld','einnahmen','profit','lohn','bezahlung','honorar'],
+      answers: [
+        'Die Zahlen sprechen für sich:\n\n**4.000€+ pro Abschluss** — das ist die durchschnittliche Provision pro vermitteltem Deal.\n\n**Ziel im ersten Jahr:** 12 Provisionen × 4.000€ = **50.000€+ brutto**. Das ist keine Garantie, aber die Baseline auf die wir gemeinsam hinarbeiten.\n\n**Die Rechnung:** ~1h Arbeit/Tag → ~1 Lead/Stunde → 20 Leads = 1 Abschluss → 4.000€.\n\nJonas zum Beispiel hat beim ersten Durchlauf 223 Leads bei nur 4,87€ pro Lead generiert — und seine erste Provision von 4.700€ kassiert.',
+        'Realistisch gesehen: **50.000€+ brutto im ersten Jahr** ist das Ziel — aufgeteilt auf 12 Provisionen à 4.000€+. Das ist keine Phantasie, das ist die Baseline auf die wir mit jedem Partner hinarbeiten.\n\nPro Deal: **4.000€ Provision**. Unser Netzwerk setzt über **20 Mio. € monatlich** um. Dein Anteil wächst mit deinem Einsatz.'
+      ]
+    },
+    {
+      keys: ['eigenkapital','kapital','investition','kosten','startkapital','geld brauche','eigenes geld','anfangskosten','was kostet'],
+      answers: [
+        'Eine der häufigsten Fragen — und die beste Antwort: **0 Euro Eigenkapital.**\n\nDein Start wird über eine unserer Partnerbanken **bankgefördert**. Das bedeutet: Dein Werbebudget kommt von der Bank, nicht von dir. Du startest ohne finanzielles Risiko.\n\nKein Kleingedrucktes. Kein Haken. Alles Weitere erklären wir dir im kostenlosen Erstgespräch.'
+      ]
+    },
+    {
+      keys: ['zeit','stunden','aufwand','nebenbei','vollzeit','teilzeit','neben job','wann','flexibel','wieviel zeit'],
+      answers: [
+        '**1–2 Stunden pro Tag** reichen völlig aus — das System ist darauf ausgelegt, neben einem Vollzeitjob zu funktionieren.\n\nDu entscheidest selbst wann: morgens vor der Arbeit, abends auf der Couch, am Wochenende. **100% flexibel, 100% remote.**\n\nDeine drei täglichen Aufgaben:\n→ Content mit KI erstellen\n→ Anzeigen schalten\n→ Fertig — der Rest läuft automatisch'
+      ]
+    },
+    {
+      keys: ['erfahrung','vorkenntnisse','marketing kenntnis','kann ich','geeignet','voraussetzung','anfänger','neuling','keine ahnung'],
+      answers: [
+        '**Keine Erfahrung nötig.** Das ist einer der größten Vorteile des Systems.\n\nDu bekommst:\n→ Erprobte Werbeanzeigen-Vorlagen, die du 1:1 übernehmen kannst\n→ KI-Tools, die 90% der Content-Erstellung abnehmen\n→ Persönliches Onboarding Schritt für Schritt\n→ Keine Kamera, kein Gesicht zeigen — komplett anonym von zu Hause\n\nJonas hatte **null Marketing-Erfahrung** — und hat in wenigen Wochen 223 Leads generiert.'
+      ]
+    },
+    {
+      keys: ['makler','schein','lizenz','zertifikat','ausbildung','studium','qualifikation'],
+      answers: [
+        'Kein Makler-Schein nötig — das ist Pflicht zu verstehen.\n\nDu arbeitest im **Marketing**, nicht im Immobilienvertrieb. Du erstellst Werbeanzeigen und digitale Inhalte. Den gesamten Vertrieb übernimmt das bestehende Netzwerk mit 800+ erfahrenen Partnern.\n\nDu berätst niemanden, du vermittelst keine Immobilien — du lieferst qualifizierte Anfragen. Das ist der entscheidende Unterschied.'
+      ]
+    },
+    {
+      keys: ['jonas','erfolg','beispiel','ergebnis','testimon','beweis','case study','partner beispiel'],
+      answers: [
+        'Jonas ist eines unserer besten Beispiele:\n\n**Vorher:** Angestellt, keine Marketing-Erfahrung, wollte etwas Eigenes — ohne klassisches Gründungsrisiko.\n\n**Ergebnisse:**\n→ Erster Durchlauf: **223 Leads** bei **4,87€ pro Lead**\n→ Zweiter Durchlauf: 54 Leads bei 9€\n→ Erste Provision: **4.700€**\n→ Geförderter Adspend: **1.086€**\n\nHeute skaliert er selbstständig weiter — neben seinem Job, komplett remote. Das ist kein Einzelfall, sondern das, worauf wir mit jedem Partner hinarbeiten.'
+      ]
+    },
+    {
+      keys: ['till','kuhn','gründer','ceo','wer','über','person','inhaber','betreiber'],
+      answers: [
+        '**Till Kuhn** ist Gründer und CEO von Kuhn Capital — 19 Jahre alt und bereits über 30 Mio.€ Umsatz aufgebaut.\n\nMit 16 startete er mit digitalen Produkten. Mit 18 hatte er über Online-Coachings und Joint-Ventures im Digital-Bereich über 30 Millionen Euro Umsatz mitaufgebaut.\n\nHeute pendelt er zwischen München, Bali, Zypern und Marbella — und arbeitet ausschließlich an einem System, hinter dem er 100% steht.\n\n*"Ich habe dieses System gebaut, weil ich selbst weiß, wie es ist, ohne Netzwerk und ohne Kapital anzufangen."*'
+      ]
+    },
+    {
+      keys: ['netzwerk','partner','800','vertriebspartner','wie viele','partner netzwerk'],
+      answers: [
+        'Das Netzwerk umfasst **800+ aktive Vertriebspartner** im DACH-Raum — darunter:\n\n→ Prealux\n→ Mähren AG\n→ Best Place Gruppe\n→ ProInvest\n→ Aurelium Real Estate\n→ Raphael Zenaty\n→ ...und viele weitere\n\nDas Netzwerk setzt gemeinsam **über 20 Millionen Euro pro Monat** um. Du nutzt diese bestehende Infrastruktur — du baust nicht von null auf.'
+      ]
+    },
+    {
+      keys: ['immobilien','kapitalanlage','warum immobilien','immobilienmarkt','produkt'],
+      answers: [
+        'Immobilien sind das stärkste Produkt am Markt — aus gutem Grund:\n\n→ **Inflationsschutz** — Immobilien steigen langfristig im Wert\n→ **Steuervorteile** — Abschreibung, Zinsen, Verwaltungskosten\n→ **Passives Einkommen** — Mieter zahlt den Kredit ab\n→ **Altersvorsorge** — greifbar und nachweislich erfolgreich\n→ **Riesiger Markt** — über 90% der Vermittler arbeiten noch analog\n\nDer letzte Punkt ist entscheidend: Wer jetzt digital Marketing macht, hat einen **unfairen Vorteil** — diese Lücke schließt sich mit der Zeit.'
+      ]
+    },
+    {
+      keys: ['platz','plätze','noch frei','kapazität','noch möglich','noch aufnahme','wie viele plätze','5 plätze'],
+      answers: [
+        'Wir nehmen maximal **5 neue Partner pro Monat** auf — und das aus gutem Grund.\n\nWir begleiten jeden Partner persönlich. Das funktioniert nur, wenn wir uns die Zeit nehmen können, die jeder Einzelne verdient. 50 Partner auf einmal bedeutet, dass niemand wirklich betreut wird.\n\nAktuell sind noch Plätze verfügbar — aber sie gehen schnell weg. Ein kostenloses Erstgespräch sichert dir deinen Platz: <a href="#termin">Jetzt buchen →</a>'
+      ]
+    },
+    {
+      keys: ['support','begleitung','coaching','hilfe','betreut','nicht allein','community','live call'],
+      answers: [
+        'Du bist nie allein — das ist eine der Kernzusagen von Kuhn Capital:\n\n**01 1:1 Betreuung** durch erfolgreiche Partner — persönlicher Ansprechpartner, der den Weg selbst gegangen ist. So viele Calls wie du brauchst.\n\n**02 Community & Live Calls** — regelmäßige Sessions mit Guest Speakern, Q&A und Partner-Community.\n\n**03 Vorlagen & Ausbildung** — fertige Ads-Templates, Funnel-Templates, KI-Tools, komplette digitale Ausbildung.\n\n**Ziel:** 12 Provisionen in 12 Monaten. Wir pushen eng mit dir zusammen, bis dieses Ziel erreicht ist.'
+      ]
+    },
+    {
+      keys: ['risiko','seriös','betrug','scam','gefährlich','vertrauen','sicher','legal','legitim'],
+      answers: [
+        'Berechtigte Frage — hier sind die Fakten:\n\n→ Das Produkt ist eine **echte Immobilie** — steht in Deutschland, gehört dem Kunden\n→ Die Partnerfirmen existieren **seit Jahren** mit hunderten Mitarbeitern\n→ **800+ aktive Vertriebspartner** im Netzwerk\n→ Bekannte Bauträger wie Mähren AG, ProInvest, Aurelium Real Estate\n→ **Bankgefördert** — eine echte Partnerbank stellt das Werbebudget bereit\n\nJeder in der Kette liefert echten Wert. Das Modell ist transparent: Wir verdienen **nur, wenn du verdienst**.'
+      ]
+    },
+    {
+      keys: ['remote','wo','ort','homeoffice','zuhause','von zuhause','standort','location','arbeitsort'],
+      answers: [
+        '**100% remote — vollständig ortsunabhängig.**\n\nDu brauchst:\n→ Laptop oder Smartphone\n→ Internetzugang\n→ 1–2 Stunden pro Tag\n\nKein Büro. Kein fester Standort. Keine Meetings. Du arbeitest von zuhause, im Café, im Urlaub — genau wie Till Kuhn zwischen München, Bali, Zypern und Marbella.'
+      ]
+    },
+    {
+      keys: ['termin','gespräch','call','buchen','kontakt','anmelden','bewerben','anfangen','start','wie bewerbe','erstgespräch'],
+      answers: [
+        'Bereit? So geht\'s weiter:\n\n**Kostenloses Erstgespräch** — 15–20 Minuten, kein Verkaufsdruck, ehrlich und transparent.\n\nWir klären:\n→ Ob das System zu dir passt\n→ Wie der konkrete Ablauf aussieht\n→ Wann du starten könntest\n\nDanach entscheidest du in Ruhe — kein Druck.\n\n👉 <a href="#termin">Jetzt Termin sichern →</a>\n\nNur noch wenige Plätze im März verfügbar.'
+      ]
+    },
+    {
+      keys: ['bank','förderung','gefördert','kredit','finanzierung','partnerbank','budget finanziert'],
+      answers: [
+        'Das ist ein Alleinstellungsmerkmal von Kuhn Capital:\n\nDein **Werbebudget wird über eine unserer Partnerbanken gefördert**. Das bedeutet:\n→ Du brauchst kein eigenes Kapital\n→ Die Bank stellt das Startbudget bereit\n→ Du trägst kein finanzielles Risiko\n\nDas ist kein Versprechen — das ist ein konkreter Teil des Franchise-Systems. Alle Details dazu im kostenlosen Erstgespräch.'
+      ]
+    },
+    {
+      keys: ['unterschied','vergleich','andere','coaches','kurs','coaching','warum besser','vorteil'],
+      answers: [
+        'Der Kernunterschied in einem Satz: **Wir verdienen erst, wenn du verdienst.**\n\nTypische Coaches:\n✕ Verdienen am Kursverkauf — egal ob du Ergebnisse hast\n✕ Nach dem Kauf bist du allein\n✕ Keine Garantie, kein echtes Netzwerk\n\nKuhn Capital:\n✓ Wir verdienen nur bei deinem Erfolg (1–2% pro Abschluss)\n✓ 800+ aktive Partner im echten Netzwerk\n✓ Persönliche Begleitung — kein Video-Kurs\n✓ Bankgefördert — 0€ Eigenkapital\n✓ Langfristige Partnerschaft statt einmalige Gebühr\n\nDeshalb nehmen wir maximal 5 Partner pro Monat auf — nicht 500.'
+      ]
+    },
+    {
+      keys: ['ablauf','prozess','wie geht','schritt','onboarding','was passiert','wie läuft'],
+      answers: [
+        'So läuft die Zusammenarbeit ab:\n\n**1 → Erstgespräch** — 15–20 Min., kein Druck, ehrlich klären ob es passt\n**2 → Systemzugang & Onboarding** — Vorlagen, Tools, persönliche Einarbeitung\n**3 → Bankförderung & Budget** — Werbebudget kommt von der Partnerbank\n**4 → Erste Ads schalten** — mit erprobten Vorlagen, Leads kommen rein\n**5 → Optimieren & Skalieren** — gemeinsam analysieren und wachsen\n\nErste Ergebnisse in Wochen, nicht Monaten.'
+      ]
+    },
+    {
+      keys: ['danke','super','gut','toll','perfekt','okay','ok','alles klar','verstanden','hilfreich'],
+      answers: [
+        'Sehr gerne! Hast du noch weitere Fragen? Oder möchtest du direkt ein kostenloses Erstgespräch buchen? → <a href="#termin">Termin sichern</a>',
+        'Gern! Falls du noch etwas wissen möchtest — ich bin da. Oder direkt zum nächsten Schritt: <a href="#termin">Kostenloses Erstgespräch →</a>'
+      ]
+    },
+    {
+      keys: ['tschüss','bye','auf wiedersehen','ciao'],
+      answers: [
+        'Bis bald! Wenn du Fragen hast, bin ich jederzeit hier. Viel Erfolg! 👋'
+      ]
+    }
+  ];
+
+  const FALLBACK = [
+    'Gute Frage! Für eine vollständige Antwort empfehle ich dir unser <a href="#termin">kostenloses Erstgespräch</a> — da klären wir alles persönlich und ohne Druck.',
+    'Das beantworte ich dir am besten direkt: <a href="#termin">Termin sichern →</a> — 15 Minuten, keine Verbindlichkeit.',
+    'Ich bin ein KI-Assistent und kenne das Kuhn Capital System in- und auswendig. Frag mich gerne nach: System, Verdienst, Kosten, Erfahrung, Plätze, Till Kuhn, Jonas, Netzwerk oder Ablauf.'
+  ];
+
+  // ── State ─────────────────────────────────────────────────
+  let isOpen = false;
+  let isTyping = false;
+  let msgCount = 0;
+  const btn = document.getElementById('kc-chat-btn');
+  const win = document.getElementById('kc-chat-window');
+  const msgs = document.getElementById('kc-messages');
+  const input = document.getElementById('kc-input');
+  const sendBtn = document.getElementById('kc-send');
+
+  // ── Toggle ────────────────────────────────────────────────
+  btn.addEventListener('click', () => {
+    isOpen = !isOpen;
+    btn.classList.toggle('open', isOpen);
+    win.classList.toggle('open', isOpen);
+    if (isOpen && msgCount === 0) {
+      setTimeout(() => botSay('Willkommen bei Kuhn Capital! Ich bin dein persönlicher KI-Assistent und beantworte alle Fragen zum Franchise-System. Womit kann ich dir helfen?'), 400);
+    }
+    if (isOpen) setTimeout(() => input.focus(), 400);
+  });
+
+  // ── Send ──────────────────────────────────────────────────
+  function kcSend(text) {
+    const t = (text || input.value).trim();
+    if (!t || isTyping) return;
+    input.value = '';
+    addMsg(t, 'user');
+    document.getElementById('kc-suggestions').style.display = 'none';
+    setTimeout(() => respond(t), 300);
+  }
+
+  window.kcSend = kcSend;
+  sendBtn.addEventListener('click', () => kcSend());
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); kcSend(); } });
+
+  // ── Add message ───────────────────────────────────────────
+  function addMsg(text, role) {
+    msgCount++;
+    const wrap = document.createElement('div');
+    wrap.className = `kc-msg ${role}`;
+
+    if (role === 'bot') {
+      const av = document.createElement('div');
+      av.className = 'kc-msg-avatar';
+      av.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>`;
+      wrap.appendChild(av);
+    }
+
+    const bubble = document.createElement('div');
+    bubble.className = 'kc-bubble';
+    // Format: bold **text**, linebreaks, links
+    bubble.innerHTML = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/→/g, '→')
+      .replace(/\n/g, '<br/>');
+    wrap.appendChild(bubble);
+
+    if (role === 'user') {
+      const av = document.createElement('div');
+      av.className = 'kc-msg-avatar';
+      av.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
+      wrap.appendChild(av);
+    }
+
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  // ── Typing indicator ──────────────────────────────────────
+  function showTyping() {
+    isTyping = true;
+    const wrap = document.createElement('div');
+    wrap.className = 'kc-msg bot kc-typing';
+    wrap.id = 'kc-typing-indicator';
+    const av = document.createElement('div');
+    av.className = 'kc-msg-avatar';
+    av.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>`;
+    const bubble = document.createElement('div');
+    bubble.className = 'kc-bubble';
+    bubble.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+    wrap.appendChild(av);
+    wrap.appendChild(bubble);
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function hideTyping() {
+    const t = document.getElementById('kc-typing-indicator');
+    if (t) t.remove();
+    isTyping = false;
+  }
+
+  function botSay(text) {
+    showTyping();
+    const delay = 600 + Math.min(text.length * 12, 1200);
+    setTimeout(() => {
+      hideTyping();
+      addMsg(text, 'bot');
+    }, delay);
+  }
+
+  // ── Match & Respond ───────────────────────────────────────
+  function respond(userText) {
+    const lower = userText.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    let best = null;
+    let bestScore = 0;
+
+    for (const entry of KB) {
+      let score = 0;
+      for (const k of entry.keys) {
+        if (lower.includes(k)) score += k.length > 4 ? 2 : 1;
+      }
+      if (score > bestScore) { bestScore = score; best = entry; }
+    }
+
+    let answer;
+    if (best && bestScore > 0) {
+      const arr = best.answers;
+      answer = arr[Math.floor(Math.random() * arr.length)];
+    } else {
+      answer = FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
+    }
+
+    botSay(answer);
+  }
+})();
+</script>
 </body>
 </html>
