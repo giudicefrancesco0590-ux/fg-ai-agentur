@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prime Masterclass – Werde zur stärksten Version deiner Marke</title>
+  <meta name="description" content="Prime Masterclass von Francesco Giudice – Das Premium-Programm für Unternehmer, die mit Social Media ein skalierbares Einkommen aufbauen wollen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --white: #ffffff;
+      --off-white: rgba(255,255,255,0.85);
+      --muted: rgba(255,255,255,0.45);
+      --border: rgba(255,255,255,0.1);
+      --black: #000000;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(20px);
+      padding: 16px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-logo-pm {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+    .nav-logo-text {
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 24px;
+      border: 1px solid rgba(255,255,255,0.3);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.45) 0%,
+        rgba(0,0,0,0.5) 50%,
+        rgba(0,0,0,0.85) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 24px;
+      max-width: 900px;
+    }
+
+    .hero-logo {
+      margin: 0 auto 40px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-logo-pm {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(96px, 14vw, 160px);
+      font-weight: 600;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .hero-logo-divider {
+      width: 80px;
+      height: 1px;
+      background: rgba(255,255,255,0.4);
+    }
+    .hero-logo-name {
+      font-size: clamp(11px, 1.5vw, 14px);
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--off-white);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 48px;
+      text-transform: uppercase;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 40px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .hero-btn:hover {
+      background: transparent;
+      color: var(--white);
+      outline: 1px solid var(--white);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 120px 0; }
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 10vw, 10rem);
+      font-weight: 300;
+      line-height: 1;
+      color: rgba(255,255,255,0.06);
+      position: absolute;
+      top: -20px;
+      left: 0;
+    }
+    .about-stat-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .about-stat {
+      position: relative;
+      padding-left: 20px;
+      border-left: 1px solid var(--gold);
+    }
+    .about-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .about-stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── MODULES ── */
+    .modules { background: #0a0a0a; }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-top: 64px;
+    }
+    .module-card {
+      background: #0a0a0a;
+      padding: 40px;
+      transition: background 0.3s;
+    }
+    .module-card:hover { background: #111; }
+    .module-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.08);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .module-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .module-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .module-tag {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 2px;
+    }
+
+    /* ── FOUNDER ── */
+    .founder-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .founder-img-wrap {
+      position: relative;
+    }
+    .founder-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border: 1px solid var(--border);
+      pointer-events: none;
+    }
+    .founder-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: top;
+      filter: grayscale(20%);
+    }
+    .founder-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .founder-role {
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+    .founder-bio {
+      font-size: 16px;
+      color: var(--off-white);
+      line-height: 1.9;
+      margin-bottom: 32px;
+    }
+    .founder-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--off-white);
+      padding-left: 24px;
+      border-left: 2px solid var(--gold);
+      line-height: 1.6;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: #050505; border-top: 1px solid var(--border); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 64px;
+    }
+    .testi-card {
+      padding: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: border-color 0.3s;
+    }
+    .testi-card:hover { border-color: rgba(255,255,255,0.25); }
+    .testi-stars {
+      display: flex;
+      gap: 4px;
+      color: var(--gold);
+      font-size: 12px;
+    }
+    .testi-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--off-white);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .testi-author {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .testi-name {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .testi-role {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 140px 0;
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-pre {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .cta-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 48px;
+      line-height: 1.8;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 52px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .cta-btn:hover {
+      background: transparent;
+      color: var(--white);
+      outline: 1px solid var(--white);
+    }
+    .cta-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FADE IN ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-links, .nav-cta { display: none; }
+
+      section { padding: 80px 0; }
+      .container { padding: 0 24px; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .modules-grid { grid-template-columns: 1fr; }
+      .founder-grid { grid-template-columns: 1fr; gap: 40px; }
+      .founder-img { aspect-ratio: 4/3; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <span class="nav-logo-pm">PM</span>
+      <span class="nav-logo-text">Prime Masterclass</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#programm">Programm</a></li>
+      <li><a href="#grunder">Gründer</a></li>
+      <li><a href="#stimmen">Stimmen</a></li>
+    </ul>
+    <a href="#anmelden" class="nav-cta">Jetzt bewerben</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" id="hero-vid">
+      <source media="(max-width:600px)" src="https://res.cloudinary.com/ddntlvfpn/video/upload/c_fill,g_center,ar_9:16,w_750,q_auto,f_auto/hero-reel_pmeaak.mp4" type="video/mp4" />
+      <source src="../brand-masterclass/hero-reel.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-logo">
+        <div class="hero-logo-pm">PM</div>
+        <div class="hero-logo-divider"></div>
+        <div class="hero-logo-name">Prime Masterclass</div>
+      </div>
+      <p class="hero-tagline">Werde zur stärksten Version<br>deiner Marke.</p>
+      <p class="hero-sub">Das Exklusive Premium-Programm von Francesco Giudice</p>
+      <a href="#anmelden" class="hero-btn">
+        Jetzt bewerben
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ABOUT / STATS -->
+  <section class="about" id="programm">
+    <div class="container">
+      <div class="about-grid">
+        <div class="fade-in">
+          <p class="section-label">Das Programm</p>
+          <h2 class="section-title">Nicht für jeden.<br>Nur für die Besten.</h2>
+          <p class="section-sub">Prime Masterclass ist das exklusive Coaching-Programm für Unternehmer und Creator, die mit ihrer Personal Brand ein skalierbares Einkommen im 5-stelligen Bereich aufbauen wollen.</p>
+        </div>
+        <div class="about-stat-wrap fade-in">
+          <div class="about-stat">
+            <div class="about-stat-num">500+</div>
+            <div class="about-stat-label">Erfolgreiche Teilnehmer</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">€ 10K+</div>
+            <div class="about-stat-label">Durchschnittlicher Monatsumsatz der Absolventen</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">90 Tage</div>
+            <div class="about-stat-label">Bis zu ersten messbaren Ergebnissen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="modules" id="module">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">Curriculum</p>
+        <h2 class="section-title">6 Module.<br>Ein System.</h2>
+      </div>
+      <div class="modules-grid">
+        <div class="module-card fade-in">
+          <div class="module-num">01</div>
+          <h3 class="module-title">Positionierung & Identität</h3>
+          <p class="module-desc">Definiere deine einzigartige Markenidentität und trenne dich von der Masse. Klare Nische, klare Botschaft, klarer Wert.</p>
+          <span class="module-tag">Strategie</span>
+        </div>
+        <div class="module-card fade-in">
+          <div class="module-num">02</div>
+          <h3 class="module-title">Content-System aufbauen</h3>
+          <p class="module-desc">Dein bewährtes System für viralen Content, der täglich neue Leads generiert – ohne ständig Zeit zu investieren.</p>
+          <span class="module-tag">Content</span>
+        </div>
+        <div class="module-card fade-in">
+          <div class="module-num">03</div>
+          <h3 class="module-title">Reichweite & Wachstum</h3>
+          <p class="module-desc">Algorithmen verstehen und nutzen. Organisches Wachstum auf Instagram, TikTok und LinkedIn skalieren.</p>
+          <span class="module-tag">Growth</span>
+        </div>
+        <div class="module-card fade-in">
+          <div class="module-num">04</div>
+          <h3 class="module-title">Angebote & Monetarisierung</h3>
+          <p class="module-desc">Premium-Angebote strukturieren, die sich fast von alleine verkaufen. Von der Idee zur skalierbaren Einnahmequelle.</p>
+          <span class="module-tag">Sales</span>
+        </div>
+        <div class="module-card fade-in">
+          <div class="module-num">05</div>
+          <h3 class="module-title">High-Ticket Sales</h3>
+          <p class="module-desc">Gespräche führen, die konvertieren. Der komplette Verkaufsprozess – von der ersten Anfrage bis zum Abschluss.</p>
+          <span class="module-tag">Conversion</span>
+        </div>
+        <div class="module-card fade-in">
+          <div class="module-num">06</div>
+          <h3 class="module-title">Automatisierung & Skalierung</h3>
+          <p class="module-desc">Dein Business so aufbauen, dass es auch ohne dich läuft. KI, Systeme und Teams strategisch einsetzen.</p>
+          <span class="module-tag">Scale</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER -->
+  <section id="grunder">
+    <div class="container">
+      <div class="founder-grid">
+        <div class="founder-img-wrap fade-in">
+          <img
+            class="founder-img"
+            src="https://res.cloudinary.com/ddntlvfpn/image/upload/q_auto,f_auto,w_840,h_1120,c_fill,g_north/WhatsApp_Image_2026-03-14_at_11.49.37_xjxor6"
+            alt="Francesco Giudice, Gründer Prime Masterclass"
+            loading="lazy"
+          />
+        </div>
+        <div class="fade-in">
+          <p class="section-label">Der Gründer</p>
+          <h2 class="founder-name">Francesco Giudice</h2>
+          <p class="founder-role">Gründer & CEO · Prime Masterclass</p>
+          <p class="founder-bio">
+            Francesco Giudice ist Unternehmer, Personal-Brand-Experte und Gründer der Prime Masterclass. In den letzten Jahren hat er hunderten von Unternehmern geholfen, mit ihrer Marke ein skalierbares Online-Business aufzubauen – von null auf fünfstellige Monatsumsätze.
+          </p>
+          <p class="founder-bio">
+            Seine Methoden kombinieren psychologisches Verständnis, bewährte Sales-Systeme und modernes Content-Marketing – alles in einem klaren, umsetzbaren Schritt-für-Schritt-Programm.
+          </p>
+          <blockquote class="founder-quote">
+            "Erfolg ist kein Zufall. Es ist ein System,<br>das du lernst – und dann meisterst."
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="stimmen">
+    <div class="container">
+      <div class="fade-in" style="text-align:center;">
+        <p class="section-label">Stimmen</p>
+        <h2 class="section-title">Was Teilnehmer sagen</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testi-card fade-in">
+          <div class="testi-stars">★★★★★</div>
+          <blockquote class="testi-text">
+            „In 90 Tagen habe ich meinen ersten 10.000€ Monat erreicht. Das Programm hat mir nicht nur ein System gegeben – es hat meine Denkweise komplett verändert."
+          </blockquote>
+          <div class="testi-author">
+            <span class="testi-name">Maximilian K.</span>
+            <span class="testi-role">Business Coach · Berlin</span>
+          </div>
+        </div>
+        <div class="testi-card fade-in">
+          <div class="testi-stars">★★★★★</div>
+          <blockquote class="testi-text">
+            „Ich hatte vorher 300 Follower und keinen Plan. Nach der Prime Masterclass habe ich eine Community von über 12.000 Menschen und 3 Premium-Kunden pro Monat."
+          </blockquote>
+          <div class="testi-author">
+            <span class="testi-name">Laura M.</span>
+            <span class="testi-role">Online-Unternehmerin · München</span>
+          </div>
+        </div>
+        <div class="testi-card fade-in">
+          <div class="testi-stars">★★★★★</div>
+          <blockquote class="testi-text">
+            „Francesco erklärt nicht nur das Was, sondern vor allem das Wie. Konkret, direkt, ohne Bullshit. Das beste Investment, das ich in mein Business gemacht habe."
+          </blockquote>
+          <div class="testi-author">
+            <span class="testi-name">David R.</span>
+            <span class="testi-role">Consultant · Zürich</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="anmelden">
+    <div class="container">
+      <p class="cta-pre fade-in">Limitierte Plätze</p>
+      <h2 class="cta-title fade-in">Bereit für den nächsten Level?</h2>
+      <p class="cta-sub fade-in">Bewirb dich jetzt für die Prime Masterclass.<br>Wir prüfen jede Bewerbung persönlich.</p>
+      <a href="mailto:info@fg-ai-agentur.de?subject=Bewerbung Prime Masterclass" class="cta-btn fade-in">
+        Jetzt bewerben
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <p class="cta-note fade-in">Nur für ernsthafte Bewerber · Limitiert auf 20 Plätze</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">PM · Prime Masterclass</span>
+    <span class="footer-text">© 2026 Francesco Giudice · Alle Rechte vorbehalten</span>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+          observer.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Mobile video autoplay
+    const vid = document.getElementById('hero-vid');
+    if (vid) {
+      vid.muted = true;
+      vid.play().catch(() => {
+        document.addEventListener('touchstart', () => vid.play(), { once: true });
+      });
+    }
+  </script>
+</body>
+</html>
