@@ -71,7 +71,7 @@ export function LivePreview({ html, hasContent, isGenerating }: LivePreviewProps
             }`}
             style={{ height: viewport === 'mobile' ? '100%' : undefined }}
             title="Website Preview"
-            sandbox="allow-scripts"
+            sandbox="allow-scripts allow-same-origin"
           />
         </div>
       </div>
