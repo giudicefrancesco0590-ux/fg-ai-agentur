@@ -336,31 +336,23 @@
       z-index: 0;
     }
 
-    /* Global background video – fixed, covers entire site */
+    /* Hero background video – scoped to hero section only */
     #hero-video {
-      position: fixed;
+      position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
       object-fit: cover;
-      z-index: -2;
+      object-position: center center;
+      z-index: 0;
       pointer-events: none;
     }
 
-    /* Global dark overlay over video */
-    #video-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.60);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    /* Hero gradient overlays */
+    /* Hero dark overlay over video */
     .hero-bg::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.10) 100%);
+      background: rgba(0,0,0,0.55);
       pointer-events: none;
       z-index: 1;
     }
@@ -1858,11 +1850,6 @@
 </head>
 <body>
 
-  <!-- Global background video (fixed, covers entire site) -->
-  <video id="hero-video" autoplay muted loop playsinline webkit-playsinline x-webkit-airplay="deny" preload="auto" disablePictureInPicture aria-hidden="true">
-    <source src="https://res.cloudinary.com/ddntlvfpn/video/upload/q_auto,f_auto/k2yolwcnrXqeeA3kpXqJydMJj3I_qebouc.mp4" type="video/mp4" />
-  </video>
-  <div id="video-overlay" aria-hidden="true"></div>
 
   <!-- ========================
        NAVIGATION
@@ -1937,7 +1924,11 @@
   ========================= -->
   <main>
     <section class="hero" id="home" aria-labelledby="hero-heading">
-      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-bg" aria-hidden="true">
+        <video id="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" disablePictureInPicture aria-hidden="true">
+          <source src="./hero_reel.mp4" type="video/mp4" />
+        </video>
+      </div>
 
       <div class="container">
         <div class="hero-content">
@@ -3089,10 +3080,38 @@
     // ── Contact form ──
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
-      contactForm.addEventListener('submit', function(e) {
+      contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('cf-submit');
         btn.disabled = true;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Wird gesendet…';
+
+        const name    = document.getElementById('cf-name').value.trim();
+        const company = document.getElementById('cf-company').value.trim();
+        const email   = document.getElementById('cf-email').value.trim();
+        const message = document.getElementById('cf-message').value.trim();
+
+        const text = [
+          '📬 *Neue Kontaktanfrage*',
+          '',
+          `👤 *Name:* ${name}`,
+          company ? `🏢 *Firma:* ${company}` : null,
+          `✉️ *E-Mail:* ${email}`,
+          '',
+          `💬 *Nachricht:*\n${message}`,
+        ].filter(Boolean).join('\n');
+
+        try {
+          const res = await fetch('https://api.telegram.org/bot8303009053:AAE91h2p3LfVgggSyOC2nFZHEpRPORBxduI/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: 5126461041, text, parse_mode: 'Markdown' }),
+          });
+          if (!res.ok) throw new Error('Telegram API Fehler');
+        } catch (err) {
+          console.error('Telegram:', err);
+        }
+
         btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Nachricht gesendet!';
         btn.style.background = '#16a34a';
         contactForm.reset();

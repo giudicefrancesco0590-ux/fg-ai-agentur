@@ -49,16 +49,25 @@ export function LivePreview({ html, hasContent, isGenerating }: LivePreviewProps
 
       {/* Preview area */}
       <div className="flex-1 relative overflow-hidden">
-        {isGenerating && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-[#0D0D0D]">
-            <div className="w-8 h-8 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
-            <p className="text-sm text-white/30">KI generiert deine Website...</p>
-          </div>
-        )}
+        {/* Leerer State */}
         {!hasContent && !isGenerating && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/20">
             <Monitor size={40} />
             <p className="text-sm">Live-Vorschau erscheint hier</p>
+          </div>
+        )}
+        {/* Generating-Indicator (non-blocking — oben rechts) */}
+        {isGenerating && hasContent && (
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-2 bg-black/60 backdrop-blur-sm border border-amber-500/20 rounded-full px-3 py-1.5">
+            <div className="w-3 h-3 border border-amber-500/50 border-t-amber-400 rounded-full animate-spin" />
+            <span className="text-xs text-amber-400">generiert...</span>
+          </div>
+        )}
+        {/* Initial loading — nur wenn noch gar nichts da ist */}
+        {isGenerating && !hasContent && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[#0D0D0D]">
+            <div className="w-8 h-8 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
+            <p className="text-sm text-white/30">KI generiert deine Website...</p>
           </div>
         )}
         <div className={`h-full flex justify-center transition-all duration-300 ${viewport === 'mobile' ? 'bg-[#1a1a1a] p-4' : ''}`}>

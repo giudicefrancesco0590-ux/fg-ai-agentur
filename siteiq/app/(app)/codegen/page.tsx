@@ -1,6 +1,7 @@
 // app/(app)/codegen/page.tsx
 'use client'
 import { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Wand2, Globe, ArrowLeft } from 'lucide-react'
 import { WizardStep, type NewSiteConfig, type DesignStyle } from '@/components/builder/WizardStep'
@@ -23,6 +24,7 @@ const DEFAULT_CONFIG: NewSiteConfig = {
 }
 
 export default function CodeGenPage() {
+  const router = useRouter()
   const [step, setStep] = useState<Step>('select-mode')
   const [mode, setMode] = useState<Mode>('new')
   const [analysis, setAnalysis] = useState<Analysis | null>(null)
@@ -231,10 +233,17 @@ export default function CodeGenPage() {
 
         <div className="grid grid-cols-2 gap-4">
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => { setMode('improve'); setStep('builder') }}
-            className="group relative p-6 bg-white/3 border border-white/8 rounded-2xl text-left hover:border-amber-500/30 hover:bg-amber-500/5 transition-all"
+            whileHover={{ scale: analysis ? 1.02 : 1 }}
+            whileTap={{ scale: analysis ? 0.98 : 1 }}
+            onClick={() => {
+              if (!analysis) { router.push('/'); return }
+              setMode('improve'); setStep('builder')
+            }}
+            className={`group relative p-6 border rounded-2xl text-left transition-all ${
+              analysis
+                ? 'bg-white/3 border-white/8 hover:border-amber-500/30 hover:bg-amber-500/5 cursor-pointer'
+                : 'bg-white/2 border-white/5 cursor-default opacity-60'
+            }`}
           >
             {analysis && (
               <div className="absolute top-3 right-3 w-2 h-2 bg-amber-400 rounded-full" />
@@ -244,7 +253,7 @@ export default function CodeGenPage() {
             <p className="text-white/40 text-xs leading-relaxed">
               {analysis
                 ? `Nutzt deine Analyse von ${analysis.url}`
-                : 'Analysiere zuerst eine Website'}
+                : 'Keine Analyse vorhanden — klicken zum Analysieren'}
             </p>
             {analysis && (
               <div className="mt-3 flex gap-2">
@@ -319,20 +328,27 @@ export default function CodeGenPage() {
             </span>
           )}
         </div>
-        <div className="flex gap-1.5">
-          {(['html', 'nextjs'] as const).map(f => (
-            <button
-              key={f}
-              onClick={() => setFramework(f)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                framework === f
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                  : 'bg-white/3 text-white/40 border border-white/5 hover:text-white/60'
-              }`}
-            >
-              {f === 'html' ? 'HTML' : 'Next.js'}
-            </button>
-          ))}
+        <div className="flex items-center gap-2">
+          {framework === 'nextjs' && (
+            <span className="text-xs text-white/30 border border-white/10 rounded-lg px-2 py-1">
+              Kein Preview — Code-Export
+            </span>
+          )}
+          <div className="flex gap-1.5">
+            {(['html', 'nextjs'] as const).map(f => (
+              <button
+                key={f}
+                onClick={() => setFramework(f)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  framework === f
+                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                    : 'bg-white/3 text-white/40 border border-white/5 hover:text-white/60'
+                }`}
+              >
+                {f === 'html' ? 'HTML' : 'Next.js'}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
