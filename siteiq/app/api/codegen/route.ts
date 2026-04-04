@@ -68,7 +68,7 @@ ${brandDna ? `Brand DNA:
 - Ton: ${brandDna.tone}
 - USP: ${brandDna.usp}
 - Zielgruppe: ${brandDna.targetAudience}
-- Farben: ${brandDna.colorPalette?.join(', ') ?? '#0A0A0A, #F59E0B'}` : ''}`
+- Farben: ${brandDna.colorPalette?.join(', ') ?? '#0A0A0A, #8B5CF6'}` : ''}`
   }
 
   if (newSiteContext) {
@@ -107,7 +107,7 @@ Gib NUR den fertigen Code zurück. Kein Markdown. Direkt mit dem Code beginnen.`
 
 REGELN:
 - Gib NUR Code zurück — kein Markdown, keine Erklärungen, kein \`\`\`
-- Dark Mode: #0A0A0A Background, #F59E0B Gold/Amber Akzente
+- Dark Mode: #0A0A0A Background, #8B5CF6 Gold/Amber Akzente
 - Keine generischen AI-Aesthetics — bold, distinctive Design
 - GSAP ScrollTrigger via CDN für Animationen (data-gsap Attribute setzen)
 - Tailwind CSS via CDN Play (class="...")

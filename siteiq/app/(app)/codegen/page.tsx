@@ -139,8 +139,8 @@ export default function CodeGenPage() {
   #siteiq-chat-toggle {
     position: fixed; bottom: 24px; right: 24px; z-index: 9999;
     width: 56px; height: 56px; border-radius: 50%;
-    background: #F59E0B; border: none; cursor: pointer;
-    box-shadow: 0 4px 24px rgba(245,158,11,0.4);
+    background: #8B5CF6; border: none; cursor: pointer;
+    box-shadow: 0 4px 24px rgba(139,92,246,0.4);
     display: flex; align-items: center; justify-content: center;
     font-size: 24px; transition: transform 0.2s;
   }
@@ -163,7 +163,7 @@ export default function CodeGenPage() {
   }
   .siteiq-msg { padding: 10px 14px; border-radius: 12px; font-size: 13px; max-width: 80%; }
   .siteiq-msg.bot { background: #1a1a1a; color: #fff; align-self: flex-start; }
-  .siteiq-msg.user { background: #F59E0B; color: #000; align-self: flex-end; font-weight: 500; }
+  .siteiq-msg.user { background: #8B5CF6; color: #000; align-self: flex-end; font-weight: 500; }
   #siteiq-chat-input-row {
     padding: 12px; border-top: 1px solid #222; display: flex; gap: 8px;
   }
@@ -172,7 +172,7 @@ export default function CodeGenPage() {
     padding: 8px 12px; color: #fff; font-size: 13px; outline: none;
   }
   #siteiq-chat-send {
-    background: #F59E0B; color: #000; border: none; border-radius: 8px;
+    background: #8B5CF6; color: #000; border: none; border-radius: 8px;
     padding: 8px 14px; font-weight: 600; cursor: pointer; font-size: 13px;
   }
 </style>
@@ -220,66 +220,141 @@ export default function CodeGenPage() {
 
   // ─── Mode Selection ──────────────────────────────────────────────────
   if (step === 'select-mode') {
-    return (
-      <div className="p-8 max-w-2xl">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white">
-            Website <span className="text-amber-400">Builder</span>
-          </h1>
-          <p className="text-white/40 text-sm mt-1">
-            KI generiert deine komplette Website in Sekunden
-          </p>
-        </div>
+    const analysisHost = analysis?.url
+      ? (() => { try { return new URL(analysis.url.startsWith('http') ? analysis.url : `https://${analysis.url}`).hostname } catch { return analysis.url } })()
+      : null
 
-        <div className="grid grid-cols-2 gap-4">
+    return (
+      <div className="h-[calc(100vh-64px)] flex flex-col items-center justify-center px-8">
+
+        {/* Hero */}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-14"
+        >
+          <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-3 py-1 text-xs text-violet-400/80 mb-5 tracking-wide uppercase">
+            <span className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-pulse" />
+            KI Website Builder
+          </div>
+          <h1 className="text-5xl font-bold text-white tracking-tight mb-4 leading-tight">
+            Deine Website.<br />
+            <span className="text-violet-400">Perfektioniert.</span>
+          </h1>
+          <p className="text-white/35 text-base max-w-sm mx-auto leading-relaxed">
+            Komplette Website in 30 Sekunden — mit GSAP-Animationen, Live-Preview und KI-Chatbot
+          </p>
+        </motion.div>
+
+        {/* Cards */}
+        <div className="grid grid-cols-2 gap-4 w-full max-w-xl">
+
+          {/* Verbessern */}
           <motion.button
-            whileHover={{ scale: analysis ? 1.02 : 1 }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12, duration: 0.4 }}
+            whileHover={{ y: analysis ? -3 : 0 }}
             whileTap={{ scale: analysis ? 0.98 : 1 }}
             onClick={() => {
               if (!analysis) { router.push('/'); return }
               setMode('improve'); setStep('builder')
             }}
-            className={`group relative p-6 border rounded-2xl text-left transition-all ${
+            className={`group relative overflow-hidden p-6 border rounded-2xl text-left transition-all duration-300 ${
               analysis
-                ? 'bg-white/3 border-white/8 hover:border-amber-500/30 hover:bg-amber-500/5 cursor-pointer'
-                : 'bg-white/2 border-white/5 cursor-default opacity-60'
+                ? 'bg-white/[0.03] border-white/10 hover:border-violet-500/40 hover:bg-violet-500/[0.04]'
+                : 'bg-white/[0.02] border-white/5 opacity-40 cursor-default'
             }`}
           >
+            {/* Subtle top border glow on hover */}
             {analysis && (
-              <div className="absolute top-3 right-3 w-2 h-2 bg-amber-400 rounded-full" />
+              <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             )}
-            <Globe size={24} className="text-amber-400 mb-4" />
-            <h3 className="text-white font-semibold mb-1">Bestehende verbessern</h3>
-            <p className="text-white/40 text-xs leading-relaxed">
+
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-9 h-9 bg-violet-500/10 rounded-xl flex items-center justify-center border border-violet-500/20">
+                <Globe size={16} className="text-violet-400" />
+              </div>
+              {analysis && (
+                <div className="flex gap-1">
+                  <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-white/35 font-mono">
+                    {analysis.seo?.score}
+                  </span>
+                  <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-white/35 font-mono">
+                    {analysis.design?.score}
+                  </span>
+                  <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-white/35 font-mono">
+                    {analysis.content?.score}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="mb-1">
+              <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">01</p>
+              <h3 className="text-white font-semibold text-sm">Bestehende verbessern</h3>
+            </div>
+            <p className="text-white/35 text-xs leading-relaxed mt-2">
               {analysis
-                ? `Nutzt deine Analyse von ${analysis.url}`
-                : 'Keine Analyse vorhanden — klicken zum Analysieren'}
+                ? `${analysisHost} — KI behebt alle Schwachstellen aus der Analyse`
+                : 'Website zuerst analysieren'}
             </p>
+
             {analysis && (
-              <div className="mt-3 flex gap-2">
-                <span className="text-xs bg-white/5 px-2 py-0.5 rounded-full text-white/40">
-                  SEO {analysis.seo?.score ?? '—'}
-                </span>
-                <span className="text-xs bg-white/5 px-2 py-0.5 rounded-full text-white/40">
-                  Design {analysis.design?.score ?? '—'}
-                </span>
+              <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[10px] text-white/25 uppercase tracking-wider">Analyse geladen</span>
+                <span className="text-violet-400 text-xs group-hover:translate-x-0.5 transition-transform">→</span>
               </div>
             )}
           </motion.button>
 
+          {/* Neu erstellen */}
           <motion.button
-            whileHover={{ scale: 1.02 }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+            whileHover={{ y: -3 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => { setMode('new'); setStep('configure') }}
-            className="group p-6 bg-white/3 border border-white/8 rounded-2xl text-left hover:border-amber-500/30 hover:bg-amber-500/5 transition-all"
+            className="group relative overflow-hidden p-6 bg-white/[0.03] border border-white/10 rounded-2xl text-left hover:border-violet-500/40 hover:bg-violet-500/[0.04] transition-all duration-300"
           >
-            <Wand2 size={24} className="text-amber-400 mb-4" />
-            <h3 className="text-white font-semibold mb-1">Neue Website erstellen</h3>
-            <p className="text-white/40 text-xs leading-relaxed">
-              Von Scratch — KI generiert alles auf Basis deiner Angaben
+            <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+            <div className="w-9 h-9 bg-violet-500/10 rounded-xl flex items-center justify-center border border-violet-500/20 mb-4">
+              <Wand2 size={16} className="text-violet-400" />
+            </div>
+
+            <div className="mb-1">
+              <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">02</p>
+              <h3 className="text-white font-semibold text-sm">Neue Website erstellen</h3>
+            </div>
+            <p className="text-white/35 text-xs leading-relaxed mt-2">
+              Name, Branche, Stil — KI generiert Hero, Nav, Services, CTA, Footer
             </p>
+
+            <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+              <span className="text-[10px] text-white/25 uppercase tracking-wider">Von Scratch</span>
+              <span className="text-violet-400 text-xs group-hover:translate-x-0.5 transition-transform">→</span>
+            </div>
           </motion.button>
         </div>
+
+        {/* Capabilities */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex items-center gap-5 mt-10"
+        >
+          {['GSAP Animationen', 'Live-Preview', 'Mobil-Ansicht', 'ZIP-Export', 'KI-Chatbot'].map((f, i) => (
+            <span key={i} className="flex items-center gap-1.5 text-[11px] text-white/20 tracking-wide">
+              <span className="w-0.5 h-0.5 bg-violet-500/40 rounded-full" />
+              {f}
+            </span>
+          ))}
+        </motion.div>
+
       </div>
     )
   }
@@ -315,10 +390,10 @@ export default function CodeGenPage() {
             <ArrowLeft size={14} /> Zurück
           </button>
           <h1 className="text-lg font-bold text-white">
-            Website <span className="text-amber-400">Builder</span>
+            Website <span className="text-violet-400">Builder</span>
           </h1>
           {mode === 'improve' && analysis && (
-            <span className="text-xs bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2.5 py-1 rounded-full">
+            <span className="text-xs bg-violet-500/10 border border-violet-500/20 text-violet-400 px-2.5 py-1 rounded-full">
               Verbessert: {analysis.url}
             </span>
           )}
@@ -341,7 +416,7 @@ export default function CodeGenPage() {
                 onClick={() => setFramework(f)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   framework === f
-                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                    ? 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
                     : 'bg-white/3 text-white/40 border border-white/5 hover:text-white/60'
                 }`}
               >
@@ -356,8 +431,8 @@ export default function CodeGenPage() {
         <div className="w-56 flex flex-col gap-4 shrink-0">
           <div className="bg-white/3 border border-white/8 rounded-2xl p-4 flex-1 overflow-auto">
             {mode === 'improve' && analysis && (
-              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-4">
-                <p className="text-xs font-medium text-amber-400 mb-1">Analyse geladen</p>
+              <div className="bg-violet-500/10 border border-violet-500/20 rounded-xl p-3 mb-4">
+                <p className="text-xs font-medium text-violet-400 mb-1">Analyse geladen</p>
                 <div className="flex gap-2 flex-wrap">
                   <span className="text-xs text-white/40">SEO {analysis.seo?.score}</span>
                   <span className="text-xs text-white/40">Design {analysis.design?.score}</span>
@@ -378,7 +453,7 @@ export default function CodeGenPage() {
           <button
             onClick={generateAll}
             disabled={anyLoading || selectedCount === 0}
-            className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+            className="w-full bg-violet-500 hover:bg-violet-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
           >
             {isGeneratingAll ? (
               <>

@@ -38,7 +38,7 @@ export function LivePreview({ html, hasContent, isGenerating }: LivePreviewProps
           {hasContent && (
             <button
               onClick={() => downloadHtml(html)}
-              className="flex items-center gap-1.5 text-xs text-white/40 hover:text-amber-400 transition-colors px-2 py-1 rounded-lg hover:bg-amber-500/10"
+              className="flex items-center gap-1.5 text-xs text-white/40 hover:text-violet-400 transition-colors px-2 py-1 rounded-lg hover:bg-violet-500/10"
             >
               <Download size={13} />
               ZIP
@@ -58,15 +58,15 @@ export function LivePreview({ html, hasContent, isGenerating }: LivePreviewProps
         )}
         {/* Generating-Indicator (non-blocking — oben rechts) */}
         {isGenerating && hasContent && (
-          <div className="absolute top-3 right-3 z-10 flex items-center gap-2 bg-black/60 backdrop-blur-sm border border-amber-500/20 rounded-full px-3 py-1.5">
-            <div className="w-3 h-3 border border-amber-500/50 border-t-amber-400 rounded-full animate-spin" />
-            <span className="text-xs text-amber-400">generiert...</span>
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-2 bg-black/60 backdrop-blur-sm border border-violet-500/20 rounded-full px-3 py-1.5">
+            <div className="w-3 h-3 border border-violet-500/50 border-t-violet-400 rounded-full animate-spin" />
+            <span className="text-xs text-violet-400">generiert...</span>
           </div>
         )}
         {/* Initial loading — nur wenn noch gar nichts da ist */}
         {isGenerating && !hasContent && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[#0D0D0D]">
-            <div className="w-8 h-8 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-violet-500/30 border-t-violet-400 rounded-full animate-spin" />
             <p className="text-sm text-white/30">KI generiert deine Website...</p>
           </div>
         )}

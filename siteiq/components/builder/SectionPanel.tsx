@@ -25,7 +25,7 @@ export function SectionPanel({ sections, onToggle, onRegenerate, chatbotEnabled,
               onClick={() => onToggle(id)}
               className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left ${
                 s.selected
-                  ? 'bg-amber-500/15 border border-amber-500/30 text-amber-400'
+                  ? 'bg-violet-500/15 border border-violet-500/30 text-violet-400'
                   : 'bg-white/3 border border-white/5 text-white/40 hover:border-white/10 hover:text-white/60'
               }`}
             >
@@ -33,17 +33,17 @@ export function SectionPanel({ sections, onToggle, onRegenerate, chatbotEnabled,
                 <Check size={10} className="shrink-0" />
               )}
               {s.loading && (
-                <div className="w-2.5 h-2.5 border border-amber-500/50 border-t-amber-400 rounded-full animate-spin shrink-0" />
+                <div className="w-2.5 h-2.5 border border-violet-500/50 border-t-violet-400 rounded-full animate-spin shrink-0" />
               )}
               {!hasCode && !s.loading && (
-                <div className={`w-2.5 h-2.5 rounded-full border shrink-0 ${s.selected ? 'border-amber-500/50' : 'border-white/20'}`} />
+                <div className={`w-2.5 h-2.5 rounded-full border shrink-0 ${s.selected ? 'border-violet-500/50' : 'border-white/20'}`} />
               )}
               {SECTION_LABELS[id]}
             </button>
             {hasCode && !s.loading && (
               <button
                 onClick={() => onRegenerate(id)}
-                className="p-1.5 rounded-lg text-white/20 hover:text-amber-400 hover:bg-amber-500/10 transition-all"
+                className="p-1.5 rounded-lg text-white/20 hover:text-violet-400 hover:bg-violet-500/10 transition-all"
                 title="Neu generieren"
               >
                 <RefreshCw size={12} />
@@ -59,12 +59,12 @@ export function SectionPanel({ sections, onToggle, onRegenerate, chatbotEnabled,
           onClick={onChatbotToggle}
           className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
             chatbotEnabled
-              ? 'bg-amber-500/15 border border-amber-500/30 text-amber-400'
+              ? 'bg-violet-500/15 border border-violet-500/30 text-violet-400'
               : 'bg-white/3 border border-white/5 text-white/40 hover:border-white/10'
           }`}
         >
           {chatbotLoading ? (
-            <div className="w-2.5 h-2.5 border border-amber-500/50 border-t-amber-400 rounded-full animate-spin shrink-0" />
+            <div className="w-2.5 h-2.5 border border-violet-500/50 border-t-violet-400 rounded-full animate-spin shrink-0" />
           ) : (
             <span>🤖</span>
           )}

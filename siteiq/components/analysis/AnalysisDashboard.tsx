@@ -46,7 +46,7 @@ export function AnalysisDashboard({ analysis }: { analysis: Analysis }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 rounded-2xl p-6 mb-6 flex items-center gap-8"
+        className="bg-gradient-to-r from-violet-500/10 to-transparent border border-violet-500/20 rounded-2xl p-6 mb-6 flex items-center gap-8"
       >
         <ScoreRing score={analysis.overallScore} size={140} label="Gesamt-Score" />
         <div className="flex-1">
@@ -55,7 +55,7 @@ export function AnalysisDashboard({ analysis }: { analysis: Analysis }) {
             <span className="text-white/40">/100</span>
           </div>
           <p className="text-white/50 text-sm">
-            Branche: <span className="text-amber-400 capitalize">{analysis.industry}</span>
+            Branche: <span className="text-violet-400 capitalize">{analysis.industry}</span>
           </p>
           {analysis.brandDna?.usp && (
             <p className="text-white/50 text-sm mt-1">
@@ -73,7 +73,7 @@ export function AnalysisDashboard({ analysis }: { analysis: Analysis }) {
         {analysis.brandDna && (
           <Card className="hidden lg:block min-w-48">
             <p className="text-xs text-white/40 mb-2 font-medium uppercase tracking-wider">Brand DNA</p>
-            <p className="text-sm text-white/80 mb-1">Ton: <span className="text-amber-400">{analysis.brandDna.tone}</span></p>
+            <p className="text-sm text-white/80 mb-1">Ton: <span className="text-violet-400">{analysis.brandDna.tone}</span></p>
             <div className="flex flex-wrap gap-1 mt-2">
               {analysis.brandDna.values?.slice(0, 3).map((v, i) => (
                 <span key={i} className="text-xs bg-white/10 px-2 py-0.5 rounded-full text-white/60">{v}</span>

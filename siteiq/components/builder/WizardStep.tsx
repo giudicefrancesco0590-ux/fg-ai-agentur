@@ -64,7 +64,7 @@ export function WizardStep({ config, onChange, onSubmit }: WizardStepProps) {
           placeholder="z.B. Mayer & Partner Rechtsanwälte"
           value={config.businessName}
           onChange={e => onChange({ ...config, businessName: e.target.value })}
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-amber-500/40"
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-violet-500/40"
         />
       </div>
 
@@ -80,7 +80,7 @@ export function WizardStep({ config, onChange, onSubmit }: WizardStepProps) {
               onClick={() => onChange({ ...config, industry: ind.value })}
               className={`px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                 config.industry === ind.value
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  ? 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
                   : 'bg-white/3 text-white/40 border border-white/5 hover:border-white/10 hover:text-white/60'
               }`}
             >
@@ -102,11 +102,11 @@ export function WizardStep({ config, onChange, onSubmit }: WizardStepProps) {
               onClick={() => onChange({ ...config, style: s.value })}
               className={`p-3 rounded-xl text-left transition-all ${
                 config.style === s.value
-                  ? 'bg-amber-500/20 border border-amber-500/30'
+                  ? 'bg-violet-500/20 border border-violet-500/30'
                   : 'bg-white/3 border border-white/5 hover:border-white/10'
               }`}
             >
-              <div className={`text-sm font-medium mb-0.5 ${config.style === s.value ? 'text-amber-400' : 'text-white/70'}`}>
+              <div className={`text-sm font-medium mb-0.5 ${config.style === s.value ? 'text-violet-400' : 'text-white/70'}`}>
                 {s.label}
               </div>
               <div className="text-xs text-white/30">{s.desc}</div>
@@ -125,14 +125,14 @@ export function WizardStep({ config, onChange, onSubmit }: WizardStepProps) {
           value={config.description}
           onChange={e => onChange({ ...config, description: e.target.value })}
           rows={3}
-          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-amber-500/40 resize-none"
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-violet-500/40 resize-none"
         />
       </div>
 
       <button
         onClick={onSubmit}
         disabled={!isValid}
-        className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+        className="w-full bg-violet-500 hover:bg-violet-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
       >
         Website generieren →
       </button>
