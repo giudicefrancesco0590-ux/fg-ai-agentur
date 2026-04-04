@@ -46,7 +46,7 @@ export function AnalysisDashboard({ analysis }: { analysis: Analysis }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-r from-violet-500/10 to-transparent border border-violet-500/20 rounded-2xl p-6 mb-6 flex items-center gap-8"
+        className="glass-violet rounded-2xl p-6 mb-6 flex items-center gap-8 shadow-[0_4px_40px_rgba(139,92,246,0.12)]"
       >
         <ScoreRing score={analysis.overallScore} size={140} label="Gesamt-Score" />
         <div className="flex-1">

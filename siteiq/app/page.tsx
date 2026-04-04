@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { VoiceButton } from '@/components/voice/VoiceButton'
-import { Search, Wand2, FileText, Bot, Zap, Globe } from 'lucide-react'
+import { Search, FileText, Bot, Zap, Globe } from 'lucide-react'
 
 const STEPS = [
   { key: 'scraping', label: 'Website laden' },
@@ -32,7 +32,7 @@ export default function LandingPage() {
   const [progress, setProgress] = useState<{ step: string; message: string; percent: number } | null>(null)
   const router = useRouter()
 
-  async function handleAnalyze(e: React.FormEvent) {
+  async function handleAnalyze(e: React.SyntheticEvent) {
     e.preventDefault()
     if (!url) return
     setLoading(true)
@@ -188,7 +188,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="mt-8 bg-white/[0.03] border border-white/8 rounded-2xl p-6"
+              className="mt-8 glass rounded-2xl p-6 shadow-[0_4px_32px_rgba(0,0,0,0.3)]"
             >
               <div className="w-full bg-white/5 rounded-full h-0.5 mb-5">
                 <motion.div
@@ -240,7 +240,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + i * 0.05 }}
-                className="bg-white/[0.03] border border-white/8 rounded-xl p-3 text-left hover:border-violet-500/20 transition-colors group"
+                className="glass rounded-xl p-3 text-left hover:border-violet-500/25 hover:bg-white/[0.06] transition-all duration-200 group shadow-[0_2px_16px_rgba(0,0,0,0.2)]"
               >
                 <div className="w-7 h-7 bg-violet-500/10 rounded-lg flex items-center justify-center mb-2.5 group-hover:bg-violet-500/15 transition-colors">
                   <Icon size={13} className="text-violet-400" />
