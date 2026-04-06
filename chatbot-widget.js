@@ -497,6 +497,22 @@
   }
 
   // ─── TTS (ElevenLabs + fallback) ─────────────────────────────────────────
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  let iosAudioUnlocked = false;
+
+  // iOS: Audio-Kontext beim ersten Tap entsperren
+  function unlockIOSAudio() {
+    if (!isIOS || iosAudioUnlocked) return;
+    iosAudioUnlocked = true;
+    if (window.speechSynthesis) {
+      const u = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(u);
+      window.speechSynthesis.cancel();
+    }
+    const a = new Audio();
+    a.play().catch(() => {});
+  }
+
   async function speak(text) {
     if (!ttsEnabled) return;
     stopSpeaking();
@@ -513,7 +529,13 @@
     getEl('fg-speaking-bar').classList.add('show');
     isSpeaking = true;
 
-    // Try ElevenLabs first
+    // iOS: direkt SpeechSynthesis (kein async fetch nötig)
+    if (isIOS) {
+      speakBrowser(clean);
+      return;
+    }
+
+    // Andere Geräte: ElevenLabs zuerst
     if (!ttsChecked || ttsEnabled !== 'browser') {
       try {
         const res = await fetch(SPEAK_ENDPOINT, {
@@ -530,10 +552,10 @@
             audioObj = new Audio(url);
             audioObj.onended = () => { stopSpeaking(); URL.revokeObjectURL(url); };
             audioObj.onerror = () => { stopSpeaking(); speakBrowser(clean); };
-            try { await audioObj.play(); return; } catch { /* autoplay blocked */ }
+            try { await audioObj.play(); return; } catch { speakBrowser(clean); return; }
           }
         }
-      } catch { /* fallback to browser */ }
+      } catch { /* fallback */ }
       ttsEnabled = 'browser';
     }
 
@@ -545,13 +567,21 @@
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'de-DE';
-    utter.rate = 1.05;
-    const voices = window.speechSynthesis.getVoices();
-    const de = voices.find(v => v.lang.startsWith('de'));
-    if (de) utter.voice = de;
-    utter.onend = stopSpeaking;
-    utter.onerror = stopSpeaking;
-    window.speechSynthesis.speak(utter);
+    utter.rate = 1.0;
+    // Voices laden (iOS braucht manchmal einen Moment)
+    const trySpeak = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const de = voices.find(v => v.lang.startsWith('de'));
+      if (de) utter.voice = de;
+      utter.onend = stopSpeaking;
+      utter.onerror = stopSpeaking;
+      window.speechSynthesis.speak(utter);
+    };
+    if (window.speechSynthesis.getVoices().length > 0) {
+      trySpeak();
+    } else {
+      window.speechSynthesis.onvoiceschanged = trySpeak;
+    }
   }
 
   function stopSpeaking() {
@@ -687,6 +717,10 @@
   // ─── Init ─────────────────────────────────────────────────────────────────
   function init() {
     buildWidget();
+
+    // iOS Audio beim ersten Tap entsperren
+    document.addEventListener('touchstart', unlockIOSAudio, { once: true, passive: true });
+    document.addEventListener('click', unlockIOSAudio, { once: true, passive: true });
 
     // Toggle button
     getEl('fg-chat-btn').onclick = toggleChat;
