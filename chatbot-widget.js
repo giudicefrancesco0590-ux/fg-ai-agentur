@@ -95,7 +95,7 @@
     #fg-chat-window.open {
       transform: translateY(0) scale(1);
       opacity: 1;
-      pointer-events: all;
+      pointer-events: auto;
     }
 
     /* Header */
