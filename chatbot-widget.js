@@ -652,31 +652,43 @@
     updateSendBtn();
     setThinking(true);
 
-    try {
-      const res = await fetch(CHAT_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: text,
-          history: history.slice(-20).slice(0, -1), // exclude last user msg (already in message)
-          leadData,
-        }),
-      });
+    const payload = JSON.stringify({
+      message: text,
+      history: history.slice(-20).slice(0, -1),
+      leadData,
+    });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const reply = data.text || 'Entschuldigung, ein Fehler ist aufgetreten.';
-      setThinking(false);
+    let reply = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 15000);
+        const res = await fetch(CHAT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          signal: controller.signal,
+        });
+        clearTimeout(timer);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        reply = data.text || null;
+        if (reply) break;
+      } catch (err) {
+        if (attempt < 2) {
+          await new Promise(r => setTimeout(r, 1500));
+          continue;
+        }
+      }
+    }
+
+    setThinking(false);
+    if (reply) {
       addMessage('bot', reply);
       if (ttsEnabled) speak(reply);
-
-      // Smart quick replies based on conversation stage
       suggestQuickReplies(reply);
-
-    } catch (err) {
-      console.error('Chat error:', err);
-      setThinking(false);
-      addMessage('bot', 'Entschuldigung, es gab einen Verbindungsfehler. Bitte versuchen Sie es nochmal oder schreiben Sie uns direkt: info@master-closing.de');
+    } else {
+      addMessage('bot', 'Kurze Verbindungspause — bitte nochmal senden. 🔄');
     }
   }
 
