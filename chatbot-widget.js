@@ -5,9 +5,9 @@
 (function () {
   'use strict';
 
-  const API_BASE = 'https://app.fg-ai.de';
-  const CHAT_ENDPOINT = `${API_BASE}/api/fg-chatbot/chat`;
-  const SPEAK_ENDPOINT = `${API_BASE}/api/fg-chatbot/speak`;
+  const API_BASE = 'https://fg-chatbot-api.vercel.app';
+  const CHAT_ENDPOINT = `${API_BASE}/api/chat`;
+  const SPEAK_ENDPOINT = `${API_BASE}/api/speak`;
 
   // ─── State ───────────────────────────────────────────────────────────────
   let history = [];
