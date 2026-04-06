@@ -562,29 +562,49 @@
   }
 
   // ─── Speech Recognition ────────────────────────────────────────────────────
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:110px;right:28px;background:rgba(30,30,30,0.95);color:#fff;font-size:12.5px;padding:9px 14px;border-radius:10px;z-index:999999;max-width:260px;border:1px solid rgba(255,255,255,0.1);pointer-events:none;opacity:1;transition:opacity 0.4s;';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2800);
+  }
+
   function startListening() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { alert('Spracheingabe wird in Ihrem Browser nicht unterstützt. Bitte Chrome nutzen.'); return; }
+    if (!SR) { showToast('Spracheingabe wird auf diesem Gerät nicht unterstützt.'); return; }
     recognition = new SR();
     recognition.lang = 'de-DE';
     recognition.continuous = false;
     recognition.interimResults = false;
     recognition.onresult = e => {
       const t = e.results[0]?.[0]?.transcript?.trim();
-      if (t) { getEl('fg-chat-input').value = t; updateSendBtn(); }
+      if (t) {
+        getEl('fg-chat-input').value = t;
+        updateSendBtn();
+        // Auto-send after voice input
+        setTimeout(() => { if (getEl('fg-chat-input').value.trim()) send(getEl('fg-chat-input').value.trim()); }, 300);
+      }
     };
-    recognition.onerror = () => stopListening();
+    recognition.onerror = e => {
+      if (e.error === 'not-allowed') showToast('Mikrofon-Zugriff verweigert. Bitte in den Browser-Einstellungen erlauben.');
+      else if (e.error === 'no-speech') showToast('Kein Ton erkannt. Bitte nochmal versuchen.');
+      stopListening();
+    };
     recognition.onend = () => stopListening();
-    recognition.start();
-    isListening = true;
-    const btn = getEl('fg-mic-btn');
-    btn.classList.add('mic-active');
-    btn.innerHTML = ICON_MIC_OFF;
-    btn.title = 'Aufnahme stoppen';
+    try {
+      recognition.start();
+      isListening = true;
+      const btn = getEl('fg-mic-btn');
+      btn.classList.add('mic-active');
+      btn.innerHTML = ICON_MIC_OFF;
+      btn.title = 'Aufnahme stoppen';
+    } catch { stopListening(); }
   }
 
   function stopListening() {
-    recognition && recognition.stop();
+    try { recognition && recognition.stop(); } catch { /* ignore */ }
     isListening = false;
     const btn = getEl('fg-mic-btn');
     btn.classList.remove('mic-active');
@@ -682,10 +702,13 @@
     // Stop speaking
     getEl('fg-stop-speak').onclick = stopSpeaking;
 
-    // Mic
-    getEl('fg-mic-btn').onclick = () => {
-      isListening ? stopListening() : startListening();
-    };
+    // Mic — verstecken wenn nicht unterstützt (z.B. iOS Safari)
+    const micBtn = getEl('fg-mic-btn');
+    if (!SR) {
+      micBtn.style.display = 'none';
+    } else {
+      micBtn.onclick = () => { isListening ? stopListening() : startListening(); };
+    }
 
     // Send button
     getEl('fg-send-btn').onclick = () => {
