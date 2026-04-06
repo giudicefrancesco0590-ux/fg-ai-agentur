@@ -668,7 +668,7 @@
   }
 
   // ─── Toggle chat ──────────────────────────────────────────────────────────
-  function toggleChat() {
+  function toggleChat(autoOpen = false) {
     isOpen = !isOpen;
     const win = getEl('fg-chat-window');
     const btn = getEl('fg-chat-btn');
@@ -679,7 +679,8 @@
 
     if (isOpen) {
       badge.style.display = 'none';
-      setTimeout(() => getEl('fg-chat-input').focus(), 300);
+      // Kein auto-focus bei automatischem Öffnen (würde Tastatur auf Mobile triggern)
+      if (!autoOpen) setTimeout(() => getEl('fg-chat-input').focus(), 300);
     }
   }
 
@@ -739,7 +740,7 @@
 
     // Chat automatisch öffnen
     setTimeout(() => {
-      if (!isOpen) toggleChat();
+      if (!isOpen) toggleChat(true);
     }, 2000);
   }
 
