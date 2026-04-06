@@ -737,10 +737,12 @@
       setQuickReplies(['Was kostet ein Chatbot?', 'Wie funktioniert das?', 'Termin buchen']);
     }, 600);
 
-    // Chat automatisch öffnen
-    setTimeout(() => {
-      if (!isOpen) toggleChat();
-    }, 2000);
+    // Chat automatisch öffnen — nur auf Mobile
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        if (!isOpen) toggleChat();
+      }, 2000);
+    }
   }
 
   // Start when DOM ready
