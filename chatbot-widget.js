@@ -731,11 +731,16 @@
       }
     });
 
-    // Welcome message after slight delay
+    // Welcome message + auto-open nach 2 Sekunden
     setTimeout(() => {
       addMessage('bot', 'Hallo! 👋 Ich bin der KI-Assistent von **FG AI Agentur**.\n\nWir entwickeln KI-Chatbots, Voice Agents und Websites — alles, was Ihr Unternehmen automatisiert und mehr Kunden gewinnt.\n\nWie kann ich Ihnen helfen?');
       setQuickReplies(['Was kostet ein Chatbot?', 'Wie funktioniert das?', 'Termin buchen']);
     }, 600);
+
+    // Chat automatisch öffnen
+    setTimeout(() => {
+      if (!isOpen) toggleChat();
+    }, 2000);
   }
 
   // Start when DOM ready
