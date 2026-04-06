@@ -705,8 +705,13 @@
 
     // Mic — verstecken wenn nicht unterstützt (z.B. iOS Safari)
     const micBtn = getEl('fg-mic-btn');
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     if (!SR) {
       micBtn.style.display = 'none';
+      // iOS-Hinweis im Input-Placeholder
+      if (isIOS) {
+        getEl('fg-chat-input').placeholder = 'Schreiben oder Tastatur-Diktat nutzen 🎤';
+      }
     } else {
       micBtn.onclick = () => { isListening ? stopListening() : startListening(); };
     }
