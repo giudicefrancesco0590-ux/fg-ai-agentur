@@ -336,8 +336,35 @@
     .fg-quick:hover { background: rgba(0,153,255,0.15); }
 
     @media (max-width: 440px) {
-      #fg-chat-window { width: calc(100vw - 24px); right: 12px; bottom: 90px; }
       #fg-chat-btn { right: 16px; bottom: 20px; }
+
+      /* Vollbild auf Mobile — kein Verrutschen bei Tastatur */
+      #fg-chat-window {
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        max-height: 100% !important;
+        border-radius: 0 !important;
+        transform-origin: bottom center;
+      }
+
+      /* Input-Bereich: Abstand für Home-Indicator (iPhone) */
+      #fg-chat-input-area {
+        padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+      }
+
+      /* 16px verhindert Auto-Zoom auf iOS beim Tippen */
+      #fg-chat-input { font-size: 16px !important; }
+
+      /* Touch-Scrolling für Nachrichten */
+      #fg-chat-messages { -webkit-overflow-scrolling: touch; }
+
+      /* Header: Safe-Area oben (Notch) */
+      #fg-chat-header {
+        padding-top: max(16px, env(safe-area-inset-top, 16px));
+      }
     }
   `;
 
@@ -757,6 +784,10 @@
       badge.style.display = 'none';
       // Kein auto-focus bei automatischem Öffnen (würde Tastatur auf Mobile triggern)
       if (!autoOpen) setTimeout(() => getEl('fg-chat-input').focus(), 300);
+    } else {
+      // Inline-Styles vom Tastatur-Handling zurücksetzen
+      win.style.height = '';
+      win.style.top = '';
     }
   }
 
@@ -816,6 +847,24 @@
         if (val && !isThinking) send(val);
       }
     });
+
+    // Mobile: Tastatur-Handling via VisualViewport API
+    // Wenn Tastatur aufgeht, Fenster auf verbleibende Höhe anpassen
+    if (window.visualViewport) {
+      const onViewportChange = () => {
+        if (!isOpen || window.innerWidth > 440) return;
+        const win = getEl('fg-chat-window');
+        const vvh = Math.round(window.visualViewport.height);
+        const vvTop = Math.round(window.visualViewport.offsetTop);
+        win.style.height = vvh + 'px';
+        win.style.top = vvTop + 'px';
+        // Nachrichten nach unten scrollen wenn Tastatur erscheint
+        const msgs = getEl('fg-chat-messages');
+        setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50);
+      };
+      window.visualViewport.addEventListener('resize', onViewportChange);
+      window.visualViewport.addEventListener('scroll', onViewportChange);
+    }
 
     // Welcome message + auto-open nach 2 Sekunden
     setTimeout(() => {
