@@ -535,32 +535,36 @@
     getEl('fg-speaking-bar').classList.add('show');
     isSpeaking = true;
 
-    // iOS: ElevenLabs via AudioContext (nach Unlock), sonst SpeechSynthesis
+    // iOS: SpeechSynthesis sofort starten (braucht synchronen Gesture-Kontext),
+    // gleichzeitig ElevenLabs via AudioContext im Hintergrund laden und übernehmen
     if (isIOS) {
+      speakBrowser(clean); // sofort starten — kein await davor!
       if (iosAudioUnlocked && audioCtx) {
-        try {
-          const res = await fetch(SPEAK_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: clean }),
-          });
-          if (res.ok) {
-            const buffer = await res.arrayBuffer();
-            if (buffer.byteLength > 0) {
-              if (audioCtx.state === 'suspended') await audioCtx.resume();
-              const decoded = await audioCtx.decodeAudioData(buffer);
-              if (audioSource) { try { audioSource.stop(); } catch {} }
-              audioSource = audioCtx.createBufferSource();
-              audioSource.buffer = decoded;
-              audioSource.connect(audioCtx.destination);
-              audioSource.onended = stopSpeaking;
-              audioSource.start(0);
-              return;
+        (async () => {
+          try {
+            const res = await fetch(SPEAK_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ text: clean }),
+            });
+            if (res.ok && isSpeaking) {
+              const buffer = await res.arrayBuffer();
+              if (buffer.byteLength > 0 && isSpeaking) {
+                if (audioCtx.state === 'suspended') await audioCtx.resume();
+                const decoded = await audioCtx.decodeAudioData(buffer);
+                // SpeechSynthesis durch ElevenLabs ersetzen
+                window.speechSynthesis && window.speechSynthesis.cancel();
+                if (audioSource) { try { audioSource.stop(); } catch {} }
+                audioSource = audioCtx.createBufferSource();
+                audioSource.buffer = decoded;
+                audioSource.connect(audioCtx.destination);
+                audioSource.onended = stopSpeaking;
+                audioSource.start(0);
+              }
             }
-          }
-        } catch { /* Fallback zu SpeechSynthesis */ }
+          } catch { /* SpeechSynthesis läuft weiter als Fallback */ }
+        })();
       }
-      speakBrowser(clean);
       return;
     }
 
