@@ -499,18 +499,24 @@
   // ─── TTS (ElevenLabs + fallback) ─────────────────────────────────────────
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   let iosAudioUnlocked = false;
+  let audioCtx = null;
+  let audioSource = null;
 
   // iOS: Audio-Kontext beim ersten Tap entsperren
   function unlockIOSAudio() {
     if (!isIOS || iosAudioUnlocked) return;
     iosAudioUnlocked = true;
+    // AudioContext erstellen & entsperren (ermöglicht ElevenLabs auf iOS)
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    } catch (e) { audioCtx = null; }
+    // SpeechSynthesis ebenfalls entsperren (als Fallback)
     if (window.speechSynthesis) {
       const u = new SpeechSynthesisUtterance('');
       window.speechSynthesis.speak(u);
       window.speechSynthesis.cancel();
     }
-    const a = new Audio();
-    a.play().catch(() => {});
   }
 
   async function speak(text) {
@@ -529,13 +535,36 @@
     getEl('fg-speaking-bar').classList.add('show');
     isSpeaking = true;
 
-    // iOS: direkt SpeechSynthesis (kein async fetch nötig)
+    // iOS: ElevenLabs via AudioContext (nach Unlock), sonst SpeechSynthesis
     if (isIOS) {
+      if (iosAudioUnlocked && audioCtx) {
+        try {
+          const res = await fetch(SPEAK_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: clean }),
+          });
+          if (res.ok) {
+            const buffer = await res.arrayBuffer();
+            if (buffer.byteLength > 0) {
+              if (audioCtx.state === 'suspended') await audioCtx.resume();
+              const decoded = await audioCtx.decodeAudioData(buffer);
+              if (audioSource) { try { audioSource.stop(); } catch {} }
+              audioSource = audioCtx.createBufferSource();
+              audioSource.buffer = decoded;
+              audioSource.connect(audioCtx.destination);
+              audioSource.onended = stopSpeaking;
+              audioSource.start(0);
+              return;
+            }
+          }
+        } catch { /* Fallback zu SpeechSynthesis */ }
+      }
       speakBrowser(clean);
       return;
     }
 
-    // Andere Geräte: ElevenLabs zuerst
+    // Desktop/Android: ElevenLabs zuerst
     if (!ttsChecked || ttsEnabled !== 'browser') {
       try {
         const res = await fetch(SPEAK_ENDPOINT, {
@@ -586,6 +615,7 @@
 
   function stopSpeaking() {
     if (audioObj) { audioObj.pause(); audioObj = null; }
+    if (audioSource) { try { audioSource.stop(); } catch {} audioSource = null; }
     window.speechSynthesis && window.speechSynthesis.cancel();
     isSpeaking = false;
     getEl('fg-speaking-bar').classList.remove('show');
